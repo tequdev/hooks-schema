@@ -1,0 +1,25 @@
+{
+  "name": "hooks-schema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "generate": "quicktype src/schema.ts -o schema.json --lang schema",
+    "lint": "biome lint --apply src",
+    "format": "biome format --write src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@transia/hooks-toolkit": "^1.0.11",
+    "@transia/xrpl": "2.7.3-alpha.22"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.2",
+    "quicktype": "^23.0.81",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

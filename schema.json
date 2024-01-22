@@ -1,0 +1,861 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "HookStateDefinition": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "description": {
+                    "type": "string",
+                    "title": "description"
+                },
+                "hook_states": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "title": "name"
+                            },
+                            "description": {
+                                "type": "string",
+                                "title": "description"
+                            },
+                            "hookstate_key": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/HookStateKeyType"
+                                },
+                                "title": "hookstate_key"
+                            },
+                            "hookstate_data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/HookStateDataType"
+                                },
+                                "title": "hookstate_data"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "hookstate_data",
+                            "hookstate_key"
+                        ]
+                    },
+                    "title": "hook_states"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "description",
+                "hook_states",
+                "name"
+            ]
+        },
+        "HookStateKeyType": {
+            "title": "HookStateKeyType",
+            "anyOf": [
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "AccountID"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 20,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt8"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 1,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt16"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 2,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt32"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 4,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt64"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 8,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "XFL"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 8,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "VarString"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "binary": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "binary"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "byte_length",
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "Hash256"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 32,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                }
+            ]
+        },
+        "HookStateDataType": {
+            "title": "HookStateDataType",
+            "anyOf": [
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "AccountID"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 20,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt8"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 1,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt16"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 2,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt32"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 4,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "UInt64"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 8,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "XFL"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 8,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "VarString"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "binary": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "binary"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "byte_length",
+                        "name",
+                        "type"
+                    ]
+                },
+                {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "Hash256"
+                            ],
+                            "title": "type"
+                        },
+                        "byte_length": {
+                            "default": 32,
+                            "type": "number",
+                            "title": "byte_length"
+                        },
+                        "name": {
+                            "type": "string",
+                            "title": "name"
+                        },
+                        "fixed_value": {
+                            "type": [
+                                "string",
+                                "number"
+                            ],
+                            "title": "fixed_value"
+                        },
+                        "exclude": {
+                            "default": false,
+                            "type": "boolean",
+                            "title": "exclude"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "type"
+                    ]
+                }
+            ]
+        },
+        "AccountID": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "AccountID"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 20,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "UInt8": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "UInt8"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 1,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "UInt16": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "UInt16"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 2,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "UInt32": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "UInt32"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 4,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "UInt64": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "UInt64"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 8,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "XFL": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "XFL"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 8,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        },
+        "VarString": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "VarString"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "type": "number",
+                    "title": "byte_length"
+                },
+                "binary": {
+                    "default": false,
+                    "type": "boolean",
+                    "title": "binary"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "byte_length",
+                "type"
+            ]
+        },
+        "Hash256": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Hash256"
+                    ],
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 32,
+                    "type": "number",
+                    "title": "byte_length"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "type"
+            ]
+        }
+    }
+}
