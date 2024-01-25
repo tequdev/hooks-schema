@@ -1,6 +1,6 @@
 # XRPL Hooks Schema
 
-(WORK IN PROGGRESS)
+(WORK IN PROGRESS)
 
 ABI standard for XRP Ledger Hooks.
 
