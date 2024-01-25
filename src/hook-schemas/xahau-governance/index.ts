@@ -1,6 +1,6 @@
-import { HookStateDefinition } from "../../schema";
+import { Definition } from "../../schema";
 
-export const GovernanceHookDefinition: HookStateDefinition = {
+export const GovernanceHookDefinition: Definition['hook_states'] = {
   name: "Governance",
   description: "Governance",
   hook_states: [
@@ -10,7 +10,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "padding",
-          fixed_value: "0".repeat(30),
+          pattern: "0".repeat(30),
           byte_length: 30,
           exclude: true,
         },
@@ -18,7 +18,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "type",
           byte_length: 2,
-          fixed_value: "MC",
+          pattern: "MC",
         },
       ],
       hookstate_data: [
@@ -35,7 +35,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "padding",
-          fixed_value: "0".repeat(30),
+          pattern: "0".repeat(30),
           byte_length: 30,
           exclude: true,
         },
@@ -43,7 +43,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "type",
           byte_length: 2,
-          fixed_value: "RR",
+          pattern: "RR",
         },
       ],
       hookstate_data: [
@@ -59,7 +59,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "padding",
-          fixed_value: "0".repeat(30),
+          pattern: "0".repeat(30),
           byte_length: 30,
           exclude: true,
         },
@@ -67,7 +67,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "type",
           byte_length: 2,
-          fixed_value: "RD",
+          pattern: "RD",
         },
       ],
       hookstate_data: [
@@ -83,7 +83,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "padding",
-          fixed_value: "0".repeat(31),
+          pattern: "0".repeat(31),
           byte_length: 31,
           exclude: true,
         },
@@ -106,7 +106,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "padding",
-          fixed_value: "0".repeat(12),
+          pattern: "0".repeat(12),
           byte_length: 12,
           exclude: true,
         },
@@ -128,7 +128,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "Type",
-          fixed_value: "VH",
+          pattern: "VH",
           byte_length: 2,
         },
         {
@@ -143,7 +143,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "padding",
           byte_length: 8,
-          fixed_value: "0".repeat(8),
+          pattern: "0".repeat(8),
           exclude: true,
         },
         {
@@ -164,7 +164,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "VRR",
+          pattern: "VRR",
           byte_length: 3,
         },
         {
@@ -175,7 +175,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "padding",
           byte_length: 8,
-          fixed_value: "0".repeat(8),
+          pattern: "0".repeat(8),
           exclude: true,
         },
         {
@@ -196,7 +196,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "VRD",
+          pattern: "VRD",
           byte_length: 3,
         },
         {
@@ -207,7 +207,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "padding",
           byte_length: 8,
-          fixed_value: "0".repeat(8),
+          pattern: "0".repeat(8),
           exclude: true,
         },
         {
@@ -228,7 +228,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "VS",
+          pattern: "VS",
           byte_length: 2,
         },
         {
@@ -243,7 +243,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "padding",
           byte_length: 8,
-          fixed_value: "0".repeat(8),
+          pattern: "0".repeat(8),
           exclude: true,
         },
         {
@@ -264,7 +264,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "CH",
+          pattern: "CH",
           byte_length: 2,
         },
         {
@@ -295,7 +295,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "CRR",
+          pattern: "CRR",
           byte_length: 3,
         },
         {
@@ -327,7 +327,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "CRD",
+          pattern: "CRD",
           byte_length: 3,
         },
         {
@@ -359,7 +359,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
         {
           type: "VarString",
           name: "type",
-          fixed_value: "CS",
+          pattern: "CS",
           byte_length: 2,
         },
         {
@@ -374,7 +374,7 @@ export const GovernanceHookDefinition: HookStateDefinition = {
           type: "VarString",
           name: "padding",
           byte_length: 8,
-          fixed_value: "0".repeat(8),
+          pattern: "0".repeat(8),
           exclude: true,
         },
         {

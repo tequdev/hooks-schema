@@ -1,7 +1,11 @@
 import { hexToXfl } from "@transia/hooks-toolkit/dist/npm/src/libs/binary-models";
-import { encodeAccountID } from "@transia/xrpl";
 import { HookState } from "@transia/xrpl/dist/npm/models/ledger";
-import { HookStateDataType, HookStateDefinition, HookStateKeyType } from "./schema";
+import { encodeAccountID } from "@transia/xrpl/dist/npm/utils";
+import { Definition } from "./schema";
+
+type HookStateDefinition = Definition['hook_states']
+type HookStateDataType = HookStateDefinition['hook_states'][number]['hookstate_data'][number]
+type HookStateKeyType = HookStateDefinition['hook_states'][number]['hookstate_key'][number]
 
 const getByteLength = (state: HookStateKeyType | HookStateDataType) => {
   switch (state.type) {
@@ -42,7 +46,7 @@ const bufferToReadableData = (buffer: Buffer, state: HookStateDataType | HookSta
       return hexToXfl(buffer.toString("hex"));
     case "VarString":
       if (state.binary === true) return buffer.toString("hex");
-      return buffer.toString().replace(/\0/g, "");
+      return buffer.toString("utf-8").replace(/\0/g, "0");
     case "Hash256":
       return buffer.toString("hex");
     default:
@@ -65,6 +69,7 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
   // console.log(value)
   const state = definition.hook_states
     .map((state) => {
+      // console.log(data.length, stateDataTotalLength(state))
       if (data.length !== stateDataTotalLength(state)) return undefined;
 
       let lastKeyIndex = 0;
@@ -77,15 +82,8 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
         lastKeyIndex += currentKeyIndex;
         const readable = bufferToReadableData(currentBuffer, k)
         // console.log(lastKeyIndex, lastKeyIndex + currentKeyIndex, readable)
-        if (!k.fixed_value) {
-          if (k.exclude === true) return true;
-          keyArr.push({
-            name: k.name,
-            value: readable,
-          });
-          return true;
-        }
-        if (readable !== k.fixed_value && currentBuffer.toString("utf-8").replace(/\0/g, "0") !== k.fixed_value) return false;
+        // console.log(k.pattern, readable.toString(), !new RegExp(k.pattern!).test(readable.toString()))
+        if (k.pattern && !new RegExp(k.pattern).test(readable.toString())) return false;
         if (k.exclude === true) return true;
         keyArr.push({
           name: k.name,
@@ -93,6 +91,7 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
         });
         return true;
       });
+      // console.log({ checkKey })
       if (checkKey === false) return undefined;
       let lastDataIndex = 0;
       const dataArr: ReadableData[] = [];
@@ -103,16 +102,9 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
         lastDataIndex += currentDataIndex;
         const readable = bufferToReadableData(currentBuffer, d)
         // console.log(lastDataIndex - currentDataIndex, lastDataIndex, readable, currentBuffer)
+        // console.log(d.pattern, readable.toString(), !new RegExp(d.pattern!).test(readable.toString()))
 
-        if (!d.fixed_value) {
-          if (d.exclude === true) return true;
-          dataArr.push({
-            name: d.name,
-            value: readable,
-          });
-          return true;
-        }
-        if (readable !== d.fixed_value && currentBuffer.toString("utf-8").replace(/\0/g, "0") !== d.fixed_value) return false;
+        if (d.pattern && !new RegExp(d.pattern).test(readable.toString())) return false;
         if (d.exclude === true) return true;
         dataArr.push({
           name: d.name,

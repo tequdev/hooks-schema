@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx src/index.ts",
-    "generate": "quicktype src/schema.ts -o schema.json --lang schema",
+    "build": "tsc",
+    "generate": "quicktype src/schema/index.ts -o schema.json --lang schema",
     "lint": "biome lint --apply src",
     "format": "biome format --write src"
   },

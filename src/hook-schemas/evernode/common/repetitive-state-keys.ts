@@ -12,9 +12,8 @@
 
 // // Hook Candidate Id keys. (Hook candidate proposal entries for candidate id-based lookup).
 // uint8_t STP_CANDIDATE_ID[32] = { 'E', 'V', 'R', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-import type { HookStateDefinition } from '../../../schema';
-type State = HookStateDefinition['hook_states'][number]
+import type { Definition } from '../../../schema';
+type State = Definition["hook_states"]["hook_states"][number]
 
 export const STP_TOKEN_ID: State = {
   name: "Token Id",
@@ -22,14 +21,14 @@ export const STP_TOKEN_ID: State = {
     {
       type: "VarString",
       name: "Key",
-      fixed_value: "EVR",
+      pattern: "EVR",
       byte_length: 3,
       exclude: true,
     },
     {
       type: "UInt8",
       name: "Index",
-      fixed_value: 2,
+      pattern: "2",
       exclude: true,
     },
     {
@@ -88,21 +87,133 @@ export const STP_HOST_ADDR: State = {
     {
       type: "VarString",
       name: "Key",
-      fixed_value: "EVR",
+      pattern: "EVR",
       byte_length: 3,
       exclude: true,
     },
     {
       type: "UInt8",
       name: "Index",
-      fixed_value: 3,
+      pattern: "3",
       exclude: true,
     },
     {
       type: "VarString",
       name: "padding",
       byte_length: 8,
-      fixed_value: "0".repeat(8),
+      pattern: "0".repeat(8),
+      exclude: true,
+    },
+    {
+      type: "AccountID",
+      name: 'Account'
+    },
+  ],
+  // <token_id(32)><country_code(2)><reserved(8)><description(26)><registration_ledger(8)><registration_fee(8)><no_of_total_instances(4)><no_of_active_instances(4)>
+  // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)><transfer_timestamp(8)>
+  hookstate_data: [
+    {
+      type: "VarString",
+      name: "TokenID",
+      byte_length: 32,
+      binary: true
+    },
+    {
+      type: "VarString",
+      name: "Country Code",
+      byte_length: 2,
+    },
+    {
+      type: "VarString",
+      name: "Reserved",
+      byte_length: 8,
+    },
+    {
+      type: "VarString",
+      name: "Description",
+      byte_length: 26,
+    },
+    {
+      type: "UInt64",
+      name: "Registration Ledger",
+    },
+    {
+      type: "UInt64",
+      name: "Registration Fee",
+    },
+    {
+      type: "UInt32",
+      name: "No of Total Instances",
+    },
+    {
+      type: "UInt32",
+      name: "No of Active Instances",
+    },
+    {
+      type: "UInt64",
+      name: "Last Heartbeat Index",
+    },
+    {
+      type: "VarString",
+      name: "Version",
+      byte_length: 3,
+    },
+    {
+      type: "UInt64",
+      name: "Registration Timestamp",
+    },
+    {
+      type: "UInt8",
+      name: "Transfer Flag",
+    },
+    {
+      type: "UInt32",
+      name: "Last Vote Candidate Idx",
+    },
+    {
+      type: "UInt64",
+      name: "Last Vote Timestamp",
+    },
+    {
+      type: "UInt8",
+      name: "Support Vote Sent",
+    },
+    {
+      type: "UInt8",
+      name: "Host Reputation",
+    },
+    {
+      type: "UInt8",
+      name: "Flags",
+    },
+    {
+      type: "UInt64",
+      name: "Transfer Timestamp",
+    },
+  ],
+}
+
+export const STP_HOST_ADDR_OLD: State = {
+  name: "Host Address",
+  hookstate_key: [
+    {
+      type: "VarString",
+      name: "Key",
+      pattern: "EVR",
+      byte_length: 3,
+      exclude: true,
+    },
+    {
+      type: "UInt8",
+      name: "Index",
+      pattern: "3",
+      exclude: true,
+    },
+    {
+      type: "VarString",
+      name: "padding",
+      byte_length: 8,
+      pattern: "0".repeat(8),
       exclude: true,
     },
     {
@@ -196,21 +307,21 @@ export const STP_TRANSFEREE_ADDR: State = {
     {
       type: "VarString",
       name: "Key",
-      fixed_value: "EVR",
+      pattern: "EVR",
       byte_length: 3,
       exclude: true,
     },
     {
       type: "UInt8",
       name: "Index",
-      fixed_value: 4,
+      pattern: "4",
       exclude: true,
     },
     {
       type: "VarString",
       name: "padding",
       byte_length: 8,
-      fixed_value: "0".repeat(8),
+      pattern: "0".repeat(8),
       exclude: true,
     },
     {
@@ -243,21 +354,21 @@ export const STP_CANDIDATE_OWNER: State = {
     {
       type: "VarString",
       name: "Key",
-      fixed_value: "EVR",
+      pattern: "EVR",
       byte_length: 3,
       exclude: true,
     },
     {
       type: "UInt8",
       name: "Index",
-      fixed_value: 5,
+      pattern: "5",
       exclude: true,
     },
     {
       type: "VarString",
       name: "padding",
       byte_length: 8,
-      fixed_value: "0".repeat(8),
+      pattern: "0".repeat(8),
       exclude: true,
     },
     {
@@ -288,14 +399,14 @@ export const STP_CANDIDATE_ID: State = {
     {
       type: "VarString",
       name: "Key",
-      fixed_value: "EVR",
+      pattern: "EVR",
       byte_length: 3,
       exclude: true,
     },
     {
       type: "UInt8",
       name: "Index",
-      fixed_value: 6,
+      pattern: "6",
       exclude: true,
     },
     {
@@ -354,6 +465,7 @@ export const STP_CANDIDATE_ID: State = {
 export const all = [
   STP_TOKEN_ID,
   STP_HOST_ADDR,
+  STP_HOST_ADDR_OLD,
   STP_TRANSFEREE_ADDR,
   STP_CANDIDATE_OWNER,
   STP_CANDIDATE_ID,

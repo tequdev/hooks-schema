@@ -4,7 +4,7 @@ import { EvernodeHookDefinition } from "./hook-schemas/evernode";
 import { GovernanceHookDefinition } from "./hook-schemas/xahau-governance";
 import { parser } from "./parser";
 
-import fs from 'fs';
+import * as fs from 'fs';
 
 const client = new Client("wss://xahau.org");
 // const client = new Client("wss://xahau-test.net");
