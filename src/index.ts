@@ -10,12 +10,12 @@ const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");
 
 const GENESIS_ACCOUNT = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'
-const Gogernance_Definition = GovernanceHookDefinition
+const Governance_Definition = GovernanceHookDefinition
 
 const Xahau_Governance = {
   hook_account: GENESIS_ACCOUNT,
   hook_namespace_id: '0',
-  hook_definition: Gogernance_Definition,
+  hook_definition: Governance_Definition,
 }
 
 const Evernode = {
