@@ -1,6 +1,6 @@
-import { HookParameterDefinition } from "./HookParameter";
-import { HookStateDefinition } from "./HookState";
-import { TxnParameterDefinition } from "./TxnParameter";
+import { HookParameterDefinition } from './HookParameter'
+import { HookStateDefinition } from './HookState'
+import { TxnParameterDefinition } from './TxnParameter'
 
 export type Definition = {
   name: string
@@ -19,5 +19,3 @@ export type Definition = {
   txn_parameters: TxnParameterDefinition
   hook_parameters: HookParameterDefinition
 }
-
-

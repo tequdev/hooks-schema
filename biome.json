@@ -13,5 +13,12 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "quoteStyle": "single",
+      "quoteProperties": "asNeeded"
+    }
   }
 }

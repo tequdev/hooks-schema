@@ -12,28 +12,28 @@
 
 // // Hook Candidate Id keys. (Hook candidate proposal entries for candidate id-based lookup).
 // uint8_t STP_CANDIDATE_ID[32] = { 'E', 'V', 'R', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-import type { Definition } from '../../../schema';
-type State = Definition["hook_states"]["hook_states"][number]
+import type { Definition } from '../../../schema'
+type State = Definition['hook_states']['hook_states'][number]
 
 export const STP_TOKEN_ID: State = {
-  name: "Token Id",
+  name: 'Token Id',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "2",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '2',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "TokenID",
+      type: 'VarString',
+      name: 'TokenID',
       byte_length: 28,
       binary: true,
     },
@@ -41,377 +41,377 @@ export const STP_TOKEN_ID: State = {
   // <host_address(20)><cpu_model_name(40)><cpu_count(2)><cpu_speed(2)><cpu_microsec(4)><ram_mb(4)><disk_mb(4)><email(40)><accumulated_reward_amount(8)>
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Host Address",
+      type: 'AccountID',
+      name: 'Host Address',
     },
     {
-      type: "VarString",
-      name: "CPU Model Name",
+      type: 'VarString',
+      name: 'CPU Model Name',
       byte_length: 40,
     },
     {
-      type: "UInt16",
-      name: "CPU Count",
+      type: 'UInt16',
+      name: 'CPU Count',
     },
     {
-      type: "UInt16",
-      name: "CPU Speed",
+      type: 'UInt16',
+      name: 'CPU Speed',
     },
     {
-      type: "UInt32",
-      name: "CPU Microsec",
+      type: 'UInt32',
+      name: 'CPU Microsec',
     },
     {
-      type: "UInt32",
-      name: "RAM MB",
+      type: 'UInt32',
+      name: 'RAM MB',
     },
     {
-      type: "UInt32",
-      name: "Disk MB",
+      type: 'UInt32',
+      name: 'Disk MB',
     },
     {
-      type: "VarString",
-      name: "Email",
+      type: 'VarString',
+      name: 'Email',
       byte_length: 40,
     },
     {
-      type: "XFL",
-      name: "Accumulated Reward Amount",
+      type: 'XFL',
+      name: 'Accumulated Reward Amount',
     },
   ],
 }
 
 export const STP_HOST_ADDR: State = {
-  name: "Host Address",
+  name: 'Host Address',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "3",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '3',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "padding",
+      type: 'VarString',
+      name: 'padding',
       byte_length: 8,
-      pattern: "0".repeat(8),
+      pattern: '0'.repeat(8),
       exclude: true,
     },
     {
-      type: "AccountID",
-      name: 'Account'
+      type: 'AccountID',
+      name: 'Account',
     },
   ],
   // <token_id(32)><country_code(2)><reserved(8)><description(26)><registration_ledger(8)><registration_fee(8)><no_of_total_instances(4)><no_of_active_instances(4)>
   // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)><transfer_timestamp(8)>
   hookstate_data: [
     {
-      type: "VarString",
-      name: "TokenID",
+      type: 'VarString',
+      name: 'TokenID',
       byte_length: 32,
-      binary: true
+      binary: true,
     },
     {
-      type: "VarString",
-      name: "Country Code",
+      type: 'VarString',
+      name: 'Country Code',
       byte_length: 2,
     },
     {
-      type: "VarString",
-      name: "Reserved",
+      type: 'VarString',
+      name: 'Reserved',
       byte_length: 8,
     },
     {
-      type: "VarString",
-      name: "Description",
+      type: 'VarString',
+      name: 'Description',
       byte_length: 26,
     },
     {
-      type: "UInt64",
-      name: "Registration Ledger",
+      type: 'UInt64',
+      name: 'Registration Ledger',
     },
     {
-      type: "UInt64",
-      name: "Registration Fee",
+      type: 'UInt64',
+      name: 'Registration Fee',
     },
     {
-      type: "UInt32",
-      name: "No of Total Instances",
+      type: 'UInt32',
+      name: 'No of Total Instances',
     },
     {
-      type: "UInt32",
-      name: "No of Active Instances",
+      type: 'UInt32',
+      name: 'No of Active Instances',
     },
     {
-      type: "UInt64",
-      name: "Last Heartbeat Index",
+      type: 'UInt64',
+      name: 'Last Heartbeat Index',
     },
     {
-      type: "VarString",
-      name: "Version",
+      type: 'VarString',
+      name: 'Version',
       byte_length: 3,
     },
     {
-      type: "UInt64",
-      name: "Registration Timestamp",
+      type: 'UInt64',
+      name: 'Registration Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Transfer Flag",
+      type: 'UInt8',
+      name: 'Transfer Flag',
     },
     {
-      type: "UInt32",
-      name: "Last Vote Candidate Idx",
+      type: 'UInt32',
+      name: 'Last Vote Candidate Idx',
     },
     {
-      type: "UInt64",
-      name: "Last Vote Timestamp",
+      type: 'UInt64',
+      name: 'Last Vote Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Support Vote Sent",
+      type: 'UInt8',
+      name: 'Support Vote Sent',
     },
     {
-      type: "UInt8",
-      name: "Host Reputation",
+      type: 'UInt8',
+      name: 'Host Reputation',
     },
     {
-      type: "UInt8",
-      name: "Flags",
+      type: 'UInt8',
+      name: 'Flags',
     },
     {
-      type: "UInt64",
-      name: "Transfer Timestamp",
+      type: 'UInt64',
+      name: 'Transfer Timestamp',
     },
   ],
 }
 
 export const STP_HOST_ADDR_OLD: State = {
-  name: "Host Address",
+  name: 'Host Address',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "3",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '3',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "padding",
+      type: 'VarString',
+      name: 'padding',
       byte_length: 8,
-      pattern: "0".repeat(8),
+      pattern: '0'.repeat(8),
       exclude: true,
     },
     {
-      type: "AccountID",
-      name: 'Account'
+      type: 'AccountID',
+      name: 'Account',
     },
   ],
   // <token_id(32)><country_code(2)><reserved(8)><description(26)><registration_ledger(8)><registration_fee(8)><no_of_total_instances(4)><no_of_active_instances(4)>
   // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)>
   hookstate_data: [
     {
-      type: "VarString",
-      name: "TokenID",
+      type: 'VarString',
+      name: 'TokenID',
       byte_length: 32,
-      binary: true
+      binary: true,
     },
     {
-      type: "VarString",
-      name: "Country Code",
+      type: 'VarString',
+      name: 'Country Code',
       byte_length: 2,
     },
     {
-      type: "VarString",
-      name: "Reserved",
+      type: 'VarString',
+      name: 'Reserved',
       byte_length: 8,
     },
     {
-      type: "VarString",
-      name: "Description",
+      type: 'VarString',
+      name: 'Description',
       byte_length: 26,
     },
     {
-      type: "UInt64",
-      name: "Registration Ledger",
+      type: 'UInt64',
+      name: 'Registration Ledger',
     },
     {
-      type: "UInt64",
-      name: "Registration Fee",
+      type: 'UInt64',
+      name: 'Registration Fee',
     },
     {
-      type: "UInt32",
-      name: "No of Total Instances",
+      type: 'UInt32',
+      name: 'No of Total Instances',
     },
     {
-      type: "UInt32",
-      name: "No of Active Instances",
+      type: 'UInt32',
+      name: 'No of Active Instances',
     },
     {
-      type: "UInt64",
-      name: "Last Heartbeat Index",
+      type: 'UInt64',
+      name: 'Last Heartbeat Index',
     },
     {
-      type: "VarString",
-      name: "Version",
+      type: 'VarString',
+      name: 'Version',
       byte_length: 3,
     },
     {
-      type: "UInt64",
-      name: "Registration Timestamp",
+      type: 'UInt64',
+      name: 'Registration Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Transfer Flag",
+      type: 'UInt8',
+      name: 'Transfer Flag',
     },
     {
-      type: "UInt32",
-      name: "Last Vote Candidate Idx",
+      type: 'UInt32',
+      name: 'Last Vote Candidate Idx',
     },
     {
-      type: "UInt64",
-      name: "Last Vote Timestamp",
+      type: 'UInt64',
+      name: 'Last Vote Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Support Vote Sent",
+      type: 'UInt8',
+      name: 'Support Vote Sent',
     },
     {
-      type: "UInt8",
-      name: "Host Reputation",
+      type: 'UInt8',
+      name: 'Host Reputation',
     },
     {
-      type: "UInt8",
-      name: "Flags",
+      type: 'UInt8',
+      name: 'Flags',
     },
   ],
 }
 
 export const STP_TRANSFEREE_ADDR: State = {
-  name: "Transferee Address",
+  name: 'Transferee Address',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "4",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '4',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "padding",
+      type: 'VarString',
+      name: 'padding',
       byte_length: 8,
-      pattern: "0".repeat(8),
+      pattern: '0'.repeat(8),
       exclude: true,
     },
     {
-      type: "AccountID",
-      name: 'Account'
+      type: 'AccountID',
+      name: 'Account',
     },
   ],
   // <transferring_host_address(20)><registration_ledger(8)><token_id(32)>
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Transferring Host Address",
+      type: 'AccountID',
+      name: 'Transferring Host Address',
     },
     {
-      type: "UInt64",
-      name: "Registration Ledger",
+      type: 'UInt64',
+      name: 'Registration Ledger',
     },
     {
-      type: "VarString",
-      name: "TokenID",
+      type: 'VarString',
+      name: 'TokenID',
       byte_length: 32,
-      binary: true
+      binary: true,
     },
   ],
 }
 
 export const STP_CANDIDATE_OWNER: State = {
-  name: "Candidate Owner",
+  name: 'Candidate Owner',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "5",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '5',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "padding",
+      type: 'VarString',
+      name: 'padding',
       byte_length: 8,
-      pattern: "0".repeat(8),
+      pattern: '0'.repeat(8),
       exclude: true,
     },
     {
-      type: "AccountID",
-      name: 'Account'
+      type: 'AccountID',
+      name: 'Account',
     },
   ],
   // <GOVERNOR_HASH(32)><REGISTRY_HASH(32)><HEARTBEAT_HASH(32)>
   hookstate_data: [
     {
-      type: "Hash256",
-      name: "Governor Hash",
+      type: 'Hash256',
+      name: 'Governor Hash',
     },
     {
-      type: "Hash256",
-      name: "Registry Hash",
+      type: 'Hash256',
+      name: 'Registry Hash',
     },
     {
-      type: "Hash256",
-      name: "Heartbeat Hash",
+      type: 'Hash256',
+      name: 'Heartbeat Hash',
     },
   ],
 }
 
 export const STP_CANDIDATE_ID: State = {
-  name: "Candidate ID",
+  name: 'Candidate ID',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "6",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '6',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "CandicateID",
+      type: 'VarString',
+      name: 'CandicateID',
       byte_length: 28,
     },
   ],
@@ -419,45 +419,45 @@ export const STP_CANDIDATE_ID: State = {
   // <last_vote_timestamp(8)><status(1)><status_change_timestamp(8)><foundation_vote_status(1)>
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Owner Address",
+      type: 'AccountID',
+      name: 'Owner Address',
     },
     {
-      type: "UInt32",
-      name: "Candidate Idx",
+      type: 'UInt32',
+      name: 'Candidate Idx',
     },
     {
-      type: "VarString",
-      name: "Short Name",
+      type: 'VarString',
+      name: 'Short Name',
       byte_length: 20,
     },
     {
-      type: "UInt64",
-      name: "Created Timestamp",
+      type: 'UInt64',
+      name: 'Created Timestamp',
     },
     {
-      type: "UInt64",
-      name: "Proposal Fee",
+      type: 'UInt64',
+      name: 'Proposal Fee',
     },
     {
-      type: "UInt32",
-      name: "Positive Vote Count",
+      type: 'UInt32',
+      name: 'Positive Vote Count',
     },
     {
-      type: "UInt64",
-      name: "Last Vote Timestamp",
+      type: 'UInt64',
+      name: 'Last Vote Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Status",
+      type: 'UInt8',
+      name: 'Status',
     },
     {
-      type: "UInt64",
-      name: "Status Change Timestamp",
+      type: 'UInt64',
+      name: 'Status Change Timestamp',
     },
     {
-      type: "UInt8",
-      name: "Foundation Vote Status",
+      type: 'UInt8',
+      name: 'Foundation Vote Status',
     },
   ],
 }

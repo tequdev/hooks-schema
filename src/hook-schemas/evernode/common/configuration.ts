@@ -31,601 +31,622 @@
 // // Network configuration <busyness_detect_period(uint32_t)><busyness_detect_average(uint16_t)>.
 // const uint8_t CONF_NETWORK_CONFIGURATION[32] = { 'E', 'V', 'R', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15 };
 
-
-import type { Definition } from '../../../schema';
-type State = Definition["hook_states"]["hook_states"][number]
+import type { Definition } from '../../../schema'
+type State = Definition['hook_states']['hook_states'][number]
 
 export const CONF_ISSUER_ADDR: State = {
-  name: "Issuer Address",
+  name: 'Issuer Address',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '1',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Address",
-    }
+      type: 'AccountID',
+      name: 'Address',
+    },
   ],
 }
 
 export const CONF_FOUNDATION_ADDR: State = {
-  name: "Foundation Address",
+  name: 'Foundation Address',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "2",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '2',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Address",
-    }
+      type: 'AccountID',
+      name: 'Address',
+    },
   ],
 }
 
 export const CONF_MOMENT_SIZE: State = {
-  name: "Moment Size",
+  name: 'Moment Size',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "3",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '3',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt16", name: "Size"
-    }
+      type: 'UInt16',
+      name: 'Size',
+    },
   ],
 }
 
 export const CONF_MINT_LIMIT: State = {
-  name: "Mint Limit",
+  name: 'Mint Limit',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "4",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '4',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt64", name: "Limit"
-    }
+      type: 'UInt64',
+      name: 'Limit',
+    },
   ],
 }
 
 export const CONF_FIXED_REG_FEE: State = {
-  name: "Fixed Reg Fee",
+  name: 'Fixed Reg Fee',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
-      exclude: true
+      pattern: '0'.repeat(27),
+      exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "5",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '5',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt64", name: "Fee"
-    }
+      type: 'UInt64',
+      name: 'Fee',
+    },
   ],
 }
 
 export const CONF_HOST_HEARTBEAT_FREQ: State = {
-  name: "Host Heartbeat Freq",
+  name: 'Host Heartbeat Freq',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "6",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '6',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt16", name: "Freq"
-    }
+      type: 'UInt16',
+      name: 'Freq',
+    },
   ],
 }
 
 export const CONF_LEASE_ACQUIRE_WINDOW: State = {
-  name: "Lease Acquire Window",
+  name: 'Lease Acquire Window',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "7",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '7',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt16", name: "Window"
-    }
+      type: 'UInt16',
+      name: 'Window',
+    },
   ],
 }
 
 export const CONF_REWARD_CONFIGURATION: State = {
-  name: "Reward Configuration",
+  name: 'Reward Configuration',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "8",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '8',
       exclude: true,
     },
   ],
   // <epoch_count(uint8_t)><first_epoch_reward_quota(uint32_t)><epoch_reward_amount(uint32_t)><reward_start_moment(uint32_t)><accumulated_reward_frequency(uint16_t)><host_reputation_threshold(uint8_t)>
   hookstate_data: [
     {
-      type: "UInt8", name: "Epoch Count"
+      type: 'UInt8',
+      name: 'Epoch Count',
     },
     {
-      type: "UInt32", name: "First Epoch Reward Quota"
+      type: 'UInt32',
+      name: 'First Epoch Reward Quota',
     },
     {
-      type: "UInt32", name: "Epoch Reward Amount"
+      type: 'UInt32',
+      name: 'Epoch Reward Amount',
     },
     {
-      type: "UInt32", name: "Reward Start Moment"
+      type: 'UInt32',
+      name: 'Reward Start Moment',
     },
     {
-      type: "UInt16", name: "Accumulated Reward Frequency"
+      type: 'UInt16',
+      name: 'Accumulated Reward Frequency',
     },
     {
-      type: "UInt8", name: "Host Reputation Threshold"
+      type: 'UInt8',
+      name: 'Host Reputation Threshold',
     },
   ],
 }
 
 export const CONF_MAX_TOLERABLE_DOWNTIME: State = {
-  name: "Max Tolerable Downtime",
+  name: 'Max Tolerable Downtime',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "9",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '9',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt16", name: "Max Tolerable Downtime"
-    }
+      type: 'UInt16',
+      name: 'Max Tolerable Downtime',
+    },
   ],
 }
 export const CONF_MOMENT_TRANSIT_INFO: State = {
-  name: "Moment Transit Info",
+  name: 'Moment Transit Info',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
+      type: 'VarString',
+      name: 'Key',
 
-      pattern: "EVR",
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
 
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "10",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '10',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt64", name: "Transition Index"
+      type: 'UInt64',
+      name: 'Transition Index',
     },
     {
-      type: "UInt16", name: "Moment Size"
+      type: 'UInt16',
+      name: 'Moment Size',
     },
     {
-      type: "UInt8", name: "Index Type"
+      type: 'UInt8',
+      name: 'Index Type',
     },
   ],
 }
 
 export const CONF_MAX_EMIT_TRX_FEE: State = {
-  name: "Max Emit Trx Fee",
+  name: 'Max Emit Trx Fee',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
+      type: 'VarString',
+      name: 'Key',
 
-      pattern: "EVR",
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "11",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '11',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt64", name: "Max Emit Trx Fee"
-    }
+      type: 'UInt64',
+      name: 'Max Emit Trx Fee',
+    },
   ],
 }
 
 export const CONF_HEARTBEAT_ADDR: State = {
-  name: "Heartbeat Addr",
+  name: 'Heartbeat Addr',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "12",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '12',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Address",
-    }
+      type: 'AccountID',
+      name: 'Address',
+    },
   ],
 }
 
 export const CONF_REGISTRY_ADDR: State = {
-  name: "Registry Addr",
+  name: 'Registry Addr',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "13",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '13',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "AccountID",
-      name: "Address",
-    }
+      type: 'AccountID',
+      name: 'Address',
+    },
   ],
 }
 
 export const CONF_GOVERNANCE_CONFIGURATION: State = {
-  name: "Governance Configuration",
+  name: 'Governance Configuration',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "14",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '14',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt32", name: "Eligibility Period"
+      type: 'UInt32',
+      name: 'Eligibility Period',
     },
     {
-      type: "UInt32", name: "Candidate Life Period"
+      type: 'UInt32',
+      name: 'Candidate Life Period',
     },
     {
-      type: "UInt32", name: "Candidate Election Period"
+      type: 'UInt32',
+      name: 'Candidate Election Period',
     },
     {
-      type: "UInt16", name: "Candidate Support Average"
+      type: 'UInt16',
+      name: 'Candidate Support Average',
     },
   ],
 }
 
 export const CONF_NETWORK_CONFIGURATION: State = {
-  name: "Network Configuration",
+  name: 'Network Configuration',
   hookstate_key: [
     {
-      type: "VarString",
-      name: "Key",
-      pattern: "EVR",
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
       byte_length: 3,
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Prefix",
-      pattern: "1",
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
       exclude: true,
     },
     {
-      type: "VarString",
-      name: "",
+      type: 'VarString',
+      name: '',
       byte_length: 27,
-      pattern: "0".repeat(27),
+      pattern: '0'.repeat(27),
       exclude: true,
     },
     {
-      type: "UInt8",
-      name: "Index",
-      pattern: "15",
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '15',
       exclude: true,
     },
   ],
   hookstate_data: [
     {
-      type: "UInt32", name: "Busyness Detect Period"
+      type: 'UInt32',
+      name: 'Busyness Detect Period',
     },
     {
-      type: "UInt16", name: "Busyness Detect Average"
+      type: 'UInt16',
+      name: 'Busyness Detect Average',
     },
   ],
 }
