@@ -2,6 +2,7 @@ import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
 import { Definition } from './schema'
+import { Field } from './schema/Field'
 
 type HookStateDefinition = Definition['hook_states']
 type HookStateDataType = HookStateDefinition['hook_states'][number]['hookstate_data'][number]
@@ -9,6 +10,8 @@ type HookStateKeyType = HookStateDefinition['hook_states'][number]['hookstate_ke
 
 const getByteLength = (state: HookStateKeyType | HookStateDataType) => {
   switch (state.type) {
+    case 'Array':
+      return state.byte_length
     case 'AccountID':
       return 20
     case 'UInt8':
@@ -30,8 +33,19 @@ const getByteLength = (state: HookStateKeyType | HookStateDataType) => {
   }
 }
 
-const bufferToReadableData = (buffer: Buffer, state: HookStateDataType | HookStateKeyType) => {
+const bufferToReadableData = (buffer: Buffer, state: Field, nullReplaceTo = '0'): string | number | bigint | Array<string | number | bigint> => {
   switch (state.type) {
+    case 'Array': {
+      let from = 0
+      const a = state.array.map((s) => {
+        const to = from + getByteLength(s)
+        const buf = buffer.subarray(from, to)
+        from = to
+        return bufferToReadableData(buf, s as Field, nullReplaceTo) as string | number | bigint
+      })
+      if (state.delimiter) return a.join(state.delimiter)
+      return a
+    }
     case 'AccountID':
       return encodeAccountID(buffer)
     case 'UInt8':
@@ -46,7 +60,7 @@ const bufferToReadableData = (buffer: Buffer, state: HookStateDataType | HookSta
       return hexToXfl(buffer.toString('hex'))
     case 'VarString':
       if (state.binary === true) return buffer.toString('hex')
-      return buffer.toString('utf-8').replace(/\0/g, '0')
+      return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
     case 'Hash256':
       return buffer.toString('hex')
     default:
@@ -59,10 +73,10 @@ const stateDataTotalLength = (data: HookStateDefinition['hook_states'][number]) 
 }
 
 type ReadableData = {
-  [key: string]: string | number | bigint
+  [key: string]: string | number | bigint | Array<string | number | bigint>
 }
 
-export const parser = (value: HookState, definition: HookStateDefinition) => {
+export const hookStateParser = (value: HookState, definition: HookStateDefinition) => {
   const key = Buffer.from(value.HookStateKey, 'hex')
   const data = Buffer.from(value.HookStateData, 'hex')
   // console.log(value)
@@ -79,10 +93,11 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
         const currentKeyIndex = getByteLength(k)
         const currentBuffer = key.subarray(lastKeyIndex, lastKeyIndex + currentKeyIndex)
         lastKeyIndex += currentKeyIndex
-        const readable = bufferToReadableData(currentBuffer, k)
+        const readableForComp = bufferToReadableData(currentBuffer, k, "0")
+        const readable = bufferToReadableData(currentBuffer, k, "")
         // console.log(lastKeyIndex, lastKeyIndex + currentKeyIndex, readable)
         // console.log(k.pattern, readable.toString(), !new RegExp(k.pattern!).test(readable.toString()))
-        if (k.pattern && !new RegExp(k.pattern).test(readable.toString())) return false
+        if (k.pattern && !new RegExp(k.pattern).test(readableForComp.toString())) return false
         if (k.exclude === true) return true
         keyArr.push({
           name: k.name,
@@ -99,11 +114,12 @@ export const parser = (value: HookState, definition: HookStateDefinition) => {
         const currentDataIndex = getByteLength(d)
         const currentBuffer = data.subarray(lastDataIndex, lastDataIndex + currentDataIndex)
         lastDataIndex += currentDataIndex
-        const readable = bufferToReadableData(currentBuffer, d)
+        const readableForComp = bufferToReadableData(currentBuffer, d, "0")
+        const readable = bufferToReadableData(currentBuffer, d, "")
         // console.log(lastDataIndex - currentDataIndex, lastDataIndex, readable, currentBuffer)
         // console.log(d.pattern, readable.toString(), !new RegExp(d.pattern!).test(readable.toString()))
 
-        if (d.pattern && !new RegExp(d.pattern).test(readable.toString())) return false
+        if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
         if (d.exclude === true) return true
         dataArr.push({
           name: d.name,

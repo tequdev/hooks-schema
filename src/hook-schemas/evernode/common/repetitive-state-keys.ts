@@ -266,9 +266,25 @@ export const STP_HOST_ADDR_OLD: State = {
       name: 'Last Heartbeat Index',
     },
     {
-      type: 'VarString',
+      type: 'Array',
       name: 'Version',
+      array: [
+        {
+          type: 'UInt8',
+          name: 'major',
+        },
+        {
+          type: 'UInt8',
+          name: 'minor',
+        },
+        {
+          type: 'UInt8',
+          name: 'patch',
+        }
+      ],
+      array_length: 3,
       byte_length: 3,
+      delimiter: '.',
     },
     {
       type: 'UInt64',

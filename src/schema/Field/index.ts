@@ -1,4 +1,14 @@
-export type Field = AccountID | UInt8 | UInt16 | UInt32 | UInt64 | XFL | VarString | Hash256
+export type Field = ArrayField | NonArrayField
+
+type NonArrayField = AccountID | UInt8 | UInt16 | UInt32 | UInt64 | XFL | VarString | Hash256
+
+export interface ArrayField<T extends NonArrayField = NonArrayField> extends FieldBase {
+  type: 'Array'
+  array: T[]
+  delimiter?: string
+  array_length: number
+  byte_length: number
+}
 
 /**
  * @external

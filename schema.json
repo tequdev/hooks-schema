@@ -5,6 +5,9 @@
             "title": "Field",
             "anyOf": [
                 {
+                    "$ref": "#/definitions/ArrayField<NonArrayField>"
+                },
+                {
                     "$ref": "#/definitions/AccountID"
                 },
                 {
@@ -29,6 +32,38 @@
                     "$ref": "#/definitions/Hash256"
                 }
             ]
+        },
+        "NonArrayField": {
+            "title": "NonArrayField",
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/AccountID"
+                },
+                {
+                    "$ref": "#/definitions/UInt8"
+                },
+                {
+                    "$ref": "#/definitions/UInt16"
+                },
+                {
+                    "$ref": "#/definitions/UInt32"
+                },
+                {
+                    "$ref": "#/definitions/UInt64"
+                },
+                {
+                    "$ref": "#/definitions/XFL"
+                },
+                {
+                    "$ref": "#/definitions/VarString"
+                },
+                {
+                    "$ref": "#/definitions/Hash256"
+                }
+            ]
+        },
+        "ArrayField": {
+            "$ref": "#/definitions/ArrayField<T>"
         },
         "FieldBase": {
             "title": "FieldBase",
@@ -798,6 +833,155 @@
                 "name",
                 "txn_parameters",
                 "version"
+            ]
+        },
+        "ArrayField<NonArrayField>": {
+            "title": "ArrayField<NonArrayField>",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Array"
+                    ],
+                    "title": "type"
+                },
+                "array": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/NonArrayField"
+                    },
+                    "title": "array"
+                },
+                "delimiter": {
+                    "type": "string",
+                    "title": "delimiter"
+                },
+                "array_length": {
+                    "type": "number",
+                    "title": "array_length"
+                },
+                "byte_length": {
+                    "type": "number",
+                    "title": "byte_length"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "pattern": {
+                    "type": "string",
+                    "title": "pattern"
+                },
+                "exclude": {
+                    "default": false,
+                    "type": "boolean",
+                    "title": "exclude"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "array",
+                "array_length",
+                "byte_length",
+                "name",
+                "type"
+            ]
+        },
+        "ArrayField<T>": {
+            "title": "ArrayField<T>",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Array"
+                    ],
+                    "title": "type"
+                },
+                "array": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/T"
+                    },
+                    "title": "array"
+                },
+                "delimiter": {
+                    "type": "string",
+                    "title": "delimiter"
+                },
+                "array_length": {
+                    "type": "number",
+                    "title": "array_length"
+                },
+                "byte_length": {
+                    "type": "number",
+                    "title": "byte_length"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "pattern": {
+                    "type": "string",
+                    "title": "pattern"
+                },
+                "exclude": {
+                    "default": false,
+                    "type": "boolean",
+                    "title": "exclude"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "array",
+                "array_length",
+                "byte_length",
+                "name",
+                "type"
+            ]
+        },
+        "T": {
+            "title": "T",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "enum": [
+                        "AccountID",
+                        "Hash256",
+                        "UInt16",
+                        "UInt32",
+                        "UInt64",
+                        "UInt8",
+                        "VarString",
+                        "XFL"
+                    ],
+                    "type": "string",
+                    "title": "type"
+                },
+                "byte_length": {
+                    "default": 32,
+                    "type": "number",
+                    "title": "byte_length"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "pattern": {
+                    "type": "string",
+                    "title": "pattern"
+                },
+                "exclude": {
+                    "default": false,
+                    "type": "boolean",
+                    "title": "exclude"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "type"
             ]
         }
     }
