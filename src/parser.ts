@@ -59,7 +59,7 @@ const bufferToReadableData = (buffer: Buffer, state: Field, nullReplaceTo = '0')
     case 'XFL':
       return hexToXfl(buffer.toString('hex'))
     case 'VarString':
-      if (state.binary === true) return buffer.toString('hex')
+      if (state.binary === true) return buffer.toString('hex').toUpperCase()
       return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
     case 'Hash256':
       return buffer.toString('hex')
