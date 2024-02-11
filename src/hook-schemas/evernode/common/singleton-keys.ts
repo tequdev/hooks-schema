@@ -1,5 +1,5 @@
-import type { Definition } from '../../../schema'
-type State = Definition['hook_states']['hook_states'][number]
+import { HookStateDefinition } from 'src/schema/HookState'
+type State = HookStateDefinition['hook_states'][number]
 
 export const STK_HOST_COUNT: State = {
   name: 'Host Count',

@@ -1,5 +1,6 @@
 import { HookParameterDefinition } from './HookParameter'
 import { HookStateDefinition } from './HookState'
+import { InvokeBlobDefinition } from './InvokeBlob'
 import { TxnParameterDefinition } from './TxnParameter'
 
 export type Definition = {
@@ -15,7 +16,8 @@ export type Definition = {
   namespace_id?: string
   hook_index?: number
 
-  hook_states: HookStateDefinition
-  txn_parameters: TxnParameterDefinition
-  hook_parameters: HookParameterDefinition
+  hook_states?: HookStateDefinition
+  txn_parameters?: TxnParameterDefinition
+  hook_parameters?: HookParameterDefinition
+  invoke_blobs?: InvokeBlobDefinition
 }
