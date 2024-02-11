@@ -62,7 +62,7 @@ const bufferToReadableData = (buffer: Buffer, state: Field, nullReplaceTo = '0')
       if (state.binary === true) return buffer.toString('hex').toUpperCase()
       return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
     case 'Hash256':
-      return buffer.toString('hex')
+      return buffer.toString('hex').toUpperCase()
     default:
       throw new Error('Invalid type')
   }

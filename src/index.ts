@@ -1,6 +1,7 @@
 import { Client } from '@transia/xrpl'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
+import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { hookStateParser } from './parser'
 
@@ -21,10 +22,17 @@ const Evernode = {
   hook_definition: EvernodeHookDefinition,
 }
 
+const Oracle = {
+  hook_account: 'rsMCzsxZYSXafH3Egj1jpGemgQjagtnXEk',
+  hook_namespace_id: '9202AF6CE925B26AE6B25ADFFF0B2705147E195FA38DD58AE6ECC58ED263751F',
+  hook_definition: OracleHookDefinition,
+}
+
+
 const main = async () => {
   await client.connect()
 
-  const current = Evernode
+  const current = Oracle
 
   const response = await client.request({
     command: 'account_namespace',

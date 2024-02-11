@@ -5,6 +5,7 @@ import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { hookStateParser } from './parser'
 
 import * as fs from 'fs'
+import { OracleHookDefinition } from './hook-schemas/oracle'
 import { Definition } from './schema'
 
 const client = new Client('wss://xahau.org')
@@ -34,7 +35,13 @@ const Evernode: DefinitionSource = {
   hook_definition: EvernodeHookDefinition,
 }
 
-const definitions = [Xahau_Governance, Evernode]
+const Oracle = {
+  hook_account: 'rsMCzsxZYSXafH3Egj1jpGemgQjagtnXEk',
+  hook_namespace_id: '9202AF6CE925B26AE6B25ADFFF0B2705147E195FA38DD58AE6ECC58ED263751F',
+  hook_definition: OracleHookDefinition,
+}
+
+const definitions = [Xahau_Governance, Evernode, Oracle]
 
 const generateDefinitionJson = (source: DefinitionSource, dir: string) => {
   const j = JSON.stringify(source, null, 2);
