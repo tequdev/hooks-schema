@@ -3,11 +3,11 @@ import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
-import { hookStateParser, invokeBlobParser } from './parser'
+import { hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
 import { Definition } from './schema'
 
-const client = new Client('wss://xahau.org')
-// const client = new Client("wss://xahau-test.net");
+// const client = new Client('wss://xahau.org')
+const client = new Client("wss://xahau-test.net");
 
 const GENESIS_ACCOUNT = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'
 
@@ -16,12 +16,16 @@ type DefinitionSource = {
   hook_namespace_id: string
   hook_definition: Definition
   invoke_txnid?: string[]
+  txn_parameters_txnid?: string[]
 }
 
 const Xahau_Governance: DefinitionSource = {
   hook_account: GENESIS_ACCOUNT,
   hook_namespace_id: '0',
   hook_definition: GovernanceHookDefinition,
+  txn_parameters_txnid: [
+    'BD826500478AB030F3E349D293FBE88163B6198202380FA57C5BBC17125C8CB4', //testnet
+  ]
 }
 
 const Evernode: DefinitionSource = {
@@ -76,14 +80,33 @@ const test_invoke_blob = async (source: DefinitionSource) => {
   }
 }
 
+const test_txn_parameters = async (source: DefinitionSource) => {
+  if (!source.txn_parameters_txnid || source.txn_parameters_txnid.length === 0) return
+
+  for (const id of source.txn_parameters_txnid) {
+    const response = await client.request<TxRequest, TxResponse>({
+      command: 'tx',
+      transaction: id,
+    })
+    if (!response.result.HookParameters) throw new Error('HookParameters is not defined')
+    if (!source.hook_definition.txn_parameters) throw new Error('hook_definition.txn_parameters is not defined')
+
+    for (const param of response.result.HookParameters) {
+      const result = txnParametersParser(param, source.hook_definition.txn_parameters)
+      console.log(JSON.stringify(result, null, 2))
+    }
+  }
+}
+
 
 const main = async () => {
   await client.connect()
 
-  const current = Oracle
+  const current = Xahau_Governance
 
   // await test_hookstate(current)
-  await test_invoke_blob(current)
+  // await test_invoke_blob(current)
+  await test_txn_parameters(current)
 
   await client.disconnect()
 }

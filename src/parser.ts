@@ -1,9 +1,11 @@
 import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
+import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
 import { Field } from './schema/Field'
 import { HookStateDefinition } from './schema/HookState'
 import { InvokeBlobDefinition } from './schema/InvokeBlob'
+import { TxnParameterDefinition } from './schema/TxnParameter'
 
 const getLengthPrefix = (buffer: Buffer) => {
   let len = buffer.readUInt8(0)
@@ -181,4 +183,69 @@ export const invokeBlobParser = (blob: string, definition: InvokeBlobDefinition)
   })
     .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
     .find((_) => true)
+}
+
+export const txnParametersParser = (parameters: HookParameter, definition: TxnParameterDefinition) => {
+  const { HookParameterName, HookParameterValue } = parameters.HookParameter
+  const name = Buffer.from(HookParameterName, 'hex')
+  const value = Buffer.from(HookParameterValue, 'hex')
+  // console.log(value)
+  const state = definition.txn_parameters
+    .map((state) => {
+      // console.log(data.length, fieldsTotalLength(state))
+      if (name.length !== fieldsTotalLength(state.otxnparam_key, name)) return undefined
+      if (value.length !== fieldsTotalLength(state.otxnparam_data, value)) return undefined
+
+      let lastNameIndex = 0
+      let lastBuffer = name
+      const keyArr: ReadableData[] = []
+
+      const checkKey = state.otxnparam_key.every((k) => {
+        // Retrieve info matching HookStateKey and length with definition
+        const currentNameIndex = getByteLength(k, lastBuffer)
+        const currentBuffer = name.subarray(lastNameIndex, lastNameIndex + currentNameIndex)
+        lastNameIndex += currentNameIndex
+        lastBuffer = currentBuffer
+        const readableForComp = bufferToReadableData(currentBuffer, k, "0")
+        const readable = bufferToReadableData(currentBuffer, k, "")
+        // console.log(lastNameIndex, lastNameIndex + currentNameIndex, readable)
+        // console.log(k.pattern, readable.toString(), !new RegExp(k.pattern!).test(readable.toString()))
+        if (k.pattern && !new RegExp(k.pattern).test(readableForComp.toString())) return false
+        if (k.exclude === true) return true
+        keyArr.push({
+          name: k.name,
+          value: readable,
+        })
+        return true
+      })
+      // console.log({ checkKey })
+      if (checkKey === false) return undefined
+      let lastValueIndex = 0
+      lastBuffer = value
+      const dataArr: ReadableData[] = []
+      const checkData = state.otxnparam_data.every((d) => {
+        // Retrieve info matching HookStateData and length with definition
+        const currentDataIndex = getByteLength(d, lastBuffer)
+        const currentBuffer = value.subarray(lastValueIndex, lastValueIndex + currentDataIndex)
+        lastValueIndex += currentDataIndex
+        lastBuffer = currentBuffer
+        const readableForComp = bufferToReadableData(currentBuffer, d, "0")
+        const readable = bufferToReadableData(currentBuffer, d, "")
+        // console.log(lastValueIndex - currentDataIndex, lastValueIndex, readable, currentBuffer)
+        // console.log(d.pattern, readable.toString(), !new RegExp(d.pattern!).test(readable.toString()))
+
+        if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+        if (d.exclude === true) return true
+        dataArr.push({
+          name: d.name,
+          value: readable,
+        })
+        return true
+      })
+
+      return checkData ? { name: state.name, key: keyArr, data: dataArr } : undefined
+    })
+    .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
+    .find((_) => true)
+  return state
 }
