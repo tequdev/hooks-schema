@@ -3,7 +3,7 @@ import { HookStateDefinition } from './HookState'
 import { InvokeBlobDefinition } from './InvokeBlob'
 import { TxnParameterDefinition } from './TxnParameter'
 
-export type Definition = {
+export interface Definition {
   name: string
   description: string
   hook_hash: string

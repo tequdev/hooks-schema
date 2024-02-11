@@ -1,6 +1,6 @@
 import { Field } from '../Field'
 
-export type HookStateDefinition = {
+export interface HookStateDefinition {
   name: string
   description: string
   hook_states: {

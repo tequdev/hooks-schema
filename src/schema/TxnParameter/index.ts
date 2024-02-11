@@ -1,6 +1,6 @@
 import { Field } from '../Field'
 
-export type TxnParameterDefinition = {
+export interface TxnParameterDefinition {
   name: string
   description: string
   txn_parameters: {

@@ -1,6 +1,6 @@
 import { Field } from '../Field'
 
-export type InvokeBlobDefinition = {
+export interface InvokeBlobDefinition {
   name: string
   description: string
   invoke_blobs: {
