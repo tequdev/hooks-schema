@@ -1,988 +1,1093 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "definitions": {
-        "Field": {
-            "title": "Field",
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/ArrayField<NonArrayField>"
-                },
-                {
-                    "$ref": "#/definitions/AccountID"
-                },
-                {
-                    "$ref": "#/definitions/UInt8"
-                },
-                {
-                    "$ref": "#/definitions/UInt16"
-                },
-                {
-                    "$ref": "#/definitions/UInt32"
-                },
-                {
-                    "$ref": "#/definitions/UInt64"
-                },
-                {
-                    "$ref": "#/definitions/XFL"
-                },
-                {
-                    "$ref": "#/definitions/VarString"
-                },
-                {
-                    "$ref": "#/definitions/Hash256"
-                }
-            ]
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Field": {
+      "title": "Field",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ArrayField<NonArrayField>"
         },
-        "NonArrayField": {
-            "title": "NonArrayField",
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/AccountID"
-                },
-                {
-                    "$ref": "#/definitions/UInt8"
-                },
-                {
-                    "$ref": "#/definitions/UInt16"
-                },
-                {
-                    "$ref": "#/definitions/UInt32"
-                },
-                {
-                    "$ref": "#/definitions/UInt64"
-                },
-                {
-                    "$ref": "#/definitions/XFL"
-                },
-                {
-                    "$ref": "#/definitions/VarString"
-                },
-                {
-                    "$ref": "#/definitions/Hash256"
-                }
-            ]
+        {
+          "$ref": "#/definitions/AccountID"
         },
-        "ArrayField": {
-            "$ref": "#/definitions/ArrayField<T>"
+        {
+          "$ref": "#/definitions/UInt8"
         },
-        "FieldBase": {
-            "title": "FieldBase",
+        {
+          "$ref": "#/definitions/UInt16"
+        },
+        {
+          "$ref": "#/definitions/UInt32"
+        },
+        {
+          "$ref": "#/definitions/UInt64"
+        },
+        {
+          "$ref": "#/definitions/XFL"
+        },
+        {
+          "$ref": "#/definitions/VarString"
+        },
+        {
+          "$ref": "#/definitions/Hash256"
+        }
+      ]
+    },
+    "NonArrayField": {
+      "title": "NonArrayField",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AccountID"
+        },
+        {
+          "$ref": "#/definitions/UInt8"
+        },
+        {
+          "$ref": "#/definitions/UInt16"
+        },
+        {
+          "$ref": "#/definitions/UInt32"
+        },
+        {
+          "$ref": "#/definitions/UInt64"
+        },
+        {
+          "$ref": "#/definitions/XFL"
+        },
+        {
+          "$ref": "#/definitions/VarString"
+        },
+        {
+          "$ref": "#/definitions/Hash256"
+        }
+      ]
+    },
+    "ArrayField": {
+      "$ref": "#/definitions/ArrayField<T>"
+    },
+    "FieldBase": {
+      "title": "FieldBase",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "type"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "AccountID": {
+      "title": "AccountID",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "AccountID"
+          ],
+          "title": "type"
+        },
+        "fixed_value": {
+          "type": "string",
+          "title": "fixed_value"
+        },
+        "byte_length": {
+          "default": 20,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "UInt8": {
+      "title": "UInt8",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "UInt8"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 1,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "UInt16": {
+      "title": "UInt16",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "UInt16"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 2,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "UInt32": {
+      "title": "UInt32",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "UInt32"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 4,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "UInt64": {
+      "title": "UInt64",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "UInt64"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 8,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "XFL": {
+      "title": "XFL",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "XFL"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 8,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "VarString": {
+      "title": "VarString",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "VarString"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "binary": {
+          "default": false,
+          "type": "boolean",
+          "title": "binary"
+        },
+        "length_prefix": {
+          "description": "The length prefix consists of either two or four bytes \n(depending on the length of the string) \nand indicates the number of raw bytes in the string",
+          "default": false,
+          "type": "boolean",
+          "title": "length_prefix"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "Hash256": {
+      "title": "Hash256",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Hash256"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 32,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "HookParameterDefinition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "description": {
+          "type": "string",
+          "title": "description"
+        },
+        "hook_parameters": {
+          "type": "array",
+          "items": {
             "type": "object",
             "properties": {
-                "type": {
-                    "type": "string",
-                    "title": "type"
+              "name": {
+                "type": "string",
+                "title": "name"
+              },
+              "description": {
+                "type": "string",
+                "title": "description"
+              },
+              "hookparam_key": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
                 },
-                "name": {
-                    "type": "string",
-                    "title": "name"
+                "title": "hookparam_key"
+              },
+              "hookparam_data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
                 },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "byte_length": {
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
+                "title": "hookparam_data"
+              }
             },
             "additionalProperties": false,
             "required": [
-                "name",
-                "type"
+              "hookparam_data",
+              "hookparam_key"
             ]
+          },
+          "title": "hook_parameters"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "hook_parameters",
+        "name"
+      ]
+    },
+    "HookStateDefinition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name"
         },
-        "AccountID": {
-            "title": "AccountID",
+        "description": {
+          "type": "string",
+          "title": "description"
+        },
+        "hook_states": {
+          "type": "array",
+          "items": {
             "type": "object",
             "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "AccountID"
-                    ],
-                    "title": "type"
+              "name": {
+                "type": "string",
+                "title": "name"
+              },
+              "description": {
+                "type": "string",
+                "title": "description"
+              },
+              "hookstate_key": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
                 },
-                "fixed_value": {
-                    "type": "string",
-                    "title": "fixed_value"
+                "title": "hookstate_key"
+              },
+              "hookstate_data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
                 },
-                "byte_length": {
-                    "default": 20,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "UInt8": {
-            "title": "UInt8",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "UInt8"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 1,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "UInt16": {
-            "title": "UInt16",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "UInt16"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 2,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "UInt32": {
-            "title": "UInt32",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "UInt32"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 4,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "UInt64": {
-            "title": "UInt64",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "UInt64"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 8,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "XFL": {
-            "title": "XFL",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "XFL"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 8,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "VarString": {
-            "title": "VarString",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "VarString"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "binary": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "binary"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "byte_length",
-                "name",
-                "type"
-            ]
-        },
-        "Hash256": {
-            "title": "Hash256",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "Hash256"
-                    ],
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 32,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
-        },
-        "HookParameterDefinition": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "description"
-                },
-                "hook_parameters": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "title": "name"
-                            },
-                            "description": {
-                                "type": "string",
-                                "title": "description"
-                            },
-                            "hookparam_key": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "hookparam_key"
-                            },
-                            "hookparam_data": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "hookparam_data"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                            "hookparam_data",
-                            "hookparam_key"
-                        ]
-                    },
-                    "title": "hook_parameters"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "description",
-                "hook_parameters",
-                "name"
-            ]
-        },
-        "HookStateDefinition": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "description"
-                },
-                "hook_states": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "title": "name"
-                            },
-                            "description": {
-                                "type": "string",
-                                "title": "description"
-                            },
-                            "hookstate_key": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "hookstate_key"
-                            },
-                            "hookstate_data": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "hookstate_data"
-                            },
-                            "foreign_state": {
-                                "type": "object",
-                                "properties": {
-                                    "account": {
-                                        "type": "string",
-                                        "title": "account"
-                                    },
-                                    "namespace_id": {
-                                        "type": "string",
-                                        "title": "namespace_id"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "account",
-                                    "namespace_id"
-                                ],
-                                "title": "foreign_state"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                            "hookstate_data",
-                            "hookstate_key"
-                        ]
-                    },
-                    "title": "hook_states"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "description",
-                "hook_states",
-                "name"
-            ]
-        },
-        "TxnParameterDefinition": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "description"
-                },
-                "txn_parameters": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "title": "name"
-                            },
-                            "description": {
-                                "type": "string",
-                                "title": "description"
-                            },
-                            "transaction_types": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                },
-                                "title": "transaction_types"
-                            },
-                            "otxnparam_key": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "otxnparam_key"
-                            },
-                            "otxnparam_data": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Field"
-                                },
-                                "title": "otxnparam_data"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "required": [
-                            "otxnparam_data",
-                            "otxnparam_key",
-                            "transaction_types"
-                        ]
-                    },
-                    "title": "txn_parameters"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "description",
-                "name",
-                "txn_parameters"
-            ]
-        },
-        "Definition": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "description"
-                },
-                "hook_hash": {
-                    "type": "string",
-                    "title": "hook_hash"
-                },
-                "version": {
-                    "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
-                    "title": "version"
-                },
-                "github_url": {
-                    "type": "string",
-                    "title": "github_url"
-                },
-                "icon_url": {
-                    "type": "string",
-                    "title": "icon_url"
-                },
-                "account": {
+                "title": "hookstate_data"
+              },
+              "foreign_state": {
+                "type": "object",
+                "properties": {
+                  "account": {
                     "type": "string",
                     "title": "account"
-                },
-                "namespace_id": {
+                  },
+                  "namespace_id": {
                     "type": "string",
                     "title": "namespace_id"
+                  }
                 },
-                "hook_index": {
-                    "type": "number",
-                    "title": "hook_index"
-                },
-                "hook_states": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "title": "name"
-                        },
-                        "description": {
-                            "type": "string",
-                            "title": "description"
-                        },
-                        "hook_states": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "title": "name"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "title": "description"
-                                    },
-                                    "hookstate_key": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "hookstate_key"
-                                    },
-                                    "hookstate_data": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "hookstate_data"
-                                    },
-                                    "foreign_state": {
-                                        "type": "object",
-                                        "properties": {
-                                            "account": {
-                                                "type": "string",
-                                                "title": "account"
-                                            },
-                                            "namespace_id": {
-                                                "type": "string",
-                                                "title": "namespace_id"
-                                            }
-                                        },
-                                        "additionalProperties": false,
-                                        "required": [
-                                            "account",
-                                            "namespace_id"
-                                        ],
-                                        "title": "foreign_state"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "hookstate_data",
-                                    "hookstate_key"
-                                ]
-                            },
-                            "title": "hook_states"
-                        }
-                    },
-                    "additionalProperties": false,
-                    "required": [
-                        "description",
-                        "hook_states",
-                        "name"
-                    ],
-                    "title": "hook_states"
-                },
-                "txn_parameters": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "title": "name"
-                        },
-                        "description": {
-                            "type": "string",
-                            "title": "description"
-                        },
-                        "txn_parameters": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "title": "name"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "title": "description"
-                                    },
-                                    "transaction_types": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string"
-                                        },
-                                        "title": "transaction_types"
-                                    },
-                                    "otxnparam_key": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "otxnparam_key"
-                                    },
-                                    "otxnparam_data": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "otxnparam_data"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "otxnparam_data",
-                                    "otxnparam_key",
-                                    "transaction_types"
-                                ]
-                            },
-                            "title": "txn_parameters"
-                        }
-                    },
-                    "additionalProperties": false,
-                    "required": [
-                        "description",
-                        "name",
-                        "txn_parameters"
-                    ],
-                    "title": "txn_parameters"
-                },
-                "hook_parameters": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "title": "name"
-                        },
-                        "description": {
-                            "type": "string",
-                            "title": "description"
-                        },
-                        "hook_parameters": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string",
-                                        "title": "name"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "title": "description"
-                                    },
-                                    "hookparam_key": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "hookparam_key"
-                                    },
-                                    "hookparam_data": {
-                                        "type": "array",
-                                        "items": {
-                                            "$ref": "#/definitions/Field"
-                                        },
-                                        "title": "hookparam_data"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "hookparam_data",
-                                    "hookparam_key"
-                                ]
-                            },
-                            "title": "hook_parameters"
-                        }
-                    },
-                    "additionalProperties": false,
-                    "required": [
-                        "description",
-                        "hook_parameters",
-                        "name"
-                    ],
-                    "title": "hook_parameters"
-                }
+                "additionalProperties": false,
+                "required": [
+                  "account",
+                  "namespace_id"
+                ],
+                "title": "foreign_state"
+              }
             },
             "additionalProperties": false,
             "required": [
-                "description",
-                "hook_hash",
-                "hook_parameters",
-                "hook_states",
-                "name",
-                "txn_parameters",
-                "version"
+              "hookstate_data",
+              "hookstate_key"
             ]
-        },
-        "ArrayField<NonArrayField>": {
-            "title": "ArrayField<NonArrayField>",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "Array"
-                    ],
-                    "title": "type"
-                },
-                "array": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/NonArrayField"
-                    },
-                    "title": "array"
-                },
-                "delimiter": {
-                    "type": "string",
-                    "title": "delimiter"
-                },
-                "array_length": {
-                    "type": "number",
-                    "title": "array_length"
-                },
-                "byte_length": {
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "array",
-                "array_length",
-                "byte_length",
-                "name",
-                "type"
-            ]
-        },
-        "ArrayField<T>": {
-            "title": "ArrayField<T>",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": [
-                        "Array"
-                    ],
-                    "title": "type"
-                },
-                "array": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/T"
-                    },
-                    "title": "array"
-                },
-                "delimiter": {
-                    "type": "string",
-                    "title": "delimiter"
-                },
-                "array_length": {
-                    "type": "number",
-                    "title": "array_length"
-                },
-                "byte_length": {
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "array",
-                "array_length",
-                "byte_length",
-                "name",
-                "type"
-            ]
-        },
-        "T": {
-            "title": "T",
-            "type": "object",
-            "properties": {
-                "type": {
-                    "enum": [
-                        "AccountID",
-                        "Hash256",
-                        "UInt16",
-                        "UInt32",
-                        "UInt64",
-                        "UInt8",
-                        "VarString",
-                        "XFL"
-                    ],
-                    "type": "string",
-                    "title": "type"
-                },
-                "byte_length": {
-                    "default": 32,
-                    "type": "number",
-                    "title": "byte_length"
-                },
-                "name": {
-                    "type": "string",
-                    "title": "name"
-                },
-                "pattern": {
-                    "type": "string",
-                    "title": "pattern"
-                },
-                "exclude": {
-                    "default": false,
-                    "type": "boolean",
-                    "title": "exclude"
-                }
-            },
-            "additionalProperties": false,
-            "required": [
-                "name",
-                "type"
-            ]
+          },
+          "title": "hook_states"
         }
+      },
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "hook_states",
+        "name"
+      ]
+    },
+    "InvokeBlobDefinition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "description": {
+          "type": "string",
+          "title": "description"
+        },
+        "invoke_blobs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "name"
+              },
+              "description": {
+                "type": "string",
+                "title": "description"
+              },
+              "value": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
+                },
+                "title": "value"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "value"
+            ]
+          },
+          "title": "invoke_blobs"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "invoke_blobs",
+        "name"
+      ]
+    },
+    "TxnParameterDefinition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "description": {
+          "type": "string",
+          "title": "description"
+        },
+        "txn_parameters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "name"
+              },
+              "description": {
+                "type": "string",
+                "title": "description"
+              },
+              "transaction_types": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "transaction_types"
+              },
+              "otxnparam_key": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
+                },
+                "title": "otxnparam_key"
+              },
+              "otxnparam_data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Field"
+                },
+                "title": "otxnparam_data"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "otxnparam_data",
+              "otxnparam_key",
+              "transaction_types"
+            ]
+          },
+          "title": "txn_parameters"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "name",
+        "txn_parameters"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "description": {
+          "type": "string",
+          "title": "description"
+        },
+        "hook_hash": {
+          "type": "string",
+          "title": "hook_hash"
+        },
+        "version": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "title": "version"
+        },
+        "github_url": {
+          "type": "string",
+          "title": "github_url"
+        },
+        "icon_url": {
+          "type": "string",
+          "title": "icon_url"
+        },
+        "account": {
+          "type": "string",
+          "title": "account"
+        },
+        "namespace_id": {
+          "type": "string",
+          "title": "namespace_id"
+        },
+        "hook_index": {
+          "type": "number",
+          "title": "hook_index"
+        },
+        "hook_states": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "name"
+            },
+            "description": {
+              "type": "string",
+              "title": "description"
+            },
+            "hook_states": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "description"
+                  },
+                  "hookstate_key": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "hookstate_key"
+                  },
+                  "hookstate_data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "hookstate_data"
+                  },
+                  "foreign_state": {
+                    "type": "object",
+                    "properties": {
+                      "account": {
+                        "type": "string",
+                        "title": "account"
+                      },
+                      "namespace_id": {
+                        "type": "string",
+                        "title": "namespace_id"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "account",
+                      "namespace_id"
+                    ],
+                    "title": "foreign_state"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "hookstate_data",
+                  "hookstate_key"
+                ]
+              },
+              "title": "hook_states"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "description",
+            "hook_states",
+            "name"
+          ],
+          "title": "hook_states"
+        },
+        "txn_parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "name"
+            },
+            "description": {
+              "type": "string",
+              "title": "description"
+            },
+            "txn_parameters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "description"
+                  },
+                  "transaction_types": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "transaction_types"
+                  },
+                  "otxnparam_key": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "otxnparam_key"
+                  },
+                  "otxnparam_data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "otxnparam_data"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "otxnparam_data",
+                  "otxnparam_key",
+                  "transaction_types"
+                ]
+              },
+              "title": "txn_parameters"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "description",
+            "name",
+            "txn_parameters"
+          ],
+          "title": "txn_parameters"
+        },
+        "hook_parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "name"
+            },
+            "description": {
+              "type": "string",
+              "title": "description"
+            },
+            "hook_parameters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "description"
+                  },
+                  "hookparam_key": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "hookparam_key"
+                  },
+                  "hookparam_data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "hookparam_data"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "hookparam_data",
+                  "hookparam_key"
+                ]
+              },
+              "title": "hook_parameters"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "description",
+            "hook_parameters",
+            "name"
+          ],
+          "title": "hook_parameters"
+        },
+        "invoke_blobs": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "name"
+            },
+            "description": {
+              "type": "string",
+              "title": "description"
+            },
+            "invoke_blobs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "description"
+                  },
+                  "value": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Field"
+                    },
+                    "title": "value"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "value"
+                ]
+              },
+              "title": "invoke_blobs"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "description",
+            "invoke_blobs",
+            "name"
+          ],
+          "title": "invoke_blobs"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "hook_hash",
+        "name",
+        "version"
+      ]
+    },
+    "ArrayField<NonArrayField>": {
+      "title": "ArrayField<NonArrayField>",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Array"
+          ],
+          "title": "type"
+        },
+        "array": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NonArrayField"
+          },
+          "title": "array"
+        },
+        "delimiter": {
+          "type": "string",
+          "title": "delimiter"
+        },
+        "array_length": {
+          "type": "number",
+          "title": "array_length"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "length_prefix": {
+          "description": "The length prefix consists of either two or four bytes \n(depending on the length of the string) \nand indicates the number of raw bytes in the string",
+          "default": false,
+          "type": "boolean",
+          "title": "length_prefix"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "array",
+        "name",
+        "type"
+      ]
+    },
+    "ArrayField<T>": {
+      "title": "ArrayField<T>",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Array"
+          ],
+          "title": "type"
+        },
+        "array": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/T"
+          },
+          "title": "array"
+        },
+        "delimiter": {
+          "type": "string",
+          "title": "delimiter"
+        },
+        "array_length": {
+          "type": "number",
+          "title": "array_length"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "length_prefix": {
+          "description": "The length prefix consists of either two or four bytes \n(depending on the length of the string) \nand indicates the number of raw bytes in the string",
+          "default": false,
+          "type": "boolean",
+          "title": "length_prefix"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "array",
+        "name",
+        "type"
+      ]
+    },
+    "T": {
+      "title": "T",
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "AccountID",
+            "Hash256",
+            "UInt16",
+            "UInt32",
+            "UInt64",
+            "UInt8",
+            "VarString",
+            "XFL"
+          ],
+          "type": "string",
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 32,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ]
     }
+  }
 }

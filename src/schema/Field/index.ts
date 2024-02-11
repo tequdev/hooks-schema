@@ -6,8 +6,15 @@ export interface ArrayField<T extends NonArrayField = NonArrayField> extends Fie
   type: 'Array'
   array: T[]
   delimiter?: string
-  array_length: number
-  byte_length: number
+  array_length?: number
+  byte_length?: number
+  /**
+   * The length prefix consists of either two or four bytes 
+   * (depending on the length of the string) 
+   * and indicates the number of raw bytes in the string
+   * @default false
+   */
+  length_prefix?: boolean
 }
 
 /**
@@ -79,11 +86,18 @@ export interface XFL extends FieldBase {
 
 export interface VarString extends FieldBase {
   type: 'VarString'
-  byte_length: number
+  byte_length?: number
   /**
    * @default false
    */
   binary?: boolean
+  /**
+   * The length prefix consists of either two or four bytes 
+   * (depending on the length of the string) 
+   * and indicates the number of raw bytes in the string
+   * @default false
+   */
+  length_prefix?: boolean
 }
 
 export interface Hash256 extends FieldBase {

@@ -18,7 +18,7 @@ type DefinitionSource = {
   name: string
   hook_account: string
   hook_namespace_id: string
-  hook_definition: Definition['hook_states']
+  hook_definition: Definition
 }
 
 const Xahau_Governance: DefinitionSource = {
@@ -73,7 +73,9 @@ const main = async () => {
     generateDefinitionJson(current, definitionDir)
     const states = await fetchStateData(current)
     const r = states.map((state) => {
-      return hookStateParser(state, current.hook_definition)
+      if (current.hook_definition.hook_states)
+        return hookStateParser(state, current.hook_definition.hook_states)
+      throw new Error('hook_definition.hook_states is not defined')
     })
     generateStateJson(current, r, definitionDir)
   }

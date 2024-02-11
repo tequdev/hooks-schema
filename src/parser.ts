@@ -1,17 +1,24 @@
 import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
-import { Definition } from './schema'
 import { Field } from './schema/Field'
+import { HookStateDefinition } from './schema/HookState'
+import { InvokeBlobDefinition } from './schema/InvokeBlob'
 
-type HookStateDefinition = Definition['hook_states']
-type HookStateDataType = HookStateDefinition['hook_states'][number]['hookstate_data'][number]
-type HookStateKeyType = HookStateDefinition['hook_states'][number]['hookstate_key'][number]
+const getLengthPrefix = (buffer: Buffer) => {
+  let len = buffer.readUInt8(0)
+  if (len > 192) {
+    len = 193 + (len - 193) * 256 + buffer.readUInt8(1)
+  }
+  return len
+}
 
-const getByteLength = (state: HookStateKeyType | HookStateDataType) => {
+const getByteLength = (state: Field, buffer: Buffer) => {
   switch (state.type) {
     case 'Array':
-      return state.byte_length
+      if (state.byte_length) return state.byte_length
+      if (state.length_prefix) return getLengthPrefix(buffer)
+      throw new Error('Array: length_prefix or byte_length must be defined')
     case 'AccountID':
       return 20
     case 'UInt8':
@@ -25,7 +32,9 @@ const getByteLength = (state: HookStateKeyType | HookStateDataType) => {
     case 'XFL':
       return 8
     case 'VarString':
-      return state.byte_length
+      if (state.byte_length) return state.byte_length
+      if (state.length_prefix) return getLengthPrefix(buffer)
+      throw new Error('VarString: length_prefix or byte_length must be defined')
     case 'Hash256':
       return 32
     default:
@@ -38,12 +47,13 @@ const bufferToReadableData = (buffer: Buffer, state: Field, nullReplaceTo = '0')
     case 'Array': {
       let from = 0
       const a = state.array.map((s) => {
-        const to = from + getByteLength(s)
+        const to = from + getByteLength(s, buffer.subarray(from))
         const buf = buffer.subarray(from, to)
         from = to
-        return bufferToReadableData(buf, s as Field, nullReplaceTo) as string | number | bigint
+        return { name: s.name, value: bufferToReadableData(buf, s as Field, nullReplaceTo) as string | number | bigint }
       })
-      if (state.delimiter) return a.join(state.delimiter)
+      if (state.delimiter) return a.map(_a => _a).join(state.delimiter)
+      // @ts-ignore
       return a
     }
     case 'AccountID':
@@ -68,8 +78,8 @@ const bufferToReadableData = (buffer: Buffer, state: Field, nullReplaceTo = '0')
   }
 }
 
-const stateDataTotalLength = (data: HookStateDefinition['hook_states'][number]) => {
-  return data.hookstate_data.reduce((total, cur) => total + getByteLength(cur), 0)
+const fieldsTotalLength = (fields: Field[], buffer: Buffer) => {
+  return fields.reduce((total, cur) => total + getByteLength(cur, buffer.subarray(total)), 0)
 }
 
 type ReadableData = {
@@ -82,17 +92,19 @@ export const hookStateParser = (value: HookState, definition: HookStateDefinitio
   // console.log(value)
   const state = definition.hook_states
     .map((state) => {
-      // console.log(data.length, stateDataTotalLength(state))
-      if (data.length !== stateDataTotalLength(state)) return undefined
+      // console.log(data.length, fieldsTotalLength(state))
+      if (data.length !== fieldsTotalLength(state.hookstate_data, data)) return undefined
 
       let lastKeyIndex = 0
+      let lastBuffer = key
       const keyArr: ReadableData[] = []
       // console.log(state.hookstate_key)
       const checkKey = state.hookstate_key.every((k) => {
         // Retrieve info matching HookStateKey and length with definition
-        const currentKeyIndex = getByteLength(k)
+        const currentKeyIndex = getByteLength(k, lastBuffer)
         const currentBuffer = key.subarray(lastKeyIndex, lastKeyIndex + currentKeyIndex)
         lastKeyIndex += currentKeyIndex
+        lastBuffer = currentBuffer
         const readableForComp = bufferToReadableData(currentBuffer, k, "0")
         const readable = bufferToReadableData(currentBuffer, k, "")
         // console.log(lastKeyIndex, lastKeyIndex + currentKeyIndex, readable)
@@ -108,12 +120,14 @@ export const hookStateParser = (value: HookState, definition: HookStateDefinitio
       // console.log({ checkKey })
       if (checkKey === false) return undefined
       let lastDataIndex = 0
+      lastBuffer = data
       const dataArr: ReadableData[] = []
       const checkData = state.hookstate_data.every((d) => {
         // Retrieve info matching HookStateData and length with definition
-        const currentDataIndex = getByteLength(d)
+        const currentDataIndex = getByteLength(d, lastBuffer)
         const currentBuffer = data.subarray(lastDataIndex, lastDataIndex + currentDataIndex)
         lastDataIndex += currentDataIndex
+        lastBuffer = currentBuffer
         const readableForComp = bufferToReadableData(currentBuffer, d, "0")
         const readable = bufferToReadableData(currentBuffer, d, "")
         // console.log(lastDataIndex - currentDataIndex, lastDataIndex, readable, currentBuffer)
@@ -133,4 +147,38 @@ export const hookStateParser = (value: HookState, definition: HookStateDefinitio
     .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
     .find((_) => true)
   return state
+}
+
+export const invokeBlobParser = (blob: string, definition: InvokeBlobDefinition) => {
+  console.log(blob)
+  const data = Buffer.from(blob, 'hex')
+  return definition.invoke_blobs.map((def) => {
+    // TODO: check length
+    // if (data.length !== fieldsTotalLength(def.value, data)) return undefined
+
+    let lastKeyIndex = 0
+    let lastBuffer = data
+    const readableArr: ReadableData[] = []
+    // console.log(state.hookstate_key)
+    const checkBlob = def.value.every((d) => {
+      // Retrieve info matching HookStateKey and length with definition
+      const currentKeyIndex = getByteLength(d, lastBuffer)
+      const currentBuffer = data.subarray(lastKeyIndex, lastKeyIndex + currentKeyIndex)
+      lastKeyIndex += currentKeyIndex
+      lastBuffer = currentBuffer
+      const readableForComp = bufferToReadableData(currentBuffer, d, "0")
+      const readable = bufferToReadableData(currentBuffer, d, "")
+
+      if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+      if (d.exclude === true) return true
+      readableArr.push({
+        name: d.name,
+        value: readable,
+      })
+      return true
+    })
+    if (checkBlob) return { name: def.name, values: readableArr }
+  })
+    .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
+    .find((_) => true)
 }
