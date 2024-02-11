@@ -36,6 +36,7 @@ const Evernode: DefinitionSource = {
 }
 
 const Oracle = {
+  name: "oracle",
   hook_account: 'rsMCzsxZYSXafH3Egj1jpGemgQjagtnXEk',
   hook_namespace_id: '9202AF6CE925B26AE6B25ADFFF0B2705147E195FA38DD58AE6ECC58ED263751F',
   hook_definition: OracleHookDefinition,
@@ -49,7 +50,7 @@ const generateDefinitionJson = (source: DefinitionSource, dir: string) => {
   fs.writeFileSync(`${dir}/${source.name}-definition.json`, j);
 }
 
-const generateStateJson = (source: DefinitionSource, data: any, dir: string) => {
+const generateStateJson = (source: DefinitionSource, data: ReturnType<typeof hookStateParser>[], dir: string) => {
   const json = JSON.stringify(data, (_, value) => typeof value === "bigint" ? value.toString() : value, 2);
   fs.writeFileSync(`${dir}/${source.name}-state.json`, json);
 }
