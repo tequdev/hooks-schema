@@ -133,7 +133,7 @@ export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
       otxnparam_data: [
         {
           type: 'AccountID',
-          name: 'Acount',
+          name: 'Account',
         },
       ],
     },
