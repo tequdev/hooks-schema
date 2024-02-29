@@ -1,4 +1,4 @@
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 
 export const GovernanceHookStateDefinition: Definition['hook_states'] = {
   name: 'Governance',

@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx samples/index.ts",
     "build": "tsc",
-    "generate": "tsx src/generate.ts",
-    "generate:schema": "quicktype src/schema/index.ts -o schema.json --lang schema",
+    "generate": "tsx samples/generate.ts",
+    "generate:schema": "quicktype schema/index.ts -o schema.json --lang schema",
     "lint": "biome lint --apply src",
     "format": "biome format --write src"
   },

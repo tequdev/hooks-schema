@@ -1,10 +1,10 @@
 import { Client, TxRequest, TxResponse } from '@transia/xrpl'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
+import { Definition } from '../schema'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
-import { Definition } from './schema'
 
 // const client = new Client('wss://xahau.org')
 const client = new Client("wss://xahau-test.net");

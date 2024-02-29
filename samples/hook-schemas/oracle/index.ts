@@ -1,4 +1,4 @@
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 import { OracleHookStateDefinition } from './hook_state'
 import { OracleInvokeDefinition } from './invoke_blob'
 

@@ -5,8 +5,8 @@ import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { hookStateParser } from './parser'
 
 import * as fs from 'fs'
+import { Definition } from '../schema'
 import { OracleHookDefinition } from './hook-schemas/oracle'
-import { Definition } from './schema'
 
 const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");

@@ -1,4 +1,4 @@
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 import { GovernanceHookStateDefinition } from './hook_state'
 import { GovernanceTxnParametersDefinition } from './txn_parameters'
 

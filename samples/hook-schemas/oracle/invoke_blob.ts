@@ -1,7 +1,7 @@
 import { currencyToHex } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import { decodeAccountID } from '@transia/xrpl'
 import sha512h from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 
 export const OracleInvokeDefinition: Definition['invoke_blobs'] = {
   name: 'Oracle Invoke Blob',

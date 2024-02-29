@@ -1,4 +1,4 @@
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 import { EvernodeHookStateDefinition } from './hook_state'
 
 export const EvernodeHookDefinition: Definition = {

@@ -2,10 +2,10 @@ import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models
 import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
-import { Field } from './schema/Field'
-import { HookStateDefinition } from './schema/HookState'
-import { InvokeBlobDefinition } from './schema/InvokeBlob'
-import { TxnParameterDefinition } from './schema/TxnParameter'
+import { Field } from '../schema/Field'
+import { HookStateDefinition } from '../schema/HookState'
+import { InvokeBlobDefinition } from '../schema/InvokeBlob'
+import { TxnParameterDefinition } from '../schema/TxnParameter'
 
 const getLengthPrefix = (buffer: Buffer) => {
   let len = buffer.readUInt8(0)

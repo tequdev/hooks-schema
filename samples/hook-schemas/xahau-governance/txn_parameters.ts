@@ -1,4 +1,4 @@
-import { Definition } from '../../schema'
+import { Definition } from '../../../schema'
 
 export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
   name: 'Governance',
