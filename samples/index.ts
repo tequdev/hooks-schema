@@ -114,6 +114,7 @@ const test_hook_parameters = async (source: DefinitionSource) => {
     hook: { account: source.hook_account }
   })
   const hooks: Hook[] = response.result.node.Hooks
+
   for (const hook of hooks) {
     const result = hook.Hook.HookParameters?.map((param) => hookParametersParser(param, source.hook_definition.hook_parameters!))
     console.log(JSON.stringify(result, null, 2))
@@ -124,11 +125,11 @@ const test_hook_parameters = async (source: DefinitionSource) => {
 const main = async () => {
   await client.connect()
 
-  const current = EvernodeRedirect
+  const current = Xahau_Governance
 
   // await test_hookstate(current)
   // await test_invoke_blob(current)
-  await test_txn_parameters(current)
+  // await test_txn_parameters(current)
   await test_hook_parameters(current)
 
   await client.disconnect()
