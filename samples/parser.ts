@@ -2,6 +2,7 @@ import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models
 import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
+import { HookParameterDefinition } from 'schema/HookParameter'
 import { Field } from '../schema/Field'
 import { HookStateDefinition } from '../schema/HookState'
 import { InvokeBlobDefinition } from '../schema/InvokeBlob'
@@ -84,6 +85,18 @@ const fieldsTotalLength = (fields: Field[], buffer: Buffer) => {
   return fields.reduce((total, cur) => total + getByteLength(cur, buffer.subarray(total)), 0)
 }
 
+const parseBuffer = (buffer: Buffer, fields: Field[], nullReplaceTo = ''): ReadableData[] => {
+  let lastIndex = 0;
+  return fields.map((field) => {
+    const length = getByteLength(field, buffer.subarray(lastIndex));
+    const currentBuffer = buffer.subarray(lastIndex, lastIndex + length);
+    lastIndex += length;
+    const value = bufferToReadableData(currentBuffer, field, nullReplaceTo);
+    return { name: field.name, value };
+  }).filter(field => field.value !== undefined);
+};
+
+
 type ReadableData = {
   [key: string]: string | number | bigint | Array<string | number | bigint>
 }
@@ -99,7 +112,7 @@ export const hookStateParser = (value: HookState, definition: HookStateDefinitio
 
       let lastKeyIndex = 0
       let lastBuffer = key
-      const keyArr: ReadableData[] = []
+      const keyArr = parseBuffer(key, state.hookstate_key)
       // console.log(state.hookstate_key)
       const checkKey = state.hookstate_key.every((k) => {
         // Retrieve info matching HookStateKey and length with definition
@@ -224,6 +237,71 @@ export const txnParametersParser = (parameters: HookParameter, definition: TxnPa
       lastBuffer = value
       const dataArr: ReadableData[] = []
       const checkData = state.otxnparam_data.every((d) => {
+        // Retrieve info matching HookStateData and length with definition
+        const currentDataIndex = getByteLength(d, lastBuffer)
+        const currentBuffer = value.subarray(lastValueIndex, lastValueIndex + currentDataIndex)
+        lastValueIndex += currentDataIndex
+        lastBuffer = currentBuffer
+        const readableForComp = bufferToReadableData(currentBuffer, d, "0")
+        const readable = bufferToReadableData(currentBuffer, d, "")
+        // console.log(lastValueIndex - currentDataIndex, lastValueIndex, readable, currentBuffer)
+        // console.log(d.pattern, readable.toString(), !new RegExp(d.pattern!).test(readable.toString()))
+
+        if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+        if (d.exclude === true) return true
+        dataArr.push({
+          name: d.name,
+          value: readable,
+        })
+        return true
+      })
+
+      return checkData ? { name: state.name, key: keyArr, data: dataArr } : undefined
+    })
+    .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
+    .find((_) => true)
+  return state
+}
+
+export const hookParametersParser = (parameters: HookParameter, definition: HookParameterDefinition) => {
+  const { HookParameterName, HookParameterValue } = parameters.HookParameter
+  const name = Buffer.from(HookParameterName, 'hex')
+  const value = Buffer.from(HookParameterValue, 'hex')
+  // console.log(value)
+  const state = definition.hook_parameters
+    .map((state) => {
+      // console.log(data.length, fieldsTotalLength(state))
+      if (name.length !== fieldsTotalLength(state.hookparam_key, name)) return undefined
+      if (value.length !== fieldsTotalLength(state.hookparam_data, value)) return undefined
+
+      let lastNameIndex = 0
+      let lastBuffer = name
+      const keyArr: ReadableData[] = []
+
+      const checkKey = state.hookparam_key.every((k) => {
+        // Retrieve info matching HookStateKey and length with definition
+        const currentNameIndex = getByteLength(k, lastBuffer)
+        const currentBuffer = name.subarray(lastNameIndex, lastNameIndex + currentNameIndex)
+        lastNameIndex += currentNameIndex
+        lastBuffer = currentBuffer
+        const readableForComp = bufferToReadableData(currentBuffer, k, "0")
+        const readable = bufferToReadableData(currentBuffer, k, "")
+        // console.log(lastNameIndex, lastNameIndex + currentNameIndex, readable)
+        // console.log(k.pattern, readable.toString(), !new RegExp(k.pattern!).test(readable.toString()))
+        if (k.pattern && !new RegExp(k.pattern).test(readableForComp.toString())) return false
+        if (k.exclude === true) return true
+        keyArr.push({
+          name: k.name,
+          value: readable,
+        })
+        return true
+      })
+      // console.log({ checkKey })
+      if (checkKey === false) return undefined
+      let lastValueIndex = 0
+      lastBuffer = value
+      const dataArr: ReadableData[] = []
+      const checkData = state.hookparam_data.every((d) => {
         // Retrieve info matching HookStateData and length with definition
         const currentDataIndex = getByteLength(d, lastBuffer)
         const currentBuffer = value.subarray(lastValueIndex, lastValueIndex + currentDataIndex)

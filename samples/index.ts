@@ -1,13 +1,15 @@
 import { Client, TxRequest, TxResponse } from '@transia/xrpl'
+import { Hook } from '@transia/xrpl/dist/npm/models/common';
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { Definition } from '../schema'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
+import { EvernodeRedirectHookDefinition } from './hook-schemas/evernode-redirect/index';
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
-import { hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
+import { hookParametersParser, hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
 
-// const client = new Client('wss://xahau.org')
-const client = new Client("wss://xahau-test.net");
+const client = new Client('wss://xahau.org')
+// const client = new Client("wss://xahau-test.net");
 
 const GENESIS_ACCOUNT = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'
 
@@ -32,6 +34,12 @@ const Evernode: DefinitionSource = {
   hook_account: 'rBvKgF3jSZWdJcwSsmoJspoXLLDVLDp6jg',
   hook_namespace_id: '01EAF09326B4911554384121FF56FA8FECC215FDDE2EC35D9E59F2C53EC665A0',
   hook_definition: EvernodeHookDefinition,
+}
+
+const EvernodeRedirect: DefinitionSource = {
+  hook_account: 'rNdWn1HN9ME6daRYvxXQPABTMUuTr3z1XY',
+  hook_namespace_id: '',
+  hook_definition: EvernodeRedirectHookDefinition,
 }
 
 const Oracle: DefinitionSource = {
@@ -98,15 +106,30 @@ const test_txn_parameters = async (source: DefinitionSource) => {
   }
 }
 
+const test_hook_parameters = async (source: DefinitionSource) => {
+  if (!source.hook_definition.hook_parameters) throw new Error('hook_definition.hook_parameters is not defined')
+
+  const response = await client.request({
+    command: 'ledger_entry',
+    hook: { account: source.hook_account }
+  })
+  const hooks: Hook[] = response.result.node.Hooks
+  for (const hook of hooks) {
+    const result = hook.Hook.HookParameters?.map((param) => hookParametersParser(param, source.hook_definition.hook_parameters!))
+    console.log(JSON.stringify(result, null, 2))
+  }
+}
+
 
 const main = async () => {
   await client.connect()
 
-  const current = Xahau_Governance
+  const current = EvernodeRedirect
 
   // await test_hookstate(current)
   // await test_invoke_blob(current)
   await test_txn_parameters(current)
+  await test_hook_parameters(current)
 
   await client.disconnect()
 }
