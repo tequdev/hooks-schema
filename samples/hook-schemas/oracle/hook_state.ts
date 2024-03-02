@@ -30,11 +30,11 @@ export const OracleHookStateDefinition: Definition['hook_states'] = {
       ],
     },
     {
-      name: 'unknown oracle',
+      name: 'Unknown Oracle',
       hookstate_key: [
         {
           type: 'Hash256',
-          name: 'hash(issuer,currency)',
+          name: 'HASH(issuer,currency)',
         },
       ],
       hookstate_data: [
