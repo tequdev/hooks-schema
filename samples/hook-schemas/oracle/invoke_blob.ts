@@ -6,7 +6,7 @@ import { Definition } from '../../../schema'
 export const OracleInvokeDefinition: Definition['invoke_blobs'] = {
   name: 'Oracle Invoke Blob',
   description: 'Oracle Invoke Blob',
-  invoke_blobs: [
+  fields: [
     {
       name: 'Oracle Set',
       value: [

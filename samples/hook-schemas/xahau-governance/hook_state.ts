@@ -3,7 +3,7 @@ import { Definition } from '../../../schema'
 export const GovernanceHookStateDefinition: Definition['hook_states'] = {
   name: 'Governance',
   description: 'Governance',
-  hook_states: [
+  fields: [
     {
       name: 'Current member count',
       hookstate_key: [

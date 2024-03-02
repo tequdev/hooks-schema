@@ -3,7 +3,7 @@ import { Field } from '../Field'
 export interface InvokeBlobDefinition {
   name: string
   description: string
-  invoke_blobs: {
+  fields: {
     name?: string
     description?: string
     value: Field[]

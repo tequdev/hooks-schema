@@ -113,7 +113,7 @@ const parseBuffer = (buffer: Buffer, definitions: Field[]) => {
   return check ? readableArr : undefined
 }
 
-type KeyValueDefs = HookStateDefinition['hook_states'] | TxnParameterDefinition['txn_parameters'] | HookParameterDefinition['hook_parameters']
+type KeyValueDefs = HookStateDefinition | TxnParameterDefinition | HookParameterDefinition
 
 const parseKeyValue = (
   keyBuffer: Buffer,
@@ -133,7 +133,7 @@ const parseKeyValue = (
   return { name: definition.name, key: keyArr, data: dataArr }
 }
 
-type SingleDataDefs = InvokeBlobDefinition['invoke_blobs']
+type SingleDataDefs = InvokeBlobDefinition
 
 const parseSingleData = (buffer: Buffer, definition: any) => {
   const readableArr = parseBuffer(buffer, definition.value)
@@ -142,8 +142,8 @@ const parseSingleData = (buffer: Buffer, definition: any) => {
 }
 
 
-const wrapper = <T extends KeyValueDefs | SingleDataDefs>(definition: T, fn: (def: T[number]) => any) => {
-  return definition
+const wrapper = <T extends KeyValueDefs | SingleDataDefs>(definition: T, fn: (def: T['fields'][number]) => any) => {
+  return definition.fields
     .map(fn)
     .filter((d): d is NonNullable<typeof d> => typeof d !== 'undefined')
     .find((_) => true)
@@ -153,13 +153,13 @@ export const hookStateParser = (value: HookState, definition: HookStateDefinitio
   const key = Buffer.from(value.HookStateKey, 'hex')
   const data = Buffer.from(value.HookStateData, 'hex')
 
-  return wrapper(definition.hook_states, (state) => parseKeyValue(key, data, state, 'hookstate_key', 'hookstate_data'))
+  return wrapper(definition, (state) => parseKeyValue(key, data, state, 'hookstate_key', 'hookstate_data'))
 }
 
 export const invokeBlobParser = (blob: string, definition: InvokeBlobDefinition) => {
   const data = Buffer.from(blob, 'hex')
 
-  return wrapper(definition.invoke_blobs, (def) => parseSingleData(data, def))
+  return wrapper(definition, (def) => parseSingleData(data, def))
 }
 
 export const txnParametersParser = (parameters: HookParameter, definition: TxnParameterDefinition) => {
@@ -167,7 +167,7 @@ export const txnParametersParser = (parameters: HookParameter, definition: TxnPa
   const name = Buffer.from(HookParameterName, 'hex')
   const value = Buffer.from(HookParameterValue, 'hex')
 
-  return wrapper(definition.txn_parameters, (state) => parseKeyValue(name, value, state, 'otxnparam_key', 'otxnparam_data'))
+  return wrapper(definition, (state) => parseKeyValue(name, value, state, 'otxnparam_key', 'otxnparam_data'))
 }
 
 export const hookParametersParser = (parameters: HookParameter, definition: HookParameterDefinition) => {
@@ -175,5 +175,5 @@ export const hookParametersParser = (parameters: HookParameter, definition: Hook
   const name = Buffer.from(HookParameterName, 'hex')
   const value = Buffer.from(HookParameterValue, 'hex')
 
-  return wrapper(definition.hook_parameters, (state) => parseKeyValue(name, value, state, 'hookparam_key', 'hookparam_data'))
+  return wrapper(definition, (state) => parseKeyValue(name, value, state, 'hookparam_key', 'hookparam_data'))
 }

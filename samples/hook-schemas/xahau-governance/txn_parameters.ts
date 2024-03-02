@@ -3,7 +3,7 @@ import { Definition } from '../../../schema'
 export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
   name: 'Governance',
   description: 'Governance',
-  txn_parameters: [
+  fields: [
     {
       name: 'Layer',
       transaction_types: ['Invoke'],

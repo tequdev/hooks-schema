@@ -3,7 +3,7 @@ import { Field } from '../Field'
 export interface HookStateDefinition {
   name: string
   description: string
-  hook_states: {
+  fields: {
     name?: string
     description?: string
     hookstate_key: Field[]

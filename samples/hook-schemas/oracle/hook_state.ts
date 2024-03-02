@@ -12,7 +12,7 @@ const toHash = (issuer: string, currency: string) => {
 export const OracleHookStateDefinition: Definition['hook_states'] = {
   name: 'Oracle',
   description: 'Denis Oracle',
-  hook_states: [
+  fields: [
     {
       name: 'EVR/XAH Oracle',
       hookstate_key: [

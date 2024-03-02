@@ -411,7 +411,7 @@
                     "type": "string",
                     "title": "description"
                 },
-                "hook_parameters": {
+                "fields": {
                     "type": "array",
                     "items": {
                         "type": "object",
@@ -445,13 +445,13 @@
                             "hookparam_key"
                         ]
                     },
-                    "title": "hook_parameters"
+                    "title": "fields"
                 }
             },
             "additionalProperties": false,
             "required": [
                 "description",
-                "hook_parameters",
+                "fields",
                 "name"
             ]
         },
@@ -467,7 +467,7 @@
                     "type": "string",
                     "title": "description"
                 },
-                "hook_states": {
+                "fields": {
                     "type": "array",
                     "items": {
                         "type": "object",
@@ -520,13 +520,13 @@
                             "hookstate_key"
                         ]
                     },
-                    "title": "hook_states"
+                    "title": "fields"
                 }
             },
             "additionalProperties": false,
             "required": [
                 "description",
-                "hook_states",
+                "fields",
                 "name"
             ]
         },
@@ -542,7 +542,7 @@
                     "type": "string",
                     "title": "description"
                 },
-                "invoke_blobs": {
+                "fields": {
                     "type": "array",
                     "items": {
                         "type": "object",
@@ -568,13 +568,13 @@
                             "value"
                         ]
                     },
-                    "title": "invoke_blobs"
+                    "title": "fields"
                 }
             },
             "additionalProperties": false,
             "required": [
                 "description",
-                "invoke_blobs",
+                "fields",
                 "name"
             ]
         },
@@ -590,7 +590,7 @@
                     "type": "string",
                     "title": "description"
                 },
-                "txn_parameters": {
+                "fields": {
                     "type": "array",
                     "items": {
                         "type": "object",
@@ -632,14 +632,14 @@
                             "transaction_types"
                         ]
                     },
-                    "title": "txn_parameters"
+                    "title": "fields"
                 }
             },
             "additionalProperties": false,
             "required": [
                 "description",
-                "name",
-                "txn_parameters"
+                "fields",
+                "name"
             ]
         },
         "Definition": {

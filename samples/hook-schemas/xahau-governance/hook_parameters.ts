@@ -4,7 +4,7 @@ import { Definition } from '../../../schema'
 export const GovernanceHookParametersDefinition: Definition['hook_parameters'] = {
   name: 'Governance',
   description: 'Governance',
-  hook_parameters: [
+  fields: [
     {
       hookparam_key: [{
         type: 'VarString',

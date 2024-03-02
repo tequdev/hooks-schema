@@ -7,5 +7,5 @@ import { all as all2 } from './common/singleton-keys'
 export const EvernodeHookStateDefinition: Definition['hook_states'] = {
   name: 'Evernode',
   description: 'Evernode',
-  hook_states: [...all1, ...all2, ...all3],
+  fields: [...all1, ...all2, ...all3],
 }
