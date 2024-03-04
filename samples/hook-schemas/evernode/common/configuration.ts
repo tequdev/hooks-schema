@@ -32,7 +32,7 @@
 // const uint8_t CONF_NETWORK_CONFIGURATION[32] = { 'E', 'V', 'R', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15 };
 
 import { HookStateDefinition } from 'schema/HookState'
-type State = HookStateDefinition['hook_states'][number]
+type State = HookStateDefinition['fields'][number]
 
 export const CONF_ISSUER_ADDR: State = {
   name: 'Issuer Address',
@@ -301,6 +301,69 @@ export const CONF_LEASE_ACQUIRE_WINDOW: State = {
 }
 
 export const CONF_REWARD_CONFIGURATION: State = {
+  name: 'Reward Configuration',
+  hookstate_key: [
+    {
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
+      byte_length: 3,
+      exclude: true,
+    },
+    {
+      type: 'UInt8',
+      name: 'Prefix',
+      pattern: '1',
+      exclude: true,
+    },
+    {
+      type: 'VarString',
+      name: '',
+      byte_length: 27,
+      pattern: '0'.repeat(27),
+      exclude: true,
+    },
+    {
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '8',
+      exclude: true,
+    },
+  ],
+  // <epoch_count(uint8_t)><first_epoch_reward_quota(uint32_t)><epoch_reward_amount(uint32_t)><reward_start_moment(uint32_t)><accumulated_reward_frequency(uint16_t)><host_reputation_threshold(uint8_t)>
+  hookstate_data: [
+    {
+      type: 'UInt8',
+      name: 'Epoch Count',
+    },
+    {
+      type: 'UInt32',
+      name: 'First Epoch Reward Quota',
+    },
+    {
+      type: 'UInt32',
+      name: 'Epoch Reward Amount',
+    },
+    {
+      type: 'UInt32',
+      name: 'Reward Start Moment',
+    },
+    {
+      type: 'UInt16',
+      name: 'Accumulated Reward Frequency',
+    },
+    {
+      type: 'UInt8',
+      name: 'Host Reputation Threshold',
+    },
+    {
+      type: 'UInt32',
+      name: 'Host Min Instance Count',
+    }
+  ],
+}
+
+export const CONF_REWARD_CONFIGURATION_081: State = {
   name: 'Reward Configuration',
   hookstate_key: [
     {
@@ -660,6 +723,7 @@ export const all = [
   CONF_HOST_HEARTBEAT_FREQ,
   CONF_LEASE_ACQUIRE_WINDOW,
   CONF_REWARD_CONFIGURATION,
+  CONF_REWARD_CONFIGURATION_081,
   CONF_MAX_TOLERABLE_DOWNTIME,
   CONF_MOMENT_TRANSIT_INFO,
   CONF_MAX_EMIT_TRX_FEE,

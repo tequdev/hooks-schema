@@ -1,5 +1,5 @@
 import { HookStateDefinition } from 'schema/HookState'
-type State = HookStateDefinition['hook_states'][number]
+type State = HookStateDefinition['fields'][number]
 
 export const STK_HOST_COUNT: State = {
   name: 'Host Count',
@@ -183,6 +183,58 @@ export const STK_REWARD_INFO: State = {
       type: 'XFL',
       name: 'Epoch Pool',
     },
+    {
+      type: 'XFL',
+      name: 'Host Max Lease Amount',
+    },
+  ],
+}
+
+export const STK_REWARD_INFO_081: State = {
+  name: 'Reward Info',
+  hookstate_key: [
+    {
+      type: 'VarString',
+      name: 'Key',
+      pattern: 'EVR',
+      byte_length: 3,
+      exclude: true,
+    },
+    {
+      type: 'UInt8',
+      name: 'Index',
+      pattern: '54',
+      exclude: true,
+    },
+    {
+      type: 'VarString',
+      name: 'padding',
+      byte_length: 28,
+      pattern: '0'.repeat(28),
+      exclude: true,
+    },
+  ],
+  hookstate_data: [
+    {
+      type: 'UInt8',
+      name: 'Epoch',
+    },
+    {
+      type: 'UInt32',
+      name: 'Saved Moment',
+    },
+    {
+      type: 'UInt32',
+      name: 'Prev Moment Active Host Count',
+    },
+    {
+      type: 'UInt32',
+      name: 'Cur Moment Active Host Count',
+    },
+    {
+      type: 'XFL',
+      name: 'Epoch Pool',
+    },
   ],
 }
 
@@ -302,6 +354,7 @@ export const all = [
   STK_HOST_REG_FEES,
   STK_MAX_REG,
   STK_REWARD_INFO,
+  STK_REWARD_INFO_081,
   STK_GOVERNANCE_INFO,
   STK_TRX_FEE_BASE_INFO,
 ]
