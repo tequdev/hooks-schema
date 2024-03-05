@@ -16,8 +16,6 @@ import { hookParametersParser, hookStateParser, invokeBlobParser, txnParametersP
 const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");
 
-const GENESIS_ACCOUNT = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'
-
 type DefinitionSource = {
   hook_account: string
   hook_namespace_id: string
@@ -27,8 +25,8 @@ type DefinitionSource = {
 }
 
 const Xahau_Governance: DefinitionSource = {
-  hook_account: GENESIS_ACCOUNT,
-  hook_namespace_id: '0',
+  hook_account: GovernanceHookDefinition.account!,
+  hook_namespace_id: GovernanceHookDefinition.namespace_id!,
   hook_definition: GovernanceHookDefinition,
   txn_parameters_txnid: [
     'BD826500478AB030F3E349D293FBE88163B6198202380FA57C5BBC17125C8CB4', //testnet
@@ -36,20 +34,20 @@ const Xahau_Governance: DefinitionSource = {
 }
 
 const Evernode: DefinitionSource = {
-  hook_account: 'rBvKgF3jSZWdJcwSsmoJspoXLLDVLDp6jg',
-  hook_namespace_id: '01EAF09326B4911554384121FF56FA8FECC215FDDE2EC35D9E59F2C53EC665A0',
+  hook_account: EvernodeHookDefinition.account!,
+  hook_namespace_id: EvernodeHookDefinition.namespace_id!,
   hook_definition: EvernodeHookDefinition,
 }
 
 const EvernodeRedirect: DefinitionSource = {
-  hook_account: 'rNdWn1HN9ME6daRYvxXQPABTMUuTr3z1XY',
-  hook_namespace_id: '',
+  hook_account: EvernodeRedirectHookDefinition.account!,
+  hook_namespace_id: EvernodeRedirectHookDefinition.namespace_id!,
   hook_definition: EvernodeRedirectHookDefinition,
 }
 
 const Oracle: DefinitionSource = {
-  hook_account: 'rsMCzsxZYSXafH3Egj1jpGemgQjagtnXEk',
-  hook_namespace_id: '9202AF6CE925B26AE6B25ADFFF0B2705147E195FA38DD58AE6ECC58ED263751F',
+  hook_account: OracleHookDefinition.account!,
+  hook_namespace_id: OracleHookDefinition.namespace_id!,
   hook_definition: OracleHookDefinition,
   invoke_txnid: ['0F119964E90B61FEDFD995D2E9926B8D0C2E838D72135A8600C2904A7F6C2234']
 }
