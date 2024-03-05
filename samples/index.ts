@@ -4,6 +4,11 @@ import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { Definition } from '../schema'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { EvernodeRedirectHookDefinition } from './hook-schemas/evernode-redirect/index';
+import { LotteryHookDefinition } from './hook-schemas/lottery/lottery';
+import { LotteryEndDefinition } from './hook-schemas/lottery/lottery_end';
+import { LotteryEndICDefinition } from './hook-schemas/lottery/lottery_end_ic';
+import { LotteryICDefinition } from './hook-schemas/lottery/lottery_ic';
+import { LotteryStartDefinition } from './hook-schemas/lottery/lottery_start';
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { hookParametersParser, hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
@@ -48,6 +53,34 @@ const Oracle: DefinitionSource = {
   hook_definition: OracleHookDefinition,
   invoke_txnid: ['0F119964E90B61FEDFD995D2E9926B8D0C2E838D72135A8600C2904A7F6C2234']
 }
+
+const Lotteries: DefinitionSource[] = [
+  {
+    hook_account: LotteryHookDefinition.account!,
+    hook_namespace_id: LotteryHookDefinition.namespace_id!,
+    hook_definition: LotteryHookDefinition,
+  },
+  {
+    hook_account: LotteryEndDefinition.account!,
+    hook_namespace_id: LotteryEndDefinition.namespace_id!,
+    hook_definition: LotteryEndDefinition,
+  },
+  {
+    hook_account: LotteryEndICDefinition.account!,
+    hook_namespace_id: LotteryEndICDefinition.namespace_id!,
+    hook_definition: LotteryEndICDefinition,
+  },
+  {
+    hook_account: LotteryICDefinition.account!,
+    hook_namespace_id: LotteryICDefinition.namespace_id!,
+    hook_definition: LotteryICDefinition,
+  },
+  {
+    hook_account: LotteryStartDefinition.account!,
+    hook_namespace_id: LotteryStartDefinition.namespace_id!,
+    hook_definition: LotteryStartDefinition,
+  },
+]
 
 const test_hookstate = async (source: DefinitionSource) => {
   const response = await client.request({
@@ -113,7 +146,7 @@ const test_hook_parameters = async (source: DefinitionSource) => {
     command: 'ledger_entry',
     hook: { account: source.hook_account }
   })
-  const hooks: Hook[] = response.result.node.Hooks
+  const hooks: Hook[] = response.result.node!.Hooks
 
   for (const hook of hooks) {
     const result = hook.Hook.HookParameters?.map((param) => hookParametersParser(param, source.hook_definition.hook_parameters!))
@@ -125,12 +158,17 @@ const test_hook_parameters = async (source: DefinitionSource) => {
 const main = async () => {
   await client.connect()
 
-  const current = Xahau_Governance
+  const current = Lotteries
 
-  // await test_hookstate(current)
-  // await test_invoke_blob(current)
-  // await test_txn_parameters(current)
-  await test_hook_parameters(current)
+  const targets = Array.isArray(current) ? current : [current]
+
+  for (let i = 0; i < targets.length; i++) {
+    const target = targets[i]
+    await test_hookstate(target)
+    // await test_invoke_blob(target)
+    // await test_txn_parameters(target)
+    // await test_hook_parameters(target)
+  }
 
   await client.disconnect()
 }
