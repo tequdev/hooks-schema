@@ -11,7 +11,8 @@ import { LotteryICDefinition } from './hook-schemas/lottery/lottery_ic';
 import { LotteryStartDefinition } from './hook-schemas/lottery/lottery_start';
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
-import { hookParametersParser, hookStateParser, invokeBlobParser, txnParametersParser } from './parser'
+import { XahauGovernanceOperation } from './hook-schemas/xahau-governance/operation';
+import { hookParametersParser, hookStateParser, invokeBlobParser, readOperation, txnParametersParser, writeOperation } from './parser'
 
 const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");
@@ -152,6 +153,34 @@ const test_hook_parameters = async (source: DefinitionSource) => {
   }
 }
 
+const test_write_operation = async () => {
+
+  const { HookParameters } = writeOperation(XahauGovernanceOperation).voteToSeat({
+    layer: 2,
+    seatId: 8,
+    value: 'rJeoxs1fZW78sMeamwJ27CVcXZNpQZR3t'
+  })
+
+  console.log(HookParameters)
+}
+
+const test_read_operation = async () => {
+
+  const account = GovernanceHookDefinition.account!
+  const namespace_id = GovernanceHookDefinition.namespace_id!
+  const definition = XahauGovernanceOperation
+
+  const { index, decodeHookStateData } = readOperation(definition, account, namespace_id).currentMemberCount({})
+
+  const response = await client.request({
+    command: 'ledger_entry',
+    index
+  })
+  const hookStateData = (response.result.node as HookState).HookStateData
+
+  console.log(decodeHookStateData(hookStateData))
+}
+
 
 const main = async () => {
   await client.connect()
@@ -162,11 +191,13 @@ const main = async () => {
 
   for (let i = 0; i < targets.length; i++) {
     const target = targets[i]
-    await test_hookstate(target)
+    // await test_hookstate(target)
     // await test_invoke_blob(target)
     // await test_txn_parameters(target)
     // await test_hook_parameters(target)
   }
+  // await test_write_operation()
+  await test_read_operation()
 
   await client.disconnect()
 }

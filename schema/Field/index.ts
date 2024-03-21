@@ -23,6 +23,8 @@ export interface ArrayField<T extends NonArrayField = NonArrayField> extends Fie
 interface FieldBase {
   type: string
   name: string
+  // field name for operation
+  field?: string
   // fixed_value?: string | number;
   pattern?: string
   byte_length?: number
@@ -84,9 +86,10 @@ export interface XFL extends FieldBase {
   byte_length?: number
 }
 
-export interface VarString extends FieldBase {
+export interface VarString extends Omit<FieldBase, 'pattern'> {
   type: 'VarString'
   byte_length?: number
+  pattern?: string | null
   /**
    * @default false
    */

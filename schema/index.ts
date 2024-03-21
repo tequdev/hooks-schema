@@ -1,6 +1,7 @@
 import { HookParameterDefinition } from './HookParameter'
 import { HookStateDefinition } from './HookState'
 import { InvokeBlobDefinition } from './InvokeBlob'
+import { OperationDefinition } from './Operation'
 import { TxnParameterDefinition } from './TxnParameter'
 
 export interface Definition {
@@ -20,4 +21,5 @@ export interface Definition {
   txn_parameters?: TxnParameterDefinition
   hook_parameters?: HookParameterDefinition
   invoke_blobs?: InvokeBlobDefinition
+  operations?: OperationDefinition
 }

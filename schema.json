@@ -77,6 +77,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -121,6 +125,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -156,6 +164,10 @@
                 "name": {
                     "type": "string",
                     "title": "name"
+                },
+                "field": {
+                    "type": "string",
+                    "title": "field"
                 },
                 "pattern": {
                     "type": "string",
@@ -193,6 +205,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -228,6 +244,10 @@
                 "name": {
                     "type": "string",
                     "title": "name"
+                },
+                "field": {
+                    "type": "string",
+                    "title": "field"
                 },
                 "pattern": {
                     "type": "string",
@@ -265,6 +285,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -301,6 +325,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -332,6 +360,13 @@
                     "type": "number",
                     "title": "byte_length"
                 },
+                "pattern": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "pattern"
+                },
                 "binary": {
                     "default": false,
                     "type": "boolean",
@@ -347,9 +382,9 @@
                     "type": "string",
                     "title": "name"
                 },
-                "pattern": {
+                "field": {
                     "type": "string",
-                    "title": "pattern"
+                    "title": "field"
                 },
                 "exclude": {
                     "default": false,
@@ -382,6 +417,10 @@
                 "name": {
                     "type": "string",
                     "title": "name"
+                },
+                "field": {
+                    "type": "string",
+                    "title": "field"
                 },
                 "pattern": {
                     "type": "string",
@@ -578,6 +617,163 @@
                 "name"
             ]
         },
+        "OperationDefinition": {
+            "title": "OperationDefinition",
+            "type": "object",
+            "properties": {
+                "write": {
+                    "$ref": "#/definitions/WriteOperation",
+                    "title": "write"
+                },
+                "read": {
+                    "$ref": "#/definitions/ReadOperation",
+                    "title": "read"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "read",
+                "write"
+            ]
+        },
+        "WriteOperation": {
+            "title": "WriteOperation",
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "$ref": "#/definitions/Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">",
+                        "title": "data"
+                    },
+                    "txn_parameter_definition": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Field"
+                                    },
+                                    "title": "key"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Field"
+                                    },
+                                    "title": "data"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "data",
+                                "key"
+                            ]
+                        },
+                        "title": "txn_parameter_definition"
+                    },
+                    "invoke_blob_definition": {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Field"
+                                },
+                                "title": "data"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "data"
+                        ],
+                        "title": "invoke_blob_definition"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "data"
+                ]
+            }
+        },
+        "ReadOperation": {
+            "title": "ReadOperation",
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "args": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "enum": [
+                                "AccountID",
+                                "Array",
+                                "Hash256",
+                                "UInt16",
+                                "UInt32",
+                                "UInt64",
+                                "UInt8",
+                                "VarString",
+                                "XFL"
+                            ],
+                            "type": "string"
+                        },
+                        "title": "args"
+                    },
+                    "returns": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "enum": [
+                                "AccountID",
+                                "Array",
+                                "Hash256",
+                                "UInt16",
+                                "UInt32",
+                                "UInt64",
+                                "UInt8",
+                                "VarString",
+                                "XFL"
+                            ],
+                            "type": "string"
+                        },
+                        "title": "returns"
+                    },
+                    "hook_state_definition": {
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Field"
+                                },
+                                "title": "key"
+                            },
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Field"
+                                },
+                                "title": "data"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "data",
+                            "key"
+                        ],
+                        "title": "hook_state_definition"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "args",
+                    "hook_state_definition",
+                    "returns"
+                ]
+            }
+        },
         "TxnParameterDefinition": {
             "title": "TxnParameterDefinition",
             "type": "object",
@@ -700,6 +896,10 @@
                 "invoke_blobs": {
                     "$ref": "#/definitions/InvokeBlobDefinition",
                     "title": "invoke_blobs"
+                },
+                "operations": {
+                    "$ref": "#/definitions/OperationDefinition",
+                    "title": "operations"
                 }
             },
             "additionalProperties": false,
@@ -749,6 +949,10 @@
                 "name": {
                     "type": "string",
                     "title": "name"
+                },
+                "field": {
+                    "type": "string",
+                    "title": "field"
                 },
                 "pattern": {
                     "type": "string",
@@ -807,6 +1011,10 @@
                     "type": "string",
                     "title": "name"
                 },
+                "field": {
+                    "type": "string",
+                    "title": "field"
+                },
                 "pattern": {
                     "type": "string",
                     "title": "pattern"
@@ -851,8 +1059,15 @@
                     "type": "string",
                     "title": "name"
                 },
-                "pattern": {
+                "field": {
                     "type": "string",
+                    "title": "field"
+                },
+                "pattern": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "pattern"
                 },
                 "exclude": {
@@ -866,6 +1081,11 @@
                 "name",
                 "type"
             ]
+        },
+        "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">": {
+            "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">",
+            "type": "object",
+            "additionalProperties": false
         }
     }
 }

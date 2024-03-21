@@ -1,8 +1,12 @@
+import { floatToXfl } from '@transia/hooks-toolkit'
 import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
-import { encodeAccountID } from '@transia/xrpl/dist/npm/utils'
+import { decodeAccountID, encodeAccountID } from '@transia/xrpl/dist/npm/utils'
+import { hashStateTree } from '@transia/xrpl/dist/npm/utils/hashes'
+import sha512Half from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
 import { HookParameterDefinition } from 'schema/HookParameter'
+import { OperationDefinition } from 'schema/Operation'
 import { Field } from '../schema/Field'
 import { HookStateDefinition } from '../schema/HookState'
 import { InvokeBlobDefinition } from '../schema/InvokeBlob'
@@ -79,6 +83,37 @@ const bufferToReadableData = (
   }
 }
 
+const toHex = (state: Field, value: null | string | number | bigint | Array<string | number | bigint>): string => {
+  switch (state.type) {
+    case 'AccountID':
+      return decodeAccountID(value as string).toString('hex').toUpperCase()
+    case 'UInt8':
+      return Buffer.from(new Uint8Array([value as number]).buffer).toString('hex').toUpperCase()
+    case 'UInt16':
+      return Buffer.from(new Uint16Array([value as number]).buffer).toString('hex').toUpperCase()
+    case 'UInt32':
+      return Buffer.from(new Uint32Array([value as number]).buffer).toString('hex').toUpperCase()
+    case 'UInt64':
+      return Buffer.from(new BigUint64Array([value as bigint]).buffer).toString('hex').toUpperCase()
+    case 'XFL':
+      return Buffer.from(new BigUint64Array([floatToXfl(value as bigint) as bigint]).buffer).toString('hex').toUpperCase()
+    case 'VarString':
+      if (state.binary === true) {
+        if (value === null) return '00'.repeat(state.byte_length!)
+        return (value as string).toUpperCase()
+      }
+      return Buffer.from(value as string).toString('hex').toUpperCase()
+    case 'Hash256':
+      return (value as string).toUpperCase()
+    case 'Array': {
+      const a = value as Array<string | number | bigint>
+      return a.map((v, i) => toHex(state.array[i], v)).join('')
+    }
+    default:
+      throw new Error('Invalid type')
+  }
+}
+
 const fieldsTotalLength = (fields: Field[], buffer: Buffer) => {
   return fields.reduce((total, cur) => total + getByteLength(cur, buffer.subarray(total)), 0)
 }
@@ -104,6 +139,33 @@ const parseBuffer = (buffer: Buffer, definitions: Field[]) => {
     if (!d.exclude) {
       readableArr.push({
         name: d.name,
+        value: readable,
+      })
+    }
+    return true
+  })
+
+  return check ? readableArr : undefined
+}
+
+const parseBufferAsOperationField = (buffer: Buffer, definitions: Field[]) => {
+  let lastIndex = 0
+  let lastBuffer = buffer
+  const readableArr: ReadableData[] = []
+
+  const check = definitions.every((d) => {
+    const currentIndex = getByteLength(d, lastBuffer)
+    const currentBuffer = buffer.subarray(lastIndex, lastIndex + currentIndex)
+    lastIndex += currentIndex
+    lastBuffer = currentBuffer
+    const readableForComp = bufferToReadableData(currentBuffer, d, '0')
+    const readable = bufferToReadableData(currentBuffer, d, '')
+
+    if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+    if (!d.exclude) {
+      if (!d.field) throw new Error(`field is not defined: ${d.name}`)
+      readableArr.push({
+        field: d.field,
         value: readable,
       })
     }
@@ -177,3 +239,68 @@ export const hookParametersParser = (parameters: HookParameter, definition: Hook
 
   return wrapper(definition, (state) => parseKeyValue(name, value, state, 'hookparam_key', 'hookparam_data'))
 }
+
+type FieldTypeToType<T extends Field['type']> =
+  T extends 'AccountID' | 'VarString' | 'Hash256' ? string
+  : T extends 'UInt8' | 'UInt16' | 'UInt32' | 'UInt64' | 'XFL' ? number
+  : T extends 'Array' ? any[] : never
+
+type WriteMethods<T extends OperationDefinition> = Extract<keyof T['write'], string>
+type ReadMethods<T extends OperationDefinition> = Extract<keyof T['read'], string>
+type WriteData<T extends OperationDefinition, U extends T['write'][keyof T['write']]['data'] = T['write'][keyof T['write']]['data']> = { [K in keyof U]: FieldTypeToType<U[K]> }
+type ReadArgs<T extends OperationDefinition, U extends T['read'][keyof T['read']]['args'] = T['read'][keyof T['read']]['args']> = { [K in keyof U]: FieldTypeToType<U[K]> }
+type ReadReturns<T extends OperationDefinition, U extends T['read'][keyof T['read']]['returns'] = T['read'][keyof T['read']]['returns']> = { [K in keyof U]: FieldTypeToType<U[K]> }
+
+export const writeOperation = <T extends OperationDefinition>(definition: T) => {
+  const methods = Object.keys(definition.write) as WriteMethods<T>[]
+
+  return methods.reduce((prev, method) => {
+    prev[method] = (data: WriteData<T>) => {
+      const parseHex = (fields: Field[]) => fields.reduce((prev, curr) => prev + toHex(curr, curr.field ? data[curr.field] : curr.pattern!), '')
+      if (definition.write[method].txn_parameter_definition) {
+        const param_definition = definition.write[method].txn_parameter_definition!
+        const HookParameters = param_definition.map((param): HookParameter => (
+          {
+            HookParameter: {
+              HookParameterName: parseHex(param.key), HookParameterValue: parseHex(param.data)
+            }
+          }
+        ))
+        return { HookParameters, Blob: null }
+      }
+      const blob_definition = definition.write[method].invoke_blob_definition!
+      const Blob = parseHex(blob_definition.data)
+      return { HookParameters: null, Blob }
+    }
+    return prev
+  }, {} as Record<WriteMethods<T>, (data: WriteData<T>) => { HookParameters: HookParameter[] | null, Blob: string | null }>
+  )
+}
+
+export const readOperation = <T extends OperationDefinition>(definition: T, account: string, namespace_id: string) => {
+  const methods = Object.keys(definition.read) as ReadMethods<T>[]
+
+  return methods.reduce((prev, method) => {
+    prev[method] = (args: ReadArgs<T>) => {
+      const parseHex = (fields: Field[]) => fields.reduce((prev, curr) => prev + toHex(curr, curr.field ? args[curr.field] : curr.pattern!), '')
+      const hook_state_definition = definition.read[method].hook_state_definition!
+      const hookStateKey = parseHex(hook_state_definition.key)
+      const prefix = '0076'
+      const index = sha512Half(`${prefix}${decodeAccountID(account).toString('hex').toUpperCase()}${hookStateKey}${namespace_id}`)
+
+      const decodeHookStateData = (hookStateValue: string): ReadReturns<T> => {
+        const buffer = Buffer.from(hookStateValue, 'hex')
+        const readableArr = parseBufferAsOperationField(buffer, hook_state_definition.data)
+        if (!readableArr) throw new Error('Invalid hook state value')
+        return Object.keys(definition.read[method].returns)
+          // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+          .reduce((prev, curr) => ({ ...prev, [curr]: readableArr.find(r => r.field === curr)!.value }), {} as ReadReturns<T>)
+      }
+      return { index, decodeHookStateData }
+
+    }
+    return prev
+  }, {} as Record<ReadMethods<T>, (args: ReadArgs<T>) => { index: string, decodeHookStateData: (value: string) => ReadReturns<T> }>
+  )
+}
+
