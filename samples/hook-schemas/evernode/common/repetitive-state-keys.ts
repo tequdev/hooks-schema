@@ -101,7 +101,8 @@ export const STP_HOST_ADDR: State = {
       type: 'VarString',
       name: 'padding',
       byte_length: 8,
-      pattern: '0'.repeat(8),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -233,7 +234,8 @@ export const STP_HOST_ADDR_081: State = {
       type: 'VarString',
       name: 'padding',
       byte_length: 8,
-      pattern: '0'.repeat(8),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -361,7 +363,8 @@ export const STP_HOST_ADDR_080: State = {
       type: 'VarString',
       name: 'padding',
       byte_length: 8,
-      pattern: '0'.repeat(8),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -485,7 +488,8 @@ export const STP_TRANSFEREE_ADDR: State = {
       type: 'VarString',
       name: 'padding',
       byte_length: 8,
-      pattern: '0'.repeat(8),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -532,7 +536,8 @@ export const STP_CANDIDATE_OWNER: State = {
       type: 'VarString',
       name: 'padding',
       byte_length: 8,
-      pattern: '0'.repeat(8),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
