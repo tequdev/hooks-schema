@@ -64,10 +64,14 @@ export const Model: HookState = {
       },
       {
         type: 'UInt64',
+        name: 'Max Tickets',
+      },
+      {
+        type: 'UInt64',
         name: 'Duration',
       },
     ],
-    byte_length: 60
+    byte_length: 68
   }],
 }
 

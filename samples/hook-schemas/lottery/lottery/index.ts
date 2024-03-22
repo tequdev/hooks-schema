@@ -8,7 +8,7 @@ const hook_account = 'rE7EjcVNHjE6JdpCoDdCXjfMoKExNiKkKi'
 export const LotteryHookDefinition: Definition = {
   name: 'Lottery',
   description: 'Lottery',
-  hook_hash: '7A16488EBCDB2C16E2A733FF4FF524FDE1CFDB293CF352801C41CFE1A8B0231B',
+  hook_hash: 'CFFFA11775796EE0A4B89641AA62841CDA9CEB0DF58A73833ACB38902D85F976',
   account: hook_account,
   namespace_id: hexNamespace('lottery'),
   github_url: 'https://github.com/Transia-RnD/xhs-library/blob/main/contracts/lottery/lottery.c',
