@@ -10,8 +10,9 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
         {
           type: 'VarString',
           name: 'padding',
-          pattern: '0'.repeat(30),
           byte_length: 30,
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -35,8 +36,9 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
         {
           type: 'VarString',
           name: 'padding',
-          pattern: '0'.repeat(30),
           byte_length: 30,
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -59,8 +61,9 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
         {
           type: 'VarString',
           name: 'padding',
-          pattern: '0'.repeat(30),
           byte_length: 30,
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -83,8 +86,9 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
         {
           type: 'VarString',
           name: 'padding',
-          pattern: '0'.repeat(31),
           byte_length: 31,
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -106,8 +110,9 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
         {
           type: 'VarString',
           name: 'padding',
-          pattern: '0'.repeat(12),
           byte_length: 12,
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -143,7 +148,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           type: 'VarString',
           name: 'padding',
           byte_length: 8,
-          pattern: '0'.repeat(8),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -175,7 +181,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           type: 'VarString',
           name: 'padding',
           byte_length: 8,
-          pattern: '0'.repeat(8),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -207,7 +214,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           type: 'VarString',
           name: 'padding',
           byte_length: 8,
-          pattern: '0'.repeat(8),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -243,7 +251,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           type: 'VarString',
           name: 'padding',
           byte_length: 8,
-          pattern: '0'.repeat(8),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
@@ -374,7 +383,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           type: 'VarString',
           name: 'padding',
           byte_length: 8,
-          pattern: '0'.repeat(8),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {

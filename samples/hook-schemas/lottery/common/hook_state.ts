@@ -8,8 +8,9 @@ export const LastLedgerTime: HookState = {
     {
       type: 'VarString',
       name: '',
-      pattern: '0'.repeat(32 - 8),
       byte_length: 32 - 8,
+      pattern: null,
+      binary: true,
       exclude: true
     },
     {
@@ -29,8 +30,9 @@ export const Model: HookState = {
     {
       type: 'VarString',
       name: '',
-      pattern: '0'.repeat(32 - 8),
       byte_length: 32 - 8,
+      pattern: null,
+      binary: true,
       exclude: true
     },
     {
@@ -93,8 +95,9 @@ export const ReverseTicketCount: HookState = {
     {
       type: 'VarString',
       name: '',
-      pattern: '0'.repeat(32 - 8),
       byte_length: 32 - 8,
+      pattern: null,
+      binary: true,
       exclude: true
     },
     {
@@ -114,8 +117,9 @@ export const TicketCount: HookState = {
     {
       type: 'VarString',
       name: '',
-      pattern: '0'.repeat(12),
       byte_length: 12,
+      pattern: null,
+      binary: true,
       exclude: true
     },
     {
