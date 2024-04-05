@@ -4,8 +4,6 @@ import sha512h from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
 import { Definition } from '../../../schema'
 
 export const OracleInvokeDefinition: Definition['invoke_blobs'] = {
-  name: 'Oracle Invoke Blob',
-  description: 'Oracle Invoke Blob',
   fields: [
     {
       name: 'Oracle Set',

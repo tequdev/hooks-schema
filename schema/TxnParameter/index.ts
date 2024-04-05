@@ -1,8 +1,6 @@
 import { Field } from '../Field'
 
 export interface TxnParameterDefinition {
-  name: string
-  description: string
   fields: {
     name?: string
     description?: string

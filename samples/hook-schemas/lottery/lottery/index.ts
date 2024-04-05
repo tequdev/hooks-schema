@@ -14,8 +14,6 @@ export const LotteryHookDefinition: Definition = {
   github_url: 'https://github.com/Transia-RnD/xhs-library/blob/main/contracts/lottery/lottery.c',
   version: [],
   hook_states: {
-    name: '',
-    description: '',
     fields: [
       // state, state_set, foreign_state_set
       {
@@ -51,8 +49,6 @@ export const LotteryHookDefinition: Definition = {
     ]
   },
   txn_parameters: {
-    name: '',
-    description: '',
     fields: [{
       ...LotteryHash,
       transaction_types: ['Payment'],

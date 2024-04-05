@@ -1,8 +1,6 @@
 import { Definition } from '../../../schema'
 
 export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
-  name: 'Governance',
-  description: 'Governance',
   fields: [
     {
       name: 'Layer',

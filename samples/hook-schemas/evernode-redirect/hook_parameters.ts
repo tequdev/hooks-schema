@@ -1,9 +1,6 @@
-
 import { Definition } from '../../../schema'
 
 export const EvernodeRedirectHookParametersDefinition: Definition['hook_parameters'] = {
-  name: 'Evernode Redirect',
-  description: 'Evernode Redirect',
   fields: [{
     hookparam_key: [{
       type: 'VarString',

@@ -1,9 +1,6 @@
-
 import { Definition } from '../../../schema'
 
 export const EvernodeRegistryHookParametersDefinition: Definition['hook_parameters'] = {
-  name: 'Evernode Registry',
-  description: 'Evernode Registry',
   fields: [{
     name: 'Issuer Address',
     hookparam_key: [

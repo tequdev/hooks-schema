@@ -1,9 +1,6 @@
-
 import { Definition } from '../../../schema'
 
 export const EvernodeHeartbeatHookParametersDefinition: Definition['hook_parameters'] = {
-  name: 'Evernode Heartbeat',
-  description: 'Evernode Heartbeat',
   fields: [{
     name: 'Issuer Address',
     hookparam_key: [
