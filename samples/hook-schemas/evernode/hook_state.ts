@@ -1,4 +1,3 @@
-
 import { Definition } from '../../../schema'
 import { all as all1 } from './common/configuration'
 import { all as all3 } from './common/repetitive-state-keys'

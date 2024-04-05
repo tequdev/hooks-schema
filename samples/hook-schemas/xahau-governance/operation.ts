@@ -1,4 +1,4 @@
-import { OperationDefinition } from "schema/Operation";
+import { OperationDefinition } from 'schema/Operation'
 
 export const XahauGovernanceOperation = {
   write: {
@@ -10,12 +10,14 @@ export const XahauGovernanceOperation = {
       },
       txn_parameter_definition: [
         {
-          key: [{
-            type: 'VarString',
-            name: 'Topic',
-            pattern: 'T',
-            byte_length: 1,
-          }],
+          key: [
+            {
+              type: 'VarString',
+              name: 'Topic',
+              pattern: 'T',
+              byte_length: 1,
+            },
+          ],
           data: [
             {
               type: 'VarString',
@@ -26,37 +28,45 @@ export const XahauGovernanceOperation = {
             {
               type: 'UInt8',
               name: 'Seat ID',
-              field: "seatId"
+              field: 'seatId',
             },
           ],
         },
         {
-          key: [{
-            type: 'VarString',
-            name: 'Layer',
-            pattern: 'L',
-            byte_length: 1,
-          }],
-          data: [{
-            type: 'UInt8',
-            name: 'Layer',
-            field: 'layer',
-          }],
+          key: [
+            {
+              type: 'VarString',
+              name: 'Layer',
+              pattern: 'L',
+              byte_length: 1,
+            },
+          ],
+          data: [
+            {
+              type: 'UInt8',
+              name: 'Layer',
+              field: 'layer',
+            },
+          ],
         },
         {
-          key: [{
-            type: 'VarString',
-            name: 'Vote',
-            pattern: 'V',
-            byte_length: 1,
-          }],
-          data: [{
-            type: 'AccountID',
-            name: 'Value',
-            field: 'value',
-          }],
-        }
-      ]
+          key: [
+            {
+              type: 'VarString',
+              name: 'Vote',
+              pattern: 'V',
+              byte_length: 1,
+            },
+          ],
+          data: [
+            {
+              type: 'AccountID',
+              name: 'Value',
+              field: 'value',
+            },
+          ],
+        },
+      ],
     },
     // voteToHook: {
     //   data: {},
@@ -88,8 +98,7 @@ export const XahauGovernanceOperation = {
   },
   read: {
     currentMemberCount: {
-      args: {
-      },
+      args: {},
       returns: {
         count: 'UInt8',
       },
@@ -109,12 +118,14 @@ export const XahauGovernanceOperation = {
             pattern: 'MC',
           },
         ],
-        data: [{
-          type: 'UInt8',
-          name: 'Count',
-          field: 'count',
-        }]
-      }
+        data: [
+          {
+            type: 'UInt8',
+            name: 'Count',
+            field: 'count',
+          },
+        ],
+      },
     },
   },
 } as const satisfies OperationDefinition

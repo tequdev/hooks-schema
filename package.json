@@ -8,8 +8,8 @@
     "build": "tsc",
     "generate": "tsx samples/generate.ts",
     "generate:schema": "quicktype schema/index.ts -o schema.json --lang schema",
-    "lint": "biome lint --apply src",
-    "format": "biome format --write src"
+    "lint": "biome lint --apply .",
+    "format": "biome format --write ."
   },
   "keywords": [],
   "author": "",

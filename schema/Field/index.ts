@@ -9,8 +9,8 @@ export interface ArrayField<T extends NonArrayField = NonArrayField> extends Fie
   array_length?: number
   byte_length?: number
   /**
-   * The length prefix consists of either two or four bytes 
-   * (depending on the length of the string) 
+   * The length prefix consists of either two or four bytes
+   * (depending on the length of the string)
    * and indicates the number of raw bytes in the string
    * @default false
    */
@@ -95,8 +95,8 @@ export interface VarString extends Omit<FieldBase, 'pattern'> {
    */
   binary?: boolean
   /**
-   * The length prefix consists of either two or four bytes 
-   * (depending on the length of the string) 
+   * The length prefix consists of either two or four bytes
+   * (depending on the length of the string)
    * and indicates the number of raw bytes in the string
    * @default false
    */

@@ -168,7 +168,7 @@ export const STP_HOST_ADDR: State = {
         {
           type: 'UInt8',
           name: 'patch',
-        }
+        },
       ],
       array_length: 3,
       byte_length: 3,
@@ -207,9 +207,9 @@ export const STP_HOST_ADDR: State = {
       name: 'Transfer Timestamp',
     },
     {
-      type: "XFL",
-      name: "Host Lease Amount"
-    }
+      type: 'XFL',
+      name: 'Host Lease Amount',
+    },
   ],
 }
 
@@ -300,7 +300,7 @@ export const STP_HOST_ADDR_081: State = {
         {
           type: 'UInt8',
           name: 'patch',
-        }
+        },
       ],
       array_length: 3,
       byte_length: 3,
@@ -428,7 +428,7 @@ export const STP_HOST_ADDR_080: State = {
         {
           type: 'UInt8',
           name: 'patch',
-        }
+        },
       ],
       array_length: 3,
       byte_length: 3,

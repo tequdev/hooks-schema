@@ -29,29 +29,31 @@ export const LotteryHookDefinition: Definition = {
         ...Ticket,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // TODO: lottery_hash (hash(Lottery ID))
-        }
+          namespace_id: '', // TODO: lottery_hash (hash(Lottery ID))
+        },
       },
       {
         ...ReverseTicketCount,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // TODO: lottery_hash (hash(Lottery ID))
-        }
+          namespace_id: '', // TODO: lottery_hash (hash(Lottery ID))
+        },
       },
       {
         ...TicketCount,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // TODO: lottery_hash (hash(Lottery ID))
-        }
+          namespace_id: '', // TODO: lottery_hash (hash(Lottery ID))
+        },
       },
-    ]
+    ],
   },
   txn_parameters: {
-    fields: [{
-      ...LotteryHash,
-      transaction_types: ['Payment'],
-    }]
-  }
+    fields: [
+      {
+        ...LotteryHash,
+        transaction_types: ['Payment'],
+      },
+    ],
+  },
 }

@@ -43,7 +43,7 @@ export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
         },
         {
           type: 'UInt8',
-          name: "Seat ID"
+          name: 'Seat ID',
         },
       ],
     },
@@ -69,7 +69,7 @@ export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
         },
         {
           type: 'UInt8',
-          name: "Hook Index"
+          name: 'Hook Index',
         },
       ],
     },
