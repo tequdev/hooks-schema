@@ -576,6 +576,8 @@ export const STP_CANDIDATE_ID: State = {
     {
       type: 'VarString',
       name: 'CandidateID',
+      // TODO: Need to investigate as it may have multiple meanings
+      binary: true,
       byte_length: 28,
     },
   ],
