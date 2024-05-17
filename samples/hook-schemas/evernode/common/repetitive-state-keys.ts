@@ -554,6 +554,10 @@ export const STP_CANDIDATE_OWNER: State = {
       type: 'Hash256',
       name: 'Heartbeat Hash',
     },
+    {
+      type: 'Hash256',
+      name: 'Reputation Hash',
+    },
   ],
 }
 
