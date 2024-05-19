@@ -7,17 +7,16 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^1.5.2
+        version: 1.5.2
       '@transia/hooks-toolkit':
         specifier: ^1.0.11
         version: 1.0.11
       '@transia/xrpl':
         specifier: 2.7.3-alpha.22
         version: 2.7.3-alpha.22
-    devDependencies:
-      '@biomejs/biome':
-        specifier: ^1.5.2
-        version: 1.5.2
       quicktype:
         specifier: ^23.0.81
         version: 23.0.81

@@ -1,6 +1,6 @@
 {
   "name": "hooks-schema",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "exports": {
     "require": {
@@ -21,18 +21,15 @@
     "generate": "tsx samples/generate.ts",
     "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema",
     "lint": "biome lint --apply .",
-    "format": "biome format --write .",
-    "publish": "pnpm publish"
+    "format": "biome format --write ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@transia/hooks-toolkit": "^1.0.11",
-    "@transia/xrpl": "2.7.3-alpha.22"
-  },
   "devDependencies": {
     "@biomejs/biome": "^1.5.2",
+    "@transia/hooks-toolkit": "^1.0.11",
+    "@transia/xrpl": "2.7.3-alpha.22",
     "quicktype": "^23.0.81",
     "tsup": "^8.0.2",
     "tsx": "^4.7.0",
