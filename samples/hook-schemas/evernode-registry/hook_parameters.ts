@@ -22,7 +22,8 @@ export const EvernodeRegistryHookParametersDefinition: Definition['hook_paramete
           type: 'VarString',
           name: '',
           byte_length: 27,
-          pattern: '0'.repeat(27),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {

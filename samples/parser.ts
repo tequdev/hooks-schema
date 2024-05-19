@@ -46,7 +46,7 @@ const getByteLength = (state: Field, buffer: Buffer) => {
 const bufferToReadableData = (
   buffer: Buffer,
   state: Field,
-  nullReplaceTo = '0',
+  nullReplaceTo = '00',
 ): string | number | bigint | Array<string | number | bigint> => {
   switch (state.type) {
     case 'AccountID':
@@ -146,10 +146,14 @@ const parseBuffer = (buffer: Buffer, definitions: Field[]) => {
     const currentBuffer = buffer.subarray(lastIndex, lastIndex + currentIndex)
     lastIndex += currentIndex
     lastBuffer = currentBuffer
-    const readableForComp = bufferToReadableData(currentBuffer, d, '0')
+    const readableForComp = bufferToReadableData(currentBuffer, d, '00')
     const readable = bufferToReadableData(currentBuffer, d, '')
 
-    if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+    if (d.pattern !== undefined) {
+      if (!new RegExp(d.pattern || "00".repeat(d.byte_length!))
+        .test(readableForComp.toString()))
+        return false
+    }
     if (!d.exclude) {
       readableArr.push({
         name: d.name,
@@ -172,10 +176,14 @@ const parseBufferAsOperationField = (buffer: Buffer, definitions: Field[]) => {
     const currentBuffer = buffer.subarray(lastIndex, lastIndex + currentIndex)
     lastIndex += currentIndex
     lastBuffer = currentBuffer
-    const readableForComp = bufferToReadableData(currentBuffer, d, '0')
+    const readableForComp = bufferToReadableData(currentBuffer, d, '00')
     const readable = bufferToReadableData(currentBuffer, d, '')
 
-    if (d.pattern && !new RegExp(d.pattern).test(readableForComp.toString())) return false
+    if (d.pattern !== undefined) {
+      if (!new RegExp(d.pattern || "00".repeat(d.byte_length!))
+        .test(readableForComp.toString()))
+        return false
+    }
     if (!d.exclude) {
       if (!d.field) throw new Error(`field is not defined: ${d.name}`)
       readableArr.push({

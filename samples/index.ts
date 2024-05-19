@@ -200,13 +200,13 @@ const main = async () => {
 
   for (let i = 0; i < targets.length; i++) {
     const target = targets[i]
-    // await test_hookstate(target)
+    await test_hookstate(target)
     // await test_invoke_blob(target)
     // await test_txn_parameters(target)
     // await test_hook_parameters(target)
   }
   // await test_write_operation()
-  await test_read_operation()
+  // await test_read_operation()
 
   await client.disconnect()
 }

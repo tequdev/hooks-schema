@@ -54,7 +54,8 @@ export const CONF_ISSUER_ADDR: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -92,7 +93,8 @@ export const CONF_FOUNDATION_ADDR: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -130,7 +132,8 @@ export const CONF_MOMENT_SIZE: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -168,7 +171,8 @@ export const CONF_MINT_LIMIT: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -206,7 +210,8 @@ export const CONF_FIXED_REG_FEE: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -244,7 +249,8 @@ export const CONF_HOST_HEARTBEAT_FREQ: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -282,7 +288,8 @@ export const CONF_LEASE_ACQUIRE_WINDOW: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -320,7 +327,8 @@ export const CONF_REWARD_CONFIGURATION: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -383,7 +391,8 @@ export const CONF_REWARD_CONFIGURATION_081: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -442,7 +451,8 @@ export const CONF_MAX_TOLERABLE_DOWNTIME: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -480,7 +490,8 @@ export const CONF_MOMENT_TRANSIT_INFO: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
 
@@ -528,7 +539,8 @@ export const CONF_MAX_EMIT_TRX_FEE: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -566,7 +578,8 @@ export const CONF_HEARTBEAT_ADDR: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -604,7 +617,8 @@ export const CONF_REGISTRY_ADDR: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -642,7 +656,8 @@ export const CONF_GOVERNANCE_CONFIGURATION: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {
@@ -692,7 +707,8 @@ export const CONF_NETWORK_CONFIGURATION: State = {
       type: 'VarString',
       name: '',
       byte_length: 27,
-      pattern: '0'.repeat(27),
+      pattern: null,
+      binary: true,
       exclude: true,
     },
     {

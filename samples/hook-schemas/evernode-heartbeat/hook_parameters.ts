@@ -22,7 +22,8 @@ export const EvernodeHeartbeatHookParametersDefinition: Definition['hook_paramet
           type: 'VarString',
           name: '',
           byte_length: 27,
-          pattern: '0'.repeat(27),
+          pattern: null,
+          binary: true,
           exclude: true,
         },
         {
