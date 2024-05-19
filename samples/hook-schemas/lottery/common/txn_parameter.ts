@@ -1,4 +1,4 @@
-import { TxnParameterDefinition } from "schema/TxnParameter";
+import { TxnParameterDefinition } from 'schema/TxnParameter'
 
 type TxnParam = TxnParameterDefinition['fields'][0]
 
@@ -10,13 +10,13 @@ export const LotteryHash: TxnParam = {
       type: 'VarString',
       name: 'LH',
       pattern: 'LH',
-      exclude: true
-    }
+      exclude: true,
+    },
   ],
   otxnparam_data: [
     {
       type: 'Hash256',
-      name: 'Lottery Hash'
-    }
-  ]
+      name: 'Lottery Hash',
+    },
+  ],
 }

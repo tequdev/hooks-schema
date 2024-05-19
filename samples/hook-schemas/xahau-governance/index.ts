@@ -14,5 +14,5 @@ export const GovernanceHookDefinition: Definition = {
   hook_states: GovernanceHookStateDefinition,
   txn_parameters: GovernanceTxnParametersDefinition,
   hook_parameters: GovernanceHookParametersDefinition,
-  operations: XahauGovernanceOperation
+  operations: XahauGovernanceOperation,
 }

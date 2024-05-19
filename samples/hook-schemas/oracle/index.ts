@@ -11,5 +11,5 @@ export const OracleHookDefinition: Definition = {
   namespace_id: hexNamespace('oracle'),
   version: [],
   hook_states: OracleHookStateDefinition,
-  invoke_blobs: OracleInvokeDefinition
+  invoke_blobs: OracleInvokeDefinition,
 }

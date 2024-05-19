@@ -11,17 +11,19 @@ export const LastLedgerTime: HookState = {
       byte_length: 32 - 8,
       pattern: null,
       binary: true,
-      exclude: true
+      exclude: true,
     },
     {
       type: 'UInt64',
       name: 'Lottery ID',
-    }
+    },
   ],
-  hookstate_data: [{
-    type: 'UInt64',
-    name: 'Last Ledger Time',
-  }],
+  hookstate_data: [
+    {
+      type: 'UInt64',
+      name: 'Last Ledger Time',
+    },
+  ],
 }
 
 export const Model: HookState = {
@@ -33,56 +35,66 @@ export const Model: HookState = {
       byte_length: 32 - 8,
       pattern: null,
       binary: true,
-      exclude: true
+      exclude: true,
     },
     {
       type: 'UInt64',
       name: 'Lottery ID',
-    }
+    },
   ],
-  hookstate_data: [{
-    type: 'Array',
-    name: 'Lottery Data',
-    array: [
-      {
-        type: 'UInt64',
-        name: 'Lottery ID',
-      },
-      {
-        type: 'XFL',
-        name: 'Price',
-      },
-      {
-        type: 'XFL',
-        name: 'Fee',
-      },
-      {
-        type: 'AccountID',
-        name: 'Fee Address',
-      },
-      {
-        type: 'XFL',
-        name: 'Max Amount',
-      },
-      {
-        type: 'UInt64',
-        name: 'Duration',
-      },
-    ],
-    byte_length: 60
-  }],
+  hookstate_data: [
+    {
+      type: 'Array',
+      name: 'Lottery Data',
+      array: [
+        {
+          type: 'UInt64',
+          name: 'Lottery ID',
+        },
+        {
+          type: 'XFL',
+          name: 'Price',
+        },
+        {
+          type: 'XFL',
+          name: 'Fee',
+        },
+        {
+          type: 'AccountID',
+          name: 'Fee Address',
+        },
+        {
+          type: 'XFL',
+          name: 'Max Amount',
+        },
+        {
+          type: 'UInt64',
+          name: 'Max Tickets',
+        },
+        {
+          type: 'UInt64',
+          name: 'Duration',
+        },
+      ],
+      byte_length: 68,
+    },
+  ],
 }
 
 export const Ticket: HookState = {
   name: 'Ticket',
-  hookstate_key: [{
-    type: 'Hash256',
-    name: 'Ticket Hash',
-  }],
-  hookstate_data: [{
-    type: 'AccountID',
-    name: 'Account',
-  }],
+  hookstate_key: [
+    {
+      type: 'Hash256',
+      name: 'Ticket Hash',
+    },
+  ],
+  hookstate_data: [
+    {
+      type: 'AccountID',
+      name: 'Account',
+    },
+  ],
 }
 
 export const ReverseTicketCount: HookState = {
@@ -94,17 +106,19 @@ export const ReverseTicketCount: HookState = {
       byte_length: 32 - 8,
       pattern: null,
       binary: true,
-      exclude: true
+      exclude: true,
     },
     {
       type: 'UInt64',
       name: 'Count',
-    }
+    },
   ],
-  hookstate_data: [{
-    type: 'AccountID',
-    name: 'Account',
-  }],
+  hookstate_data: [
+    {
+      type: 'AccountID',
+      name: 'Account',
+    },
+  ],
 }
 
 export const TicketCount: HookState = {
@@ -116,15 +130,17 @@ export const TicketCount: HookState = {
       byte_length: 12,
       pattern: null,
       binary: true,
-      exclude: true
+      exclude: true,
     },
     {
       type: 'AccountID',
       name: 'Hook Account',
-    }
+    },
   ],
-  hookstate_data: [{
-    type: 'UInt64',
-    name: 'Count',
-  }],
+  hookstate_data: [
+    {
+      type: 'UInt64',
+      name: 'Count',
+    },
+  ],
 }

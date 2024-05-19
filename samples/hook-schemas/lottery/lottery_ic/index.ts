@@ -1,8 +1,8 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
 import { Definition } from 'schema'
 import { Model } from '../common/hook_state'
-import { LotteryHash } from '../common/txn_parameter';
-import { ReverseTicketCount, Ticket, TicketCount } from './../common/hook_state';
+import { LotteryHash } from '../common/txn_parameter'
+import { ReverseTicketCount, Ticket, TicketCount } from './../common/hook_state'
 
 const hook_account = 'rE7EjcVNHjE6JdpCoDdCXjfMoKExNiKkKi'
 const lottery_start_ns = hexNamespace('lottery_start')
@@ -16,8 +16,6 @@ export const LotteryICDefinition: Definition = {
   github_url: 'https://github.com/Transia-RnD/xhs-library/blob/main/contracts/lottery/lottery_ic.c',
   version: [],
   hook_states: {
-    name: '',
-    description: '',
     fields: [
       // state, state_set, foreign_state_set
       Model,
@@ -25,30 +23,26 @@ export const LotteryICDefinition: Definition = {
         ...Ticket,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // lottery_hash
-        }
+          namespace_id: '', // lottery_hash
+        },
       },
       {
         ...ReverseTicketCount,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // lottery_hash
-        }
+          namespace_id: '', // lottery_hash
+        },
       },
       {
         ...TicketCount,
         foreign_state: {
           account: hook_account,
-          namespace_id: '' // lottery_hash
-        }
+          namespace_id: '', // lottery_hash
+        },
       },
-    ]
+    ],
   },
   txn_parameters: {
-    name: '',
-    description: '',
-    fields: [
-      LotteryHash
-    ]
-  }
+    fields: [LotteryHash],
+  },
 }

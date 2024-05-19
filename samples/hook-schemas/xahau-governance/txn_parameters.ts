@@ -1,8 +1,6 @@
 import { Definition } from '../../../schema'
 
 export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
-  name: 'Governance',
-  description: 'Governance',
   fields: [
     {
       name: 'Layer',
@@ -45,7 +43,7 @@ export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
         },
         {
           type: 'UInt8',
-          name: "Seat ID"
+          name: 'Seat ID',
         },
       ],
     },
@@ -71,7 +69,7 @@ export const GovernanceTxnParametersDefinition: Definition['txn_parameters'] = {
         },
         {
           type: 'UInt8',
-          name: "Hook Index"
+          name: 'Hook Index',
         },
       ],
     },

@@ -1,18 +1,25 @@
 import { Client, TxRequest, TxResponse } from '@transia/xrpl'
-import { Hook } from '@transia/xrpl/dist/npm/models/common';
+import { Hook } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { Definition } from '../schema'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
-import { EvernodeRedirectHookDefinition } from './hook-schemas/evernode-redirect/index';
-import { LotteryHookDefinition } from './hook-schemas/lottery/lottery';
-import { LotteryEndDefinition } from './hook-schemas/lottery/lottery_end';
-import { LotteryEndICDefinition } from './hook-schemas/lottery/lottery_end_ic';
-import { LotteryICDefinition } from './hook-schemas/lottery/lottery_ic';
-import { LotteryStartDefinition } from './hook-schemas/lottery/lottery_start';
+import { EvernodeRedirectHookDefinition } from './hook-schemas/evernode-redirect/index'
+import { LotteryHookDefinition } from './hook-schemas/lottery/lottery'
+import { LotteryEndDefinition } from './hook-schemas/lottery/lottery_end'
+import { LotteryEndICDefinition } from './hook-schemas/lottery/lottery_end_ic'
+import { LotteryICDefinition } from './hook-schemas/lottery/lottery_ic'
+import { LotteryStartDefinition } from './hook-schemas/lottery/lottery_start'
 import { OracleHookDefinition } from './hook-schemas/oracle'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
-import { XahauGovernanceOperation } from './hook-schemas/xahau-governance/operation';
-import { hookParametersParser, hookStateParser, invokeBlobParser, readOperation, txnParametersParser, writeOperation } from './parser'
+import { XahauGovernanceOperation } from './hook-schemas/xahau-governance/operation'
+import {
+  hookParametersParser,
+  hookStateParser,
+  invokeBlobParser,
+  readOperation,
+  txnParametersParser,
+  writeOperation,
+} from './parser'
 
 const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");
@@ -31,7 +38,7 @@ const Xahau_Governance: DefinitionSource = {
   hook_definition: GovernanceHookDefinition,
   txn_parameters_txnid: [
     'BD826500478AB030F3E349D293FBE88163B6198202380FA57C5BBC17125C8CB4', //testnet
-  ]
+  ],
 }
 
 const Evernode: DefinitionSource = {
@@ -50,7 +57,7 @@ const Oracle: DefinitionSource = {
   hook_account: OracleHookDefinition.account!,
   hook_namespace_id: OracleHookDefinition.namespace_id!,
   hook_definition: OracleHookDefinition,
-  invoke_txnid: ['0F119964E90B61FEDFD995D2E9926B8D0C2E838D72135A8600C2904A7F6C2234']
+  invoke_txnid: ['0F119964E90B61FEDFD995D2E9926B8D0C2E838D72135A8600C2904A7F6C2234'],
 }
 
 const Lotteries: DefinitionSource[] = [
@@ -92,14 +99,17 @@ const test_hookstate = async (source: DefinitionSource) => {
   const entries = response.result.namespace_entries as HookState[]
 
   const r = entries.map((entry, i) => {
-    if (source.hook_definition.hook_states)
-      return hookStateParser(entry, source.hook_definition.hook_states)// || console.log(i)
+    if (source.hook_definition.hook_states) return hookStateParser(entry, source.hook_definition.hook_states) // || console.log(i)
     throw new Error('hook_definition.hook_states is not defined')
   })
 
-  const json = JSON.stringify(r, (key, value) => {
-    return typeof value === "bigint" ? value.toString() : value;
-  }, 2);
+  const json = JSON.stringify(
+    r,
+    (key, value) => {
+      return typeof value === 'bigint' ? value.toString() : value
+    },
+    2,
+  )
 
   console.log(json)
 }
@@ -143,29 +153,29 @@ const test_hook_parameters = async (source: DefinitionSource) => {
 
   const response = await client.request({
     command: 'ledger_entry',
-    hook: { account: source.hook_account }
+    hook: { account: source.hook_account },
   })
   const hooks: Hook[] = response.result.node!.Hooks
 
   for (const hook of hooks) {
-    const result = hook.Hook.HookParameters?.map((param) => hookParametersParser(param, source.hook_definition.hook_parameters!))
+    const result = hook.Hook.HookParameters?.map((param) =>
+      hookParametersParser(param, source.hook_definition.hook_parameters!),
+    )
     console.log(JSON.stringify(result, null, 2))
   }
 }
 
 const test_write_operation = async () => {
-
   const { HookParameters } = writeOperation(XahauGovernanceOperation).voteToSeat({
     layer: 2,
     seatId: 8,
-    value: 'rJeoxs1fZW78sMeamwJ27CVcXZNpQZR3t'
+    value: 'rJeoxs1fZW78sMeamwJ27CVcXZNpQZR3t',
   })
 
   console.log(HookParameters)
 }
 
 const test_read_operation = async () => {
-
   const account = GovernanceHookDefinition.account!
   const namespace_id = GovernanceHookDefinition.namespace_id!
   const definition = XahauGovernanceOperation
@@ -174,13 +184,12 @@ const test_read_operation = async () => {
 
   const response = await client.request({
     command: 'ledger_entry',
-    index
+    index,
   })
   const hookStateData = (response.result.node as HookState).HookStateData
 
   console.log(decodeHookStateData(hookStateData))
 }
-
 
 const main = async () => {
   await client.connect()

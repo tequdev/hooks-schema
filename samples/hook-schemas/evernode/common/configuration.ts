@@ -367,7 +367,7 @@ export const CONF_REWARD_CONFIGURATION: State = {
     {
       type: 'UInt32',
       name: 'Host Min Instance Count',
-    }
+    },
   ],
 }
 
