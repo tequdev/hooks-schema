@@ -101,6 +101,11 @@ export interface VarString extends Omit<FieldBase, 'pattern'> {
    * @default false
    */
   length_prefix?: boolean
+  /**
+   * All remaining data in Buffer is considered to be the value
+   * @default false
+   */
+  to_last?: boolean
 }
 
 export interface Hash256 extends FieldBase {
