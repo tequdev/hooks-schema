@@ -1,15 +1,28 @@
 {
   "name": "hooks-schema",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "exports": {
+    "require": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx samples/index.ts",
-    "build": "tsc",
+    "build": "tsup",
     "generate": "tsx samples/generate.ts",
-    "generate:schema": "quicktype schema/index.ts -o schema.json --lang schema",
+    "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema",
     "lint": "biome lint --apply .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "publish": "pnpm publish"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +34,18 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.2",
     "quicktype": "^23.0.81",
+    "tsup": "^8.0.2",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
+  },
+  "tsup": {
+    "entry": [
+      "schema/index.ts"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "dts": true
   }
 }
