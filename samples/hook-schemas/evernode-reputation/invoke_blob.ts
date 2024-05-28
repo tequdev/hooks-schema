@@ -9,10 +9,10 @@ export const EvernodeReputationInvokeDefinition: Definition['invoke_blobs'] = {
           name: 'Scores',
           byte_length: 64,
           array: [
-            {
+            ...new Array(64).fill({
               type: 'UInt8',
               name: 'Score',
-            },
+            }),
           ],
           delimiter: ',',
         },
