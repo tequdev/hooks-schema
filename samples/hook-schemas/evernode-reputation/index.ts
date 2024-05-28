@@ -2,6 +2,7 @@ import { hexNamespace } from '@transia/hooks-toolkit'
 import { Definition } from '../../../schema'
 import { EvernodeReputationHookParametersDefinition } from './hook_parameters'
 import { EvernodeReputationHookStateDefinition } from './hook_state'
+import { EvernodeReputationInvokeDefinition } from './invoke_blob'
 import { EvernodeReputationTxnParamreterDefinition } from './txn_parameter'
 
 export const EvernodeReputationHookDefinition: Definition = {
@@ -13,4 +14,5 @@ export const EvernodeReputationHookDefinition: Definition = {
   hook_parameters: EvernodeReputationHookParametersDefinition,
   hook_states: EvernodeReputationHookStateDefinition,
   txn_parameters: EvernodeReputationTxnParamreterDefinition,
+  invoke_blobs: EvernodeReputationInvokeDefinition,
 }
