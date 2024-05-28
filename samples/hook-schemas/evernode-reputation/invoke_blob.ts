@@ -7,6 +7,7 @@ export const EvernodeReputationInvokeDefinition: Definition['invoke_blobs'] = {
         {
           type: 'Array',
           name: 'Scores',
+          byte_length: 64,
           array: [
             {
               type: 'UInt8',
