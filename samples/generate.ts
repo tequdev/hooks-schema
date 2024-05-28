@@ -6,6 +6,7 @@ import { hookStateParser } from './parser'
 
 import * as fs from 'fs'
 import { Definition } from '../schema'
+import { EvernodeReputationHookDefinition } from './hook-schemas/evernode-reputation'
 import { OracleHookDefinition } from './hook-schemas/oracle'
 
 const client = new Client('wss://xahau.org')
@@ -35,6 +36,13 @@ const Evernode: DefinitionSource = {
   hook_definition: EvernodeHookDefinition,
 }
 
+const EvernodeReputation: DefinitionSource = {
+  name: 'evernode-reputation',
+  hook_account: 'rBvKgF3jSZWdJcwSsmoJspoXLLDVLDp6jg',
+  hook_namespace_id: EvernodeReputationHookDefinition.namespace_id!,
+  hook_definition: EvernodeReputationHookDefinition,
+}
+
 const Oracle = {
   name: 'oracle',
   hook_account: 'rsMCzsxZYSXafH3Egj1jpGemgQjagtnXEk',
@@ -42,7 +50,7 @@ const Oracle = {
   hook_definition: OracleHookDefinition,
 }
 
-const definitions = [Xahau_Governance, Evernode, Oracle]
+const definitions = [Xahau_Governance, Evernode, Oracle, EvernodeReputation]
 
 const generateDefinitionJson = (source: DefinitionSource, dir: string) => {
   const j = JSON.stringify(source, null, 2)
@@ -67,16 +75,16 @@ const fetchStateData = async (source: DefinitionSource) => {
 }
 
 const main = async () => {
-  await client.connect()
+  // await client.connect()
   for (const current of definitions) {
     const definitionDir = `${outputsDir}/${current.name}`
     generateDefinitionJson(current, definitionDir)
-    const states = await fetchStateData(current)
-    const r = states.map((state) => {
-      if (current.hook_definition.hook_states) return hookStateParser(state, current.hook_definition.hook_states)
-      throw new Error('hook_definition.hook_states is not defined')
-    })
-    generateStateJson(current, r, definitionDir)
+    // const states = await fetchStateData(current)
+    // const r = states.map((state) => {
+    //   if (current.hook_definition.hook_states) return hookStateParser(state, current.hook_definition.hook_states)
+    //   throw new Error('hook_definition.hook_states is not defined')
+    // })
+    // generateStateJson(current, r, definitionDir)
   }
   await client.disconnect()
 }
