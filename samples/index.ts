@@ -11,6 +11,8 @@ import { LotteryEndICDefinition } from './hook-schemas/lottery/lottery_end_ic'
 import { LotteryICDefinition } from './hook-schemas/lottery/lottery_ic'
 import { LotteryStartDefinition } from './hook-schemas/lottery/lottery_start'
 import { OracleHookDefinition } from './hook-schemas/oracle'
+import { VoucharClaimHookDefinition } from './hook-schemas/vouchar-claim'
+import { VoucharCreateHookDefinition } from './hook-schemas/vouchar-create'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import { XahauGovernanceOperation } from './hook-schemas/xahau-governance/operation'
 import {
@@ -97,6 +99,20 @@ const Lotteries: DefinitionSource[] = [
   },
 ]
 
+const VoucharCreate: DefinitionSource = {
+  hook_account: VoucharCreateHookDefinition.account!,
+  hook_namespace_id: VoucharCreateHookDefinition.namespace_id!,
+  hook_definition: VoucharCreateHookDefinition,
+  txn_parameters_txnid: ['CF9C9B917776992F70922685D20B52882694A10C28E25A4120FBBC20D9F27F2E'],
+}
+const VoucharClaim: DefinitionSource = {
+  hook_account: VoucharClaimHookDefinition.account!,
+  hook_namespace_id: VoucharClaimHookDefinition.namespace_id!,
+  hook_definition: VoucharClaimHookDefinition,
+  txn_parameters_txnid: ['639B85A71BD20A56E8846F737A123593AFB45ABB85E39711A4BF49D0DF7D2260'],
+  invoke_txnid: ['639B85A71BD20A56E8846F737A123593AFB45ABB85E39711A4BF49D0DF7D2260'],
+}
+
 const test_hookstate = async (source: DefinitionSource) => {
   const response = await client.request({
     command: 'account_namespace',
@@ -148,7 +164,7 @@ const test_txn_parameters = async (source: DefinitionSource) => {
       command: 'tx',
       transaction: id,
     })
-    if (!response.result.HookParameters) throw new Error('HookParameters is not defined')
+    if (!response.result.HookParameters) throw new Error('HookParameters(OTXN) is not defined')
     if (!source.hook_definition.txn_parameters) throw new Error('hook_definition.txn_parameters is not defined')
 
     for (const param of response.result.HookParameters) {
