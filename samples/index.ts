@@ -1,9 +1,10 @@
 import { Client, TxRequest, TxResponse } from '@transia/xrpl'
 import { Hook } from '@transia/xrpl/dist/npm/models/common'
-import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
+import { HookDefinition, HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { Definition } from '../schema'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { EvernodeRedirectHookDefinition } from './hook-schemas/evernode-redirect/index'
+import { EvernodeReputationHookDefinition } from './hook-schemas/evernode-reputation'
 import { LotteryHookDefinition } from './hook-schemas/lottery/lottery'
 import { LotteryEndDefinition } from './hook-schemas/lottery/lottery_end'
 import { LotteryEndICDefinition } from './hook-schemas/lottery/lottery_end_ic'
@@ -51,6 +52,14 @@ const EvernodeRedirect: DefinitionSource = {
   hook_account: EvernodeRedirectHookDefinition.account!,
   hook_namespace_id: EvernodeRedirectHookDefinition.namespace_id!,
   hook_definition: EvernodeRedirectHookDefinition,
+}
+
+const EvernodeReputation: DefinitionSource = {
+  hook_account: EvernodeReputationHookDefinition.account!,
+  hook_namespace_id: EvernodeReputationHookDefinition.namespace_id!,
+  hook_definition: EvernodeReputationHookDefinition,
+  invoke_txnid: ['1E57100CB463BFF5B5EAC4F72334A947787DBC317B479A159AAE45C31B0F5105'],
+  txn_parameters_txnid: ['619C6FAAD15669C9DC5A904E8AC06AFECE3B0C1F69C1833AC5C167AA20E9CF04'],
 }
 
 const Oracle: DefinitionSource = {
@@ -124,6 +133,7 @@ const test_invoke_blob = async (source: DefinitionSource) => {
     })
     if (response.result.TransactionType !== 'Invoke') throw new Error('Invalid transaction type')
     if (!response.result.Blob) throw new Error('Blob is not defined')
+    console.log(response.result.Blob)
     if (!source.hook_definition.invoke_blobs) throw new Error('hook_definition.invoke_blobs is not defined')
     const result = invokeBlobParser(response.result.Blob, source.hook_definition.invoke_blobs)
     console.log(JSON.stringify(result, null, 2))
@@ -156,9 +166,22 @@ const test_hook_parameters = async (source: DefinitionSource) => {
     hook: { account: source.hook_account },
   })
   const hooks: Hook[] = response.result.node!.Hooks
-
+  const hashes: string[] = []
   for (const hook of hooks) {
+    if (!hook.Hook.HookHash) continue
     const result = hook.Hook.HookParameters?.map((param) =>
+      hookParametersParser(param, source.hook_definition.hook_parameters!),
+    )
+    console.log(JSON.stringify(result, null, 2))
+    hashes.push(hook.Hook.HookHash)
+  }
+  console.log(hashes)
+  for (const hash of hashes) {
+    const response = await client.request({
+      command: 'ledger_entry',
+      hook_definition: hash,
+    })
+    const result = (response.result.node as HookDefinition).HookParameters?.map((param) =>
       hookParametersParser(param, source.hook_definition.hook_parameters!),
     )
     console.log(JSON.stringify(result, null, 2))
@@ -194,16 +217,16 @@ const test_read_operation = async () => {
 const main = async () => {
   await client.connect()
 
-  const current = Lotteries
+  const current = Xahau_Governance
 
   const targets = Array.isArray(current) ? current : [current]
 
   for (let i = 0; i < targets.length; i++) {
     const target = targets[i]
     await test_hookstate(target)
-    // await test_invoke_blob(target)
-    // await test_txn_parameters(target)
-    // await test_hook_parameters(target)
+    await test_invoke_blob(target)
+    await test_txn_parameters(target)
+    await test_hook_parameters(target)
   }
   // await test_write_operation()
   // await test_read_operation()

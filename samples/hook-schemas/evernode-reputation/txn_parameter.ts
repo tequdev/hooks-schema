@@ -21,12 +21,8 @@ export const EvernodeReputationTxnParamreterDefinition: TxnParam = {
           exclude: true,
         },
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 27,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt8',
@@ -61,12 +57,8 @@ export const EvernodeReputationTxnParamreterDefinition: TxnParam = {
           exclude: true,
         },
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 27,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt8',
@@ -101,12 +93,8 @@ export const EvernodeReputationTxnParamreterDefinition: TxnParam = {
           exclude: true,
         },
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 27,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt8',

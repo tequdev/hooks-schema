@@ -6,12 +6,8 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
       name: 'Cleanup Moment',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 24,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'VarString',
@@ -32,12 +28,8 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
       name: 'Host Count in that moment',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 24,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt64',
@@ -55,12 +47,8 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
       name: 'Reputation Account',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 16,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt64',
@@ -82,12 +70,8 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
       name: 'Reputation',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 12,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -113,12 +97,8 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
       name: 'Ordered HostID',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: '',
+          type: 'Null',
           byte_length: 4,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'UInt64',

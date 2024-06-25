@@ -6,12 +6,8 @@ export const LastLedgerTime: HookState = {
   name: 'Last Ledger Time',
   hookstate_key: [
     {
-      type: 'VarString',
-      name: '',
-      byte_length: 32 - 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
+      type: 'Null',
+      byte_length: 24,
     },
     {
       type: 'UInt64',
@@ -30,12 +26,8 @@ export const Model: HookState = {
   name: 'Lottery Data',
   hookstate_key: [
     {
-      type: 'VarString',
-      name: '',
-      byte_length: 32 - 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
+      type: 'Null',
+      byte_length: 24,
     },
     {
       type: 'UInt64',
@@ -101,12 +93,8 @@ export const ReverseTicketCount: HookState = {
   name: 'Reverse Ticket Count',
   hookstate_key: [
     {
-      type: 'VarString',
-      name: '',
-      byte_length: 32 - 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
+      type: 'Null',
+      byte_length: 24,
     },
     {
       type: 'UInt64',
@@ -125,12 +113,8 @@ export const TicketCount: HookState = {
   name: 'Ticket Count',
   hookstate_key: [
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 12,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',

@@ -105,10 +105,7 @@ export const XahauGovernanceOperation = {
       hook_state_definition: {
         key: [
           {
-            type: 'VarString',
-            name: 'Empty',
-            pattern: null,
-            binary: true,
+            type: 'Null',
             byte_length: 30,
           },
           {
