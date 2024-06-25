@@ -18,12 +18,8 @@ export const STK_HOST_COUNT: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -51,12 +47,8 @@ export const STK_MOMENT_BASE_INFO: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -93,12 +85,8 @@ export const STK_HOST_REG_FEES: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -126,12 +114,8 @@ export const STK_MAX_REG: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -159,12 +143,8 @@ export const STK_REWARD_INFO: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -212,12 +192,8 @@ export const STK_REWARD_INFO_081: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [
@@ -261,12 +237,8 @@ export const STK_GOVERNANCE_INFO: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   // <governance_mode(1)><last_candidate_idx(4)><voter_base_count(4)><voter_base_count_changed_timestamp(8)><foundation_last_voted_candidate_idx(4)><foundation_last_voted_timestamp(8)><elected_proposal_unique_id(32)>
@@ -328,12 +300,8 @@ export const STK_TRX_FEE_BASE_INFO: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 28,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
   ],
   hookstate_data: [

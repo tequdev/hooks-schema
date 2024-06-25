@@ -6,12 +6,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       name: 'Current member count',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 30,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'VarString',
@@ -32,12 +28,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       name: 'Current reward rate',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 30,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'VarString',
@@ -57,12 +49,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       name: 'Current reward delay',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 30,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'VarString',
@@ -82,12 +70,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       name: 'Seat Place',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 31,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           // SeatID
@@ -106,12 +90,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       name: 'Account Place',
       hookstate_key: [
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 12,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -143,12 +123,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 8,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -176,12 +152,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 8,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -209,12 +181,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 8,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -246,12 +214,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 8,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',
@@ -378,12 +342,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 8,
-          pattern: null,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'AccountID',

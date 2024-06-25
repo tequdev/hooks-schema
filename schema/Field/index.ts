@@ -1,6 +1,6 @@
 export type Field = ArrayField | NonArrayField
 
-type NonArrayField = AccountID | UInt8 | UInt16 | UInt32 | UInt64 | XFL | VarString | Hash256
+type NonArrayField = AccountID | UInt8 | UInt16 | UInt32 | UInt64 | XFL | VarString | Null | Hash256
 
 export interface ArrayField<T extends NonArrayField = NonArrayField> extends FieldBase {
   type: 'Array'
@@ -89,7 +89,7 @@ export interface XFL extends FieldBase {
 export interface VarString extends Omit<FieldBase, 'pattern'> {
   type: 'VarString'
   byte_length?: number
-  pattern?: string | null
+  pattern?: string
   /**
    * @default false
    */
@@ -106,6 +106,11 @@ export interface VarString extends Omit<FieldBase, 'pattern'> {
    * @default false
    */
   to_last?: boolean
+}
+
+export interface Null extends Omit<FieldBase, 'name' | 'pattern'> {
+  type: 'Null'
+  byte_length: number
 }
 
 export interface Hash256 extends FieldBase {

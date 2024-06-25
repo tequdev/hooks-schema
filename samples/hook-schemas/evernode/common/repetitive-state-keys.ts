@@ -98,12 +98,8 @@ export const STP_HOST_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',
@@ -231,12 +227,8 @@ export const STP_HOST_ADDR_081: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',
@@ -360,12 +352,8 @@ export const STP_HOST_ADDR_080: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',
@@ -485,12 +473,8 @@ export const STP_TRANSFEREE_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',
@@ -533,12 +517,8 @@ export const STP_CANDIDATE_OWNER: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: 'padding',
+      type: 'Null',
       byte_length: 8,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'AccountID',
