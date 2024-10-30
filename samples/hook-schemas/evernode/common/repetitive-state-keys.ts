@@ -32,10 +32,9 @@ export const STP_TOKEN_ID: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
+      type: 'HexBinary',
       name: 'TokenID',
       byte_length: 28,
-      binary: true,
     },
   ],
   // <host_address(20)><cpu_model_name(40)><cpu_count(2)><cpu_speed(2)><cpu_microsec(4)><ram_mb(4)><disk_mb(4)><email(40)><accumulated_reward_amount(8)>
@@ -110,10 +109,8 @@ export const STP_HOST_ADDR: State = {
   // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)><transfer_timestamp(8)><host_lease_amount(8,xfl)>
   hookstate_data: [
     {
-      type: 'VarString',
+      type: 'LedgerEntryID',
       name: 'TokenID',
-      byte_length: 32,
-      binary: true,
     },
     {
       type: 'VarString',
@@ -172,8 +169,9 @@ export const STP_HOST_ADDR: State = {
       delimiter: '.',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Registration Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -184,8 +182,9 @@ export const STP_HOST_ADDR: State = {
       name: 'Last Vote Candidate Idx',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Last Vote Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -200,8 +199,9 @@ export const STP_HOST_ADDR: State = {
       name: 'Flags',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Transfer Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'XFL',
@@ -239,10 +239,9 @@ export const STP_HOST_ADDR_081: State = {
   // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)><transfer_timestamp(8)>
   hookstate_data: [
     {
-      type: 'VarString',
+      type: 'LedgerEntryID',
       name: 'TokenID',
       byte_length: 32,
-      binary: true,
     },
     {
       type: 'VarString',
@@ -301,8 +300,9 @@ export const STP_HOST_ADDR_081: State = {
       delimiter: '.',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Registration Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -313,8 +313,9 @@ export const STP_HOST_ADDR_081: State = {
       name: 'Last Vote Candidate Idx',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Last Vote Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -329,8 +330,9 @@ export const STP_HOST_ADDR_081: State = {
       name: 'Flags',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Transfer Timestamp',
+      epoch: 'unix',
     },
   ],
 }
@@ -364,10 +366,8 @@ export const STP_HOST_ADDR_080: State = {
   // <last_heartbeat_index(8)><version(3)><registration_timestamp(8)><transfer_flag(1)><last_vote_candidate_idx(4)><last_vote_timestamp(8)><support_vote_sent(1)><host_reputation(1)><flags(1)>
   hookstate_data: [
     {
-      type: 'VarString',
+      type: 'LedgerEntryID',
       name: 'TokenID',
-      byte_length: 32,
-      binary: true,
     },
     {
       type: 'VarString',
@@ -426,8 +426,9 @@ export const STP_HOST_ADDR_080: State = {
       delimiter: '.',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Registration Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -438,8 +439,9 @@ export const STP_HOST_ADDR_080: State = {
       name: 'Last Vote Candidate Idx',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Last Vote Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
@@ -492,10 +494,8 @@ export const STP_TRANSFEREE_ADDR: State = {
       name: 'Registration Ledger',
     },
     {
-      type: 'VarString',
+      type: 'LedgerEntryID',
       name: 'TokenID',
-      byte_length: 32,
-      binary: true,
     },
   ],
 }
@@ -585,11 +585,12 @@ export const STP_CANDIDATE_ID: State = {
       byte_length: 20,
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Created Timestamp',
+      epoch: 'unix',
     },
     {
-      type: 'UInt64',
+      type: 'XFL',
       name: 'Proposal Fee',
     },
     {
@@ -597,16 +598,18 @@ export const STP_CANDIDATE_ID: State = {
       name: 'Positive Vote Count',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Last Vote Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',
       name: 'Status',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Status Change Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',

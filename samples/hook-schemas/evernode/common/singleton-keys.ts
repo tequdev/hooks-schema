@@ -257,24 +257,27 @@ export const STK_GOVERNANCE_INFO: State = {
       name: 'Voter Base Count',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Voter Base Count Changed Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt32',
       name: 'Foundation Last Voted Candidate Idx',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Foundation Last Voted Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'Hash256',
       name: 'Elected Proposal Unique Id',
     },
     {
-      type: 'UInt64',
+      type: 'DateTime64',
       name: 'Proposal Elected Timestamp',
+      epoch: 'unix',
     },
     {
       type: 'UInt8',

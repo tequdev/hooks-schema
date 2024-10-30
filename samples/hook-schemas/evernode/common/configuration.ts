@@ -436,7 +436,6 @@ export const CONF_MOMENT_TRANSIT_INFO: State = {
     {
       type: 'VarString',
       name: 'Key',
-
       pattern: 'EVR',
       byte_length: 3,
       exclude: true,
@@ -480,7 +479,6 @@ export const CONF_MAX_EMIT_TRX_FEE: State = {
     {
       type: 'VarString',
       name: 'Key',
-
       pattern: 'EVR',
       byte_length: 3,
       exclude: true,
