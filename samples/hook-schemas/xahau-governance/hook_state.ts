@@ -133,7 +133,7 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
       ],
       hookstate_data: [
         {
-          type: 'Hash256',
+          type: 'HookHash',
           name: 'HookHash',
         },
       ],
@@ -247,9 +247,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
+          type: 'HexBinary',
           byte_length: 28,
-          binary: true,
           name: 'HookHash',
         },
       ],
@@ -274,11 +273,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 20,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'XFL',
@@ -306,11 +302,8 @@ export const GovernanceHookStateDefinition: Definition['hook_states'] = {
           name: 'Layer',
         },
         {
-          type: 'VarString',
-          name: 'padding',
+          type: 'Null',
           byte_length: 20,
-          binary: true,
-          exclude: true,
         },
         {
           type: 'XFL',

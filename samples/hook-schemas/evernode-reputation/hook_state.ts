@@ -10,10 +10,9 @@ export const EvernodeReputationHookStateDefinition: Definition['hook_states'] = 
           byte_length: 24,
         },
         {
-          type: 'VarString',
+          type: 'HexBinary',
           name: 'Special',
           pattern: 'FFFFFFFFFFFFFFFF',
-          binary: true,
           byte_length: 8,
         },
       ],

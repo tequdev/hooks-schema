@@ -26,13 +26,34 @@
           "$ref": "#/definitions/XFL"
         },
         {
+          "$ref": "#/definitions/Currency"
+        },
+        {
           "$ref": "#/definitions/VarString"
+        },
+        {
+          "$ref": "#/definitions/HexBinary"
         },
         {
           "$ref": "#/definitions/Null"
         },
         {
           "$ref": "#/definitions/Hash256"
+        },
+        {
+          "$ref": "#/definitions/DateTime"
+        },
+        {
+          "$ref": "#/definitions/DateTime64"
+        },
+        {
+          "$ref": "#/definitions/TxHash"
+        },
+        {
+          "$ref": "#/definitions/HookHash"
+        },
+        {
+          "$ref": "#/definitions/LedgerEntryID"
         }
       ]
     },
@@ -58,13 +79,34 @@
           "$ref": "#/definitions/XFL"
         },
         {
+          "$ref": "#/definitions/Currency"
+        },
+        {
           "$ref": "#/definitions/VarString"
+        },
+        {
+          "$ref": "#/definitions/HexBinary"
         },
         {
           "$ref": "#/definitions/Null"
         },
         {
           "$ref": "#/definitions/Hash256"
+        },
+        {
+          "$ref": "#/definitions/DateTime"
+        },
+        {
+          "$ref": "#/definitions/DateTime64"
+        },
+        {
+          "$ref": "#/definitions/TxHash"
+        },
+        {
+          "$ref": "#/definitions/HookHash"
+        },
+        {
+          "$ref": "#/definitions/LedgerEntryID"
         }
       ]
     },
@@ -283,6 +325,41 @@
       "additionalProperties": false,
       "required": ["name", "type"]
     },
+    "Currency": {
+      "title": "Currency",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["Currency"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 20,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "type"]
+    },
     "XFL": {
       "title": "XFL",
       "type": "object",
@@ -331,10 +408,6 @@
           "type": "number",
           "title": "byte_length"
         },
-        "pattern": {
-          "type": "string",
-          "title": "pattern"
-        },
         "binary": {
           "default": false,
           "type": "boolean",
@@ -359,6 +432,56 @@
         "field": {
           "type": "string",
           "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "type"]
+    },
+    "HexBinary": {
+      "title": "HexBinary",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["HexBinary"],
+          "title": "type"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "length_prefix": {
+          "description": "The length prefix consists of either two or four bytes\n(depending on the length of the string)\nand indicates the number of raw bytes in the string",
+          "default": false,
+          "type": "boolean",
+          "title": "length_prefix"
+        },
+        "to_last": {
+          "description": "All remaining data in Buffer is considered to be the value",
+          "default": false,
+          "type": "boolean",
+          "title": "to_last"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
         },
         "exclude": {
           "default": false,
@@ -402,6 +525,193 @@
         "type": {
           "type": "string",
           "enum": ["Hash256"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 32,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "type"]
+    },
+    "DateTime": {
+      "description": "DateTime(uint32) as unix timestamp (seconds) or ripple timestamp",
+      "title": "DateTime",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["DateTime"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 4,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "epoch": {
+          "enum": ["ripple", "unix"],
+          "type": "string",
+          "title": "epoch"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["epoch", "name", "type"]
+    },
+    "DateTime64": {
+      "description": "DateTime(uint64) as unix timestamp (seconds) or ripple timestamp\n\nAs default RippleEpoch is uint32, but ledger_last_time api return as uint64.\nSo we need to define another type for DateTime as DateTime64.",
+      "title": "DateTime64",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["DateTime64"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 8,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "epoch": {
+          "enum": ["ripple", "unix"],
+          "type": "string",
+          "title": "epoch"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["epoch", "name", "type"]
+    },
+    "TxHash": {
+      "title": "TxHash",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["TxHash"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 32,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "type"]
+    },
+    "HookHash": {
+      "title": "HookHash",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["HookHash"],
+          "title": "type"
+        },
+        "byte_length": {
+          "default": 32,
+          "type": "number",
+          "title": "byte_length"
+        },
+        "name": {
+          "type": "string",
+          "title": "name"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "pattern": {
+          "type": "string",
+          "title": "pattern"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "type"]
+    },
+    "LedgerEntryID": {
+      "title": "LedgerEntryID",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["LedgerEntryID"],
           "title": "type"
         },
         "byte_length": {
@@ -585,7 +895,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/definitions/Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">",
+            "$ref": "#/definitions/Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"Currency\"|\"XFL\"|\"VarString\"|\"HexBinary\"|\"Null\"|\"Hash256\"|\"DateTime\"|\"DateTime64\"|\"TxHash\"|\"HookHash\"|\"LedgerEntryID\">",
             "title": "data"
           },
           "txn_parameter_definition": {
@@ -645,8 +955,15 @@
               "enum": [
                 "AccountID",
                 "Array",
+                "Currency",
+                "DateTime",
+                "DateTime64",
                 "Hash256",
+                "HexBinary",
+                "HookHash",
+                "LedgerEntryID",
                 "Null",
+                "TxHash",
                 "UInt16",
                 "UInt32",
                 "UInt64",
@@ -664,8 +981,15 @@
               "enum": [
                 "AccountID",
                 "Array",
+                "Currency",
+                "DateTime",
+                "DateTime64",
                 "Hash256",
+                "HexBinary",
+                "HookHash",
+                "LedgerEntryID",
                 "Null",
+                "TxHash",
                 "UInt16",
                 "UInt32",
                 "UInt64",
@@ -934,7 +1258,24 @@
       "type": "object",
       "properties": {
         "type": {
-          "enum": ["AccountID", "Hash256", "Null", "UInt16", "UInt32", "UInt64", "UInt8", "VarString", "XFL"],
+          "enum": [
+            "AccountID",
+            "Currency",
+            "DateTime",
+            "DateTime64",
+            "Hash256",
+            "HexBinary",
+            "HookHash",
+            "LedgerEntryID",
+            "Null",
+            "TxHash",
+            "UInt16",
+            "UInt32",
+            "UInt64",
+            "UInt8",
+            "VarString",
+            "XFL"
+          ],
           "type": "string",
           "title": "type"
         },
@@ -956,8 +1297,8 @@
       "additionalProperties": false,
       "required": ["type"]
     },
-    "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">": {
-      "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">",
+    "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"Currency\"|\"XFL\"|\"VarString\"|\"HexBinary\"|\"Null\"|\"Hash256\"|\"DateTime\"|\"DateTime64\"|\"TxHash\"|\"HookHash\"|\"LedgerEntryID\">": {
+      "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"Currency\"|\"XFL\"|\"VarString\"|\"HexBinary\"|\"Null\"|\"Hash256\"|\"DateTime\"|\"DateTime64\"|\"TxHash\"|\"HookHash\"|\"LedgerEntryID\">",
       "type": "object",
       "additionalProperties": false
     }
