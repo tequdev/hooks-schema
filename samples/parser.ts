@@ -3,7 +3,6 @@ import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models
 import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { decodeAccountID, encodeAccountID } from '@transia/xrpl/dist/npm/utils'
-import { hashStateTree } from '@transia/xrpl/dist/npm/utils/hashes'
 import sha512Half from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
 import { HookParameterDefinition } from 'schema/HookParameter'
 import { OperationDefinition } from 'schema/Operation'
@@ -31,6 +30,7 @@ const getTypeByteLength = (type: Field['type']) => {
     Hash256: 32,
     Array: undefined,
     VarString: undefined,
+    Null: undefined,
   }
   return typeToLength[type]
 }
@@ -64,6 +64,8 @@ const bufferToReadableData = (
     case 'VarString':
       if (state.binary === true) return buffer.toString('hex').toUpperCase()
       return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
+    case 'Null':
+      return nullReplaceTo.repeat(state.byte_length)
     case 'Hash256':
       return buffer.toString('hex').toUpperCase()
     case 'Array': {
@@ -72,13 +74,17 @@ const bufferToReadableData = (
         const length = getByteLength(s, buffer.subarray(from))
         const buf = buffer.subarray(from, from + length)
         from += length
-        return { name: s.name, value: bufferToReadableData(buf, s, nullReplaceTo) as string | number | bigint }
+        return {
+          name: s.type === 'Null' ? '' : s.name,
+          value: bufferToReadableData(buf, s, nullReplaceTo) as string | number | bigint,
+        }
       })
       if (state.delimiter) a.map((_a) => _a.value).join(state.delimiter)
       // @ts-ignore
       return a
     }
     default:
+      console.log(state)
       throw new Error('Invalid type')
   }
 }
@@ -111,12 +117,13 @@ const toHex = (state: Field, value: null | string | number | bigint | Array<stri
         .toUpperCase()
     case 'VarString':
       if (state.binary === true) {
-        if (value === null) return '00'.repeat(state.byte_length!)
         return (value as string).toUpperCase()
       }
       return Buffer.from(value as string)
         .toString('hex')
         .toUpperCase()
+    case 'Null':
+      return '00'.repeat(state.byte_length)
     case 'Hash256':
       return (value as string).toUpperCase()
     case 'Array': {
@@ -149,10 +156,13 @@ const parseBuffer = (buffer: Buffer, definitions: Field[]) => {
     const readableForComp = bufferToReadableData(currentBuffer, d, '00')
     const readable = bufferToReadableData(currentBuffer, d, '')
 
+    if (d.type === 'Null') {
+      if (new RegExp('00'.repeat(d.byte_length)).test(readableForComp.toString())) return true
+      return false
+    }
+
     if (d.pattern !== undefined) {
-      if (!new RegExp(d.pattern || "00".repeat(d.byte_length!))
-        .test(readableForComp.toString()))
-        return false
+      if (!new RegExp(d.pattern).test(readableForComp.toString())) return false
     }
     if (!d.exclude) {
       readableArr.push({
@@ -179,10 +189,13 @@ const parseBufferAsOperationField = (buffer: Buffer, definitions: Field[]) => {
     const readableForComp = bufferToReadableData(currentBuffer, d, '00')
     const readable = bufferToReadableData(currentBuffer, d, '')
 
+    if (d.type === 'Null') {
+      if (new RegExp('00'.repeat(d.byte_length)).test(readableForComp.toString())) return true
+      return false
+    }
+
     if (d.pattern !== undefined) {
-      if (!new RegExp(d.pattern || "00".repeat(d.byte_length!))
-        .test(readableForComp.toString()))
-        return false
+      if (!new RegExp(d.pattern).test(readableForComp.toString())) return false
     }
     if (!d.exclude) {
       if (!d.field) throw new Error(`field is not defined: ${d.name}`)
@@ -291,7 +304,11 @@ export const writeOperation = <T extends OperationDefinition>(definition: T) => 
     (prev, method) => {
       prev[method] = (data: WriteData<T>) => {
         const parseHex = (fields: Field[]) =>
-          fields.reduce((prev, curr) => prev + toHex(curr, curr.field ? data[curr.field] : curr.pattern!), '')
+          fields.reduce(
+            (prev, curr) =>
+              prev + toHex(curr, curr.field ? data[curr.field] : curr.type === 'Null' ? null : curr.pattern!),
+            '',
+          )
         if (definition.write[method].txn_parameter_definition) {
           const param_definition = definition.write[method].txn_parameter_definition!
           const HookParameters = param_definition.map(
@@ -324,7 +341,11 @@ export const readOperation = <T extends OperationDefinition>(definition: T, acco
     (prev, method) => {
       prev[method] = (args: ReadArgs<T>) => {
         const parseHex = (fields: Field[]) =>
-          fields.reduce((prev, curr) => prev + toHex(curr, curr.field ? args[curr.field] : curr.pattern!), '')
+          fields.reduce(
+            (prev, curr) =>
+              prev + toHex(curr, curr.field ? args[curr.field] : curr.type === 'Null' ? null : curr.pattern!),
+            '',
+          )
         const hook_state_definition = definition.read[method].hook_state_definition!
         const hookStateKey = parseHex(hook_state_definition.key)
         const prefix = '0076'
@@ -336,13 +357,10 @@ export const readOperation = <T extends OperationDefinition>(definition: T, acco
           const buffer = Buffer.from(hookStateValue, 'hex')
           const readableArr = parseBufferAsOperationField(buffer, hook_state_definition.data)
           if (!readableArr) throw new Error('Invalid hook state value')
-          return (
-            Object.keys(definition.read[method].returns)
-              // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-              .reduce(
-                (prev, curr) => ({ ...prev, [curr]: readableArr.find((r) => r.field === curr)!.value }),
-                {} as ReadReturns<T>,
-              )
+          return Object.keys(definition.read[method].returns).reduce(
+            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+            (prev, curr) => ({ ...prev, [curr]: readableArr.find((r) => r.field === curr)!.value }),
+            {} as ReadReturns<T>,
           )
         }
         return { index, decodeHookStateData }

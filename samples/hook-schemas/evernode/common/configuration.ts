@@ -1,3 +1,4 @@
+import { Null } from './../../../../schema/Field/index'
 // // Issuer address.
 // const uint8_t CONF_ISSUER_ADDR[32] = { 'E', 'V', 'R', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 // // Foundation address
@@ -51,12 +52,8 @@ export const CONF_ISSUER_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -90,12 +87,8 @@ export const CONF_FOUNDATION_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -129,12 +122,8 @@ export const CONF_MOMENT_SIZE: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -168,12 +157,8 @@ export const CONF_MINT_LIMIT: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -207,12 +192,8 @@ export const CONF_FIXED_REG_FEE: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -246,12 +227,8 @@ export const CONF_HOST_HEARTBEAT_FREQ: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -285,12 +262,8 @@ export const CONF_LEASE_ACQUIRE_WINDOW: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -324,12 +297,8 @@ export const CONF_REWARD_CONFIGURATION: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -388,12 +357,8 @@ export const CONF_REWARD_CONFIGURATION_081: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -448,12 +413,8 @@ export const CONF_MAX_TOLERABLE_DOWNTIME: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -487,14 +448,9 @@ export const CONF_MOMENT_TRANSIT_INFO: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
-
     {
       type: 'UInt8',
       name: 'Index',
@@ -536,12 +492,8 @@ export const CONF_MAX_EMIT_TRX_FEE: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -575,12 +527,8 @@ export const CONF_HEARTBEAT_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -614,12 +562,8 @@ export const CONF_REGISTRY_ADDR: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -653,12 +597,8 @@ export const CONF_GOVERNANCE_CONFIGURATION: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
@@ -704,12 +644,8 @@ export const CONF_NETWORK_CONFIGURATION: State = {
       exclude: true,
     },
     {
-      type: 'VarString',
-      name: '',
+      type: 'Null',
       byte_length: 27,
-      pattern: null,
-      binary: true,
-      exclude: true,
     },
     {
       type: 'UInt8',
