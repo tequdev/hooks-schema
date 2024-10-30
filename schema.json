@@ -29,6 +29,9 @@
           "$ref": "#/definitions/VarString"
         },
         {
+          "$ref": "#/definitions/Null"
+        },
+        {
           "$ref": "#/definitions/Hash256"
         }
       ]
@@ -56,6 +59,9 @@
         },
         {
           "$ref": "#/definitions/VarString"
+        },
+        {
+          "$ref": "#/definitions/Null"
         },
         {
           "$ref": "#/definitions/Hash256"
@@ -361,10 +367,7 @@
           "title": "byte_length"
         },
         "pattern": {
-          "type": [
-            "null",
-            "string"
-          ],
+          "type": "string",
           "title": "pattern"
         },
         "binary": {
@@ -377,6 +380,12 @@
           "default": false,
           "type": "boolean",
           "title": "length_prefix"
+        },
+        "to_last": {
+          "description": "All remaining data in Buffer is considered to be the value",
+          "default": false,
+          "type": "boolean",
+          "title": "to_last"
         },
         "name": {
           "type": "string",
@@ -395,6 +404,37 @@
       "additionalProperties": false,
       "required": [
         "name",
+        "type"
+      ]
+    },
+    "Null": {
+      "title": "Null",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Null"
+          ],
+          "title": "type"
+        },
+        "byte_length": {
+          "type": "number",
+          "title": "byte_length"
+        },
+        "field": {
+          "type": "string",
+          "title": "field"
+        },
+        "exclude": {
+          "default": false,
+          "type": "boolean",
+          "title": "exclude"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "byte_length",
         "type"
       ]
     },
@@ -613,7 +653,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/definitions/Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">",
+            "$ref": "#/definitions/Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">",
             "title": "data"
           },
           "txn_parameter_definition": {
@@ -681,6 +721,7 @@
                 "AccountID",
                 "Array",
                 "Hash256",
+                "Null",
                 "UInt16",
                 "UInt32",
                 "UInt64",
@@ -699,6 +740,7 @@
                 "AccountID",
                 "Array",
                 "Hash256",
+                "Null",
                 "UInt16",
                 "UInt32",
                 "UInt64",
@@ -1000,6 +1042,7 @@
           "enum": [
             "AccountID",
             "Hash256",
+            "Null",
             "UInt16",
             "UInt32",
             "UInt64",
@@ -1015,20 +1058,9 @@
           "type": "number",
           "title": "byte_length"
         },
-        "name": {
-          "type": "string",
-          "title": "name"
-        },
         "field": {
           "type": "string",
           "title": "field"
-        },
-        "pattern": {
-          "type": [
-            "null",
-            "string"
-          ],
-          "title": "pattern"
         },
         "exclude": {
           "default": false,
@@ -1038,12 +1070,11 @@
       },
       "additionalProperties": false,
       "required": [
-        "name",
         "type"
       ]
     },
-    "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">": {
-      "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Hash256\">",
+    "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">": {
+      "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">",
       "type": "object",
       "additionalProperties": false
     }
