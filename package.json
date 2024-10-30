@@ -31,7 +31,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@biomejs/biome": "^1.5.2",
+    "@biomejs/biome": "^1.9.4",
     "@transia/hooks-toolkit": "^1.0.11",
     "@transia/xrpl": "2.7.3-alpha.22",
     "quicktype": "^23.0.81",
@@ -40,13 +40,8 @@
     "typescript": "^5.3.3"
   },
   "tsup": {
-    "entry": [
-      "schema/index.ts"
-    ],
-    "format": [
-      "cjs",
-      "esm"
-    ],
+    "entry": ["schema/index.ts"],
+    "format": ["cjs", "esm"],
     "dts": true
   }
 }
