@@ -194,7 +194,7 @@ export interface DateTime64 extends FieldBase {
 export interface TxHash extends FieldBase {
   type: 'TxHash'
   /**
-   * @default 64
+   * @default 32
    */
   byte_length?: number
 }
@@ -202,7 +202,7 @@ export interface TxHash extends FieldBase {
 export interface HookHash extends FieldBase {
   type: 'HookHash'
   /**
-   * @default 64
+   * @default 32
    */
   byte_length?: number
 }
@@ -210,7 +210,7 @@ export interface HookHash extends FieldBase {
 export interface LedgerEntryID extends FieldBase {
   type: 'LedgerEntryID'
   /**
-   * @default 64
+   * @default 32
    */
   byte_length?: number
 }
