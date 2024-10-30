@@ -1,15 +1,15 @@
 import { floatToXfl } from '@transia/hooks-toolkit'
 import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
-import { HookParameter } from '@transia/xrpl/dist/npm/models/common'
-import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
+import type { HookParameter } from '@transia/xrpl/dist/npm/models/common'
+import type { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { decodeAccountID, encodeAccountID } from '@transia/xrpl/dist/npm/utils'
 import sha512Half from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
-import { HookParameterDefinition } from 'schema/HookParameter'
-import { OperationDefinition } from 'schema/Operation'
-import { Field } from '../schema/Field'
-import { HookStateDefinition } from '../schema/HookState'
-import { InvokeBlobDefinition } from '../schema/InvokeBlob'
-import { TxnParameterDefinition } from '../schema/TxnParameter'
+import type { HookParameterDefinition } from 'schema/HookParameter'
+import type { OperationDefinition } from 'schema/Operation'
+import type { Field } from '../schema/Field'
+import type { HookStateDefinition } from '../schema/HookState'
+import type { InvokeBlobDefinition } from '../schema/InvokeBlob'
+import type { TxnParameterDefinition } from '../schema/TxnParameter'
 
 const getLengthPrefix = (buffer: Buffer) => {
   let len = buffer.readUInt8(0)

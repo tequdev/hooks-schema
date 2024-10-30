@@ -1,4 +1,4 @@
-import { TxnParameterDefinition } from 'schema/TxnParameter'
+import type { TxnParameterDefinition } from 'schema/TxnParameter'
 
 type TxnParam = TxnParameterDefinition['fields'][0]
 

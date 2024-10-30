@@ -1,4 +1,4 @@
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { EvernodeHeartbeatHookParametersDefinition } from './hook_parameters'
 
 export const EvernodeHeartbeatHookDefinition: Definition = {

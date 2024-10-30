@@ -1,4 +1,4 @@
-import { OperationDefinition } from 'schema/Operation'
+import type { OperationDefinition } from 'schema/Operation'
 
 export const XahauGovernanceOperation = {
   write: {

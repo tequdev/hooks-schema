@@ -1,5 +1,5 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { OracleHookStateDefinition } from './hook_state'
 import { OracleInvokeDefinition } from './invoke_blob'
 

@@ -1,4 +1,4 @@
-import { HookStateDefinition } from 'schema/HookState'
+import type { HookStateDefinition } from 'schema/HookState'
 type State = HookStateDefinition['fields'][number]
 
 export const STK_HOST_COUNT: State = {

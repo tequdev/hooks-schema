@@ -1,4 +1,4 @@
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { GovernanceHookParametersDefinition } from './hook_parameters'
 import { GovernanceHookStateDefinition } from './hook_state'
 import { XahauGovernanceOperation } from './operation'

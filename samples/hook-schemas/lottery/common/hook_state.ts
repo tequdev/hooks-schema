@@ -1,4 +1,4 @@
-import { HookStateDefinition } from 'schema/HookState'
+import type { HookStateDefinition } from 'schema/HookState'
 
 type HookState = HookStateDefinition['fields'][number]
 

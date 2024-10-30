@@ -1,11 +1,11 @@
 import { Client } from '@transia/xrpl'
-import { HookState } from '@transia/xrpl/dist/npm/models/ledger'
+import type { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
-import { hookStateParser } from './parser'
+import type { hookStateParser } from './parser'
 
 import * as fs from 'fs'
-import { Definition } from '../schema'
+import type { Definition } from '../schema'
 import { EvernodeReputationHookDefinition } from './hook-schemas/evernode-reputation'
 import { OracleHookDefinition } from './hook-schemas/oracle'
 

@@ -1,7 +1,7 @@
 import { currencyToHex } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import { decodeAccountID } from '@transia/xrpl'
 import sha512h from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 
 const toHash = (issuer: string, currency: string) => {
   const _issuer = decodeAccountID(issuer).toString('hex')

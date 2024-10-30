@@ -1,5 +1,5 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { EvernodeReputationHookParametersDefinition } from './hook_parameters'
 import { EvernodeReputationHookStateDefinition } from './hook_state'
 import { EvernodeReputationInvokeDefinition } from './invoke_blob'

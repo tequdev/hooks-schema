@@ -1,8 +1,8 @@
-import { HookParameterDefinition } from './HookParameter'
-import { HookStateDefinition } from './HookState'
-import { InvokeBlobDefinition } from './InvokeBlob'
-import { OperationDefinition } from './Operation'
-import { TxnParameterDefinition } from './TxnParameter'
+import type { HookParameterDefinition } from './HookParameter'
+import type { HookStateDefinition } from './HookState'
+import type { InvokeBlobDefinition } from './InvokeBlob'
+import type { OperationDefinition } from './Operation'
+import type { TxnParameterDefinition } from './TxnParameter'
 
 export interface Definition {
   name: string

@@ -32,7 +32,7 @@ import { Null } from './../../../../schema/Field/index'
 // // Network configuration <busyness_detect_period(uint32_t)><busyness_detect_average(uint16_t)>.
 // const uint8_t CONF_NETWORK_CONFIGURATION[32] = { 'E', 'V', 'R', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15 };
 
-import { HookStateDefinition } from 'schema/HookState'
+import type { HookStateDefinition } from 'schema/HookState'
 type State = HookStateDefinition['fields'][number]
 
 export const CONF_ISSUER_ADDR: State = {

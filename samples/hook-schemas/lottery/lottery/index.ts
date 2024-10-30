@@ -1,5 +1,5 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
-import { Definition } from 'schema'
+import type { Definition } from 'schema'
 import { LastLedgerTime, Model, ReverseTicketCount, Ticket, TicketCount } from '../common/hook_state'
 import { LotteryHash } from '../common/txn_parameter'
 

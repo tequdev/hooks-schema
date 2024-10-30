@@ -1,5 +1,5 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { EvernodeRedirectHookParametersDefinition } from './hook_parameters'
 
 export const EvernodeRedirectHookDefinition: Definition = {

@@ -1,4 +1,4 @@
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 
 export const EvernodeReputationHookParametersDefinition: Definition['hook_parameters'] = {
   fields: [

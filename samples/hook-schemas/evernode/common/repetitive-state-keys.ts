@@ -12,7 +12,7 @@
 
 // // Hook Candidate Id keys. (Hook candidate proposal entries for candidate id-based lookup).
 // uint8_t STP_CANDIDATE_ID[32] = { 'E', 'V', 'R', 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-import { HookStateDefinition } from 'schema/HookState'
+import type { HookStateDefinition } from 'schema/HookState'
 type State = HookStateDefinition['fields'][number]
 
 export const STP_TOKEN_ID: State = {

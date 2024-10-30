@@ -1,5 +1,5 @@
 import { hexNamespace } from '@transia/hooks-toolkit'
-import { Definition } from '../../../schema'
+import type { Definition } from '../../../schema'
 import { EvernodeHookStateDefinition } from './hook_state'
 
 export const EvernodeHookDefinition: Definition = {
