@@ -2,7 +2,13 @@ import { floatToXfl } from '@transia/hooks-toolkit'
 import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import type { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import type { HookState } from '@transia/xrpl/dist/npm/models/ledger'
-import { decodeAccountID, encodeAccountID } from '@transia/xrpl/dist/npm/utils'
+import {
+  decodeAccountID,
+  encodeAccountID,
+  isoTimeToRippleTime,
+  rippleTimeToISOTime,
+  rippleTimeToUnixTime,
+} from '@transia/xrpl/dist/npm/utils'
 import sha512Half from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
 import type { HookParameterDefinition } from 'schema/HookParameter'
 import type { OperationDefinition } from 'schema/Operation'
@@ -28,8 +34,13 @@ const getTypeByteLength = (type: Field['type']) => {
     UInt64: 8,
     XFL: 8,
     Hash256: 32,
+    RippleEpoch: 8,
+    TxHash: 32,
+    HookHash: 32,
+    LedgerEntryID: 32,
     Array: undefined,
     VarString: undefined,
+    HexBinary: undefined,
     Null: undefined,
   }
   return typeToLength[type]
@@ -57,6 +68,8 @@ const bufferToReadableData = (
       return buffer.readUInt16LE()
     case 'UInt32':
       return buffer.readUint32LE()
+    case 'RippleEpoch':
+      return rippleTimeToISOTime(Number(buffer.readUint32LE()))
     case 'UInt64':
       return buffer.readBigUint64LE()
     case 'XFL':
@@ -64,9 +77,14 @@ const bufferToReadableData = (
     case 'VarString':
       if (state.binary === true) return buffer.toString('hex').toUpperCase()
       return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
+    case 'HexBinary':
+      return buffer.toString('hex').toUpperCase()
     case 'Null':
       return nullReplaceTo.repeat(state.byte_length)
     case 'Hash256':
+    case 'TxHash':
+    case 'HookHash':
+    case 'LedgerEntryID':
       return buffer.toString('hex').toUpperCase()
     case 'Array': {
       let from = 0
@@ -107,6 +125,12 @@ const toHex = (state: Field, value: null | string | number | bigint | Array<stri
       return Buffer.from(new Uint32Array([value as number]).buffer)
         .toString('hex')
         .toUpperCase()
+    case 'RippleEpoch': {
+      const rippleEpoch = isoTimeToRippleTime(value as string)
+      return Buffer.from(new Uint32Array([rippleEpoch]).buffer)
+        .toString('hex')
+        .toUpperCase()
+    }
     case 'UInt64':
       return Buffer.from(new BigUint64Array([value as bigint]).buffer)
         .toString('hex')
@@ -122,9 +146,14 @@ const toHex = (state: Field, value: null | string | number | bigint | Array<stri
       return Buffer.from(value as string)
         .toString('hex')
         .toUpperCase()
+    case 'HexBinary':
+      return (value as string).toUpperCase()
     case 'Null':
       return '00'.repeat(state.byte_length)
     case 'Hash256':
+    case 'TxHash':
+    case 'HookHash':
+    case 'LedgerEntryID':
       return (value as string).toUpperCase()
     case 'Array': {
       const a = value as Array<string | number | bigint>
