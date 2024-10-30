@@ -4,7 +4,7 @@ import { EvernodeHookDefinition } from './hook-schemas/evernode'
 import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import type { hookStateParser } from './parser'
 
-import * as fs from 'fs'
+import * as fs from 'node:fs'
 import type { Definition } from '../schema'
 import { EvernodeReputationHookDefinition } from './hook-schemas/evernode-reputation'
 import { OracleHookDefinition } from './hook-schemas/oracle'
