@@ -102,10 +102,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "AccountID": {
       "title": "AccountID",
@@ -113,9 +110,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "AccountID"
-          ],
+          "enum": ["AccountID"],
           "title": "type"
         },
         "fixed_value": {
@@ -146,10 +141,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "UInt8": {
       "title": "UInt8",
@@ -157,9 +149,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "UInt8"
-          ],
+          "enum": ["UInt8"],
           "title": "type"
         },
         "byte_length": {
@@ -186,10 +176,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "UInt16": {
       "title": "UInt16",
@@ -197,9 +184,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "UInt16"
-          ],
+          "enum": ["UInt16"],
           "title": "type"
         },
         "byte_length": {
@@ -226,10 +211,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "UInt32": {
       "title": "UInt32",
@@ -237,9 +219,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "UInt32"
-          ],
+          "enum": ["UInt32"],
           "title": "type"
         },
         "byte_length": {
@@ -266,10 +246,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "UInt64": {
       "title": "UInt64",
@@ -277,9 +254,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "UInt64"
-          ],
+          "enum": ["UInt64"],
           "title": "type"
         },
         "byte_length": {
@@ -306,10 +281,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "XFL": {
       "title": "XFL",
@@ -317,9 +289,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "XFL"
-          ],
+          "enum": ["XFL"],
           "title": "type"
         },
         "byte_length": {
@@ -346,10 +316,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "VarString": {
       "title": "VarString",
@@ -357,9 +324,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "VarString"
-          ],
+          "enum": ["VarString"],
           "title": "type"
         },
         "byte_length": {
@@ -402,10 +367,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "Null": {
       "title": "Null",
@@ -413,9 +375,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "Null"
-          ],
+          "enum": ["Null"],
           "title": "type"
         },
         "byte_length": {
@@ -433,10 +393,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "byte_length",
-        "type"
-      ]
+      "required": ["byte_length", "type"]
     },
     "Hash256": {
       "title": "Hash256",
@@ -444,9 +401,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "Hash256"
-          ],
+          "enum": ["Hash256"],
           "title": "type"
         },
         "byte_length": {
@@ -473,10 +428,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "type"
-      ]
+      "required": ["name", "type"]
     },
     "HookParameterDefinition": {
       "title": "HookParameterDefinition",
@@ -511,18 +463,13 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "hookparam_data",
-              "hookparam_key"
-            ]
+            "required": ["hookparam_data", "hookparam_key"]
           },
           "title": "fields"
         }
       },
       "additionalProperties": false,
-      "required": [
-        "fields"
-      ]
+      "required": ["fields"]
     },
     "HookStateDefinition": {
       "title": "HookStateDefinition",
@@ -568,26 +515,18 @@
                   }
                 },
                 "additionalProperties": false,
-                "required": [
-                  "account",
-                  "namespace_id"
-                ],
+                "required": ["account", "namespace_id"],
                 "title": "foreign_state"
               }
             },
             "additionalProperties": false,
-            "required": [
-              "hookstate_data",
-              "hookstate_key"
-            ]
+            "required": ["hookstate_data", "hookstate_key"]
           },
           "title": "fields"
         }
       },
       "additionalProperties": false,
-      "required": [
-        "fields"
-      ]
+      "required": ["fields"]
     },
     "InvokeBlobDefinition": {
       "title": "InvokeBlobDefinition",
@@ -615,17 +554,13 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "value"
-            ]
+            "required": ["value"]
           },
           "title": "fields"
         }
       },
       "additionalProperties": false,
-      "required": [
-        "fields"
-      ]
+      "required": ["fields"]
     },
     "OperationDefinition": {
       "title": "OperationDefinition",
@@ -641,10 +576,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "read",
-        "write"
-      ]
+      "required": ["read", "write"]
     },
     "WriteOperation": {
       "title": "WriteOperation",
@@ -677,10 +609,7 @@
                 }
               },
               "additionalProperties": false,
-              "required": [
-                "data",
-                "key"
-              ]
+              "required": ["data", "key"]
             },
             "title": "txn_parameter_definition"
           },
@@ -696,16 +625,12 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "data"
-            ],
+            "required": ["data"],
             "title": "invoke_blob_definition"
           }
         },
         "additionalProperties": false,
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       }
     },
     "ReadOperation": {
@@ -771,19 +696,12 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "data",
-              "key"
-            ],
+            "required": ["data", "key"],
             "title": "hook_state_definition"
           }
         },
         "additionalProperties": false,
-        "required": [
-          "args",
-          "hook_state_definition",
-          "returns"
-        ]
+        "required": ["args", "hook_state_definition", "returns"]
       }
     },
     "TxnParameterDefinition": {
@@ -826,19 +744,13 @@
               }
             },
             "additionalProperties": false,
-            "required": [
-              "otxnparam_data",
-              "otxnparam_key",
-              "transaction_types"
-            ]
+            "required": ["otxnparam_data", "otxnparam_key", "transaction_types"]
           },
           "title": "fields"
         }
       },
       "additionalProperties": false,
-      "required": [
-        "fields"
-      ]
+      "required": ["fields"]
     },
     "Definition": {
       "title": "Definition",
@@ -905,12 +817,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "description",
-        "hook_hash",
-        "name",
-        "version"
-      ]
+      "required": ["description", "hook_hash", "name", "version"]
     },
     "ArrayField<NonArrayField>": {
       "title": "ArrayField<NonArrayField>",
@@ -918,9 +825,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "Array"
-          ],
+          "enum": ["Array"],
           "title": "type"
         },
         "array": {
@@ -967,11 +872,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "array",
-        "name",
-        "type"
-      ]
+      "required": ["array", "name", "type"]
     },
     "ArrayField<T>": {
       "title": "ArrayField<T>",
@@ -979,9 +880,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "Array"
-          ],
+          "enum": ["Array"],
           "title": "type"
         },
         "array": {
@@ -1028,28 +927,14 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "array",
-        "name",
-        "type"
-      ]
+      "required": ["array", "name", "type"]
     },
     "T": {
       "title": "T",
       "type": "object",
       "properties": {
         "type": {
-          "enum": [
-            "AccountID",
-            "Hash256",
-            "Null",
-            "UInt16",
-            "UInt32",
-            "UInt64",
-            "UInt8",
-            "VarString",
-            "XFL"
-          ],
+          "enum": ["AccountID", "Hash256", "Null", "UInt16", "UInt32", "UInt64", "UInt8", "VarString", "XFL"],
           "type": "string",
           "title": "type"
         },
@@ -1069,9 +954,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "type"
-      ]
+      "required": ["type"]
     },
     "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">": {
       "title": "Record<string,\"Array\"|\"AccountID\"|\"UInt8\"|\"UInt16\"|\"UInt32\"|\"UInt64\"|\"XFL\"|\"VarString\"|\"Null\"|\"Hash256\">",

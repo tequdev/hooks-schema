@@ -15,14 +15,12 @@
       "default": "./dist/index.mjs"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "tsx samples/index.ts",
     "build": "tsup",
     "generate": "tsx samples/generate.ts",
-    "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema",
+    "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema && biome format --write schema.json",
     "lint": "biome lint --apply .",
     "format": "biome format --write .",
     "prepublish": "pnpm run build"

@@ -27,5 +27,10 @@
       "quoteStyle": "single",
       "quoteProperties": "asNeeded"
     }
+  },
+  "json": {
+    "formatter": {
+      "lineWidth": 120
+    }
   }
 }
