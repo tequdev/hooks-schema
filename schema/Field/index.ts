@@ -7,11 +7,13 @@ type NonArrayField =
   | UInt32
   | UInt64
   | XFL
+  | Currency
   | VarString
   | HexBinary
   | Null
   | Hash256
-  | RippleEpoch
+  | DateTime
+  | DateTime64
   | TxHash
   | HookHash
   | LedgerEntryID
@@ -92,6 +94,14 @@ export interface UInt64 extends FieldBase {
   byte_length?: number
 }
 
+export interface Currency extends FieldBase {
+  type: 'Currency'
+  /**
+   * @default 20
+   */
+  byte_length?: number
+}
+
 export interface XFL extends FieldBase {
   type: 'XFL'
   /**
@@ -154,12 +164,31 @@ export interface Hash256 extends FieldBase {
   byte_length?: number
 }
 
-export interface RippleEpoch extends FieldBase {
-  type: 'RippleEpoch'
+/**
+ * DateTime(uint32) as unix timestamp (seconds) or ripple timestamp
+ */
+export interface DateTime extends FieldBase {
+  type: 'DateTime'
   /**
    * @default 4
    */
   byte_length?: number
+  epoch: 'unix' | 'ripple'
+}
+
+/**
+ * DateTime(uint64) as unix timestamp (seconds) or ripple timestamp
+ *
+ * As default RippleEpoch is uint32, but ledger_last_time api return as uint64.
+ * So we need to define another type for DateTime as DateTime64.
+ */
+export interface DateTime64 extends FieldBase {
+  type: 'DateTime64'
+  /**
+   * @default 8
+   */
+  byte_length?: number
+  epoch: 'unix' | 'ripple'
 }
 
 export interface TxHash extends FieldBase {

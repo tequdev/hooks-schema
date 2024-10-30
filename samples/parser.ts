@@ -1,5 +1,5 @@
 import { floatToXfl } from '@transia/hooks-toolkit'
-import { hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
+import { hexToCurrency, hexToXfl } from '@transia/hooks-toolkit/dist/npm/src/libs/binary-models'
 import type { HookParameter } from '@transia/xrpl/dist/npm/models/common'
 import type { HookState } from '@transia/xrpl/dist/npm/models/ledger'
 import {
@@ -8,6 +8,7 @@ import {
   isoTimeToRippleTime,
   rippleTimeToISOTime,
   rippleTimeToUnixTime,
+  unixTimeToRippleTime,
 } from '@transia/xrpl/dist/npm/utils'
 import sha512Half from '@transia/xrpl/dist/npm/utils/hashes/sha512Half'
 import type { HookParameterDefinition } from 'schema/HookParameter'
@@ -33,8 +34,10 @@ const getTypeByteLength = (type: Field['type']) => {
     UInt32: 4,
     UInt64: 8,
     XFL: 8,
+    Currency: 20,
     Hash256: 32,
-    RippleEpoch: 8,
+    DateTime: 4,
+    DateTime64: 8,
     TxHash: 32,
     HookHash: 32,
     LedgerEntryID: 32,
@@ -68,12 +71,20 @@ const bufferToReadableData = (
       return buffer.readUInt16LE()
     case 'UInt32':
       return buffer.readUint32LE()
-    case 'RippleEpoch':
-      return rippleTimeToISOTime(Number(buffer.readUint32LE()))
+    case 'DateTime': {
+      if (state.epoch === 'unix') return rippleTimeToISOTime(unixTimeToRippleTime(buffer.readUint32LE()))
+      return rippleTimeToISOTime(buffer.readUint32LE())
+    }
     case 'UInt64':
       return buffer.readBigUint64LE()
+    case 'DateTime64': {
+      if (state.epoch === 'unix') return rippleTimeToISOTime(unixTimeToRippleTime(Number(buffer.readBigUint64LE())))
+      return rippleTimeToISOTime(Number(buffer.readBigUint64LE()))
+    }
     case 'XFL':
       return hexToXfl(buffer.toString('hex'))
+    case 'Currency':
+      return hexToCurrency(buffer.toString('hex'))
     case 'VarString':
       if (state.binary === true) return buffer.toString('hex').toUpperCase()
       return buffer.toString('utf-8').replace(/\0/g, nullReplaceTo)
@@ -125,9 +136,21 @@ const toHex = (state: Field, value: null | string | number | bigint | Array<stri
       return Buffer.from(new Uint32Array([value as number]).buffer)
         .toString('hex')
         .toUpperCase()
-    case 'RippleEpoch': {
-      const rippleEpoch = isoTimeToRippleTime(value as string)
+    case 'DateTime': {
+      const rippleEpoch =
+        state.epoch === 'unix'
+          ? rippleTimeToUnixTime(isoTimeToRippleTime(value as string))
+          : isoTimeToRippleTime(value as string)
       return Buffer.from(new Uint32Array([rippleEpoch]).buffer)
+        .toString('hex')
+        .toUpperCase()
+    }
+    case 'DateTime64': {
+      const rippleEpoch =
+        state.epoch === 'unix'
+          ? rippleTimeToUnixTime(isoTimeToRippleTime(value as string))
+          : isoTimeToRippleTime(value as string)
+      return Buffer.from(new BigUint64Array([BigInt(rippleEpoch)]).buffer)
         .toString('hex')
         .toUpperCase()
     }
@@ -139,6 +162,8 @@ const toHex = (state: Field, value: null | string | number | bigint | Array<stri
       return Buffer.from(new BigUint64Array([floatToXfl(value as bigint) as bigint]).buffer)
         .toString('hex')
         .toUpperCase()
+    case 'Currency':
+      return hexToCurrency(value as string)
     case 'VarString':
       if (state.binary === true) {
         return (value as string).toUpperCase()
