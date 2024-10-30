@@ -15,10 +15,10 @@
       "default": "./dist/index.mjs"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "schema"],
   "scripts": {
     "dev": "tsx samples/index.ts",
-    "build": "tsup",
+    "build": "tsup --sourcemap",
     "generate": "tsx samples/generate.ts",
     "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema && biome format --write schema.json",
     "lint": "biome lint --apply .",
