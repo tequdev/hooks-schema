@@ -18,7 +18,7 @@
   "files": ["dist", "schema"],
   "scripts": {
     "dev": "tsx samples/index.ts",
-    "build": "tsup --sourcemap",
+    "build": "tsup",
     "generate": "tsx samples/generate.ts",
     "generate:schema": "quicktype schema/generate.ts -o schema.json --lang schema && biome format --write schema.json",
     "lint": "biome lint --apply .",
@@ -26,7 +26,11 @@
     "prepublish": "pnpm run build"
   },
   "keywords": [],
-  "author": "",
+  "author": "tequ <git@tequ.dev>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tequdev/hooks-schema.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -40,6 +44,7 @@
   "tsup": {
     "entry": ["schema/index.ts"],
     "format": ["cjs", "esm"],
-    "dts": true
+    "dts": true,
+    "sourcemap": true
   }
 }
