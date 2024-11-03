@@ -5,9 +5,16 @@ import { GovernanceHookDefinition } from './hook-schemas/xahau-governance'
 import type { hookStateParser } from './parser'
 
 import * as fs from 'node:fs'
+import { hexNamespace } from '@transia/hooks-toolkit'
 import type { Definition } from '../schema'
 import { EvernodeReputationHookDefinition } from './hook-schemas/evernode-reputation'
 import { OracleHookDefinition } from './hook-schemas/oracle'
+import { VPRABattleV2HookDefinition } from './hook-schemas/vpra/pet_battleV2'
+import { VPRABreedV2HookDefinition } from './hook-schemas/vpra/pet_breedV2'
+import { VPRAMintV2HookDefinition } from './hook-schemas/vpra/pet_mintv2'
+import { VPRARaceV2HookDefinition } from './hook-schemas/vpra/pet_raceV2'
+import { VPRARacePoolV2HookDefinition } from './hook-schemas/vpra/pet_race_poolV2'
+import { VPRAUpdateV2HookDefinition } from './hook-schemas/vpra/pet_updateV2'
 
 const client = new Client('wss://xahau.org')
 // const client = new Client("wss://xahau-test.net");
@@ -50,7 +57,60 @@ const Oracle = {
   hook_definition: OracleHookDefinition,
 }
 
-const definitions = [Xahau_Governance, Evernode, Oracle, EvernodeReputation]
+const VPRABattleV2 = {
+  name: 'vpra-battleV2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('/battles'),
+  hook_definition: VPRABattleV2HookDefinition,
+}
+
+const VPRABreedV2 = {
+  name: 'vpra-breedV2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('pets'),
+  hook_definition: VPRABreedV2HookDefinition,
+}
+
+const VPRAMintV2 = {
+  name: 'vpra-mintv2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('pets'),
+  hook_definition: VPRAMintV2HookDefinition,
+}
+
+const VPRARacePoolV2 = {
+  name: 'vpra-racepoolV2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('/races'),
+  hook_definition: VPRARacePoolV2HookDefinition,
+}
+
+const VPRARaceV2 = {
+  name: 'vpra-raceV2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('/races'),
+  hook_definition: VPRARaceV2HookDefinition,
+}
+
+const VPRAUpdateV2 = {
+  name: 'vpra-updateV2',
+  hook_account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
+  hook_namespace_id: hexNamespace('pets'),
+  hook_definition: VPRAUpdateV2HookDefinition,
+}
+
+const definitions = [
+  Xahau_Governance,
+  Evernode,
+  Oracle,
+  EvernodeReputation,
+  VPRABattleV2,
+  VPRABreedV2,
+  VPRAMintV2,
+  VPRARacePoolV2,
+  VPRARaceV2,
+  VPRAUpdateV2,
+]
 
 const generateDefinitionJson = (source: DefinitionSource, dir: string) => {
   const j = JSON.stringify(source, null, 2)
