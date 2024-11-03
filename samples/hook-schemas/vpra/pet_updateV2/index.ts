@@ -9,7 +9,7 @@ export const VPRAUpdateV2HookDefinition: Definition = {
   description: '',
   account: 'rUYiTLYpN8M4xLhtRD9HQZFwqZ4WaKJc89',
   namespace_id: hexNamespace('pets'),
-  hook_hash: '',
+  hook_hash: 'DCC25F1DCE8916C25825082915A9B22E0C915B1CFB752DF77516076DA238B7A0',
   version: [],
   hook_states: VPRAUpdateV2HookStateDefinition,
   github_url:
