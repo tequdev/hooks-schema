@@ -19,10 +19,11 @@ export const VPRABreedV2HookStateDefinition: Definition['hook_states'] = {
         {
           type: 'Null',
           byte_length: 12,
+          exclude: true,
         },
         {
           type: 'AccountID',
-          name: 'hook account',
+          name: 'Hook Account',
         },
       ],
       hookstate_data: [
