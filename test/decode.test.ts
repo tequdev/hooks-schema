@@ -25,20 +25,16 @@ StateValue UserInfoValue {
 
 State UserInfo = UserInfoKey -> UserInfoValue @priority(100)
 
-StateKey UserCurrencySlotKey {
+State UserCurrencySlot = {
   Null(10)
   String("U")
   u8 currencySlot
   UserId19 user
   u8 userSlot
-}
-
-StateValue UserCurrencyValue {
+} -> {
   Currency currency
   Issuer issuer
-}
-
-State UserCurrencySlot = UserCurrencySlotKey -> UserCurrencyValue @priority(100)
+} @priority(100)
 
 StateKey SettingsHKey {
   String("SH")

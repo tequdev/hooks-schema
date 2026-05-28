@@ -6,6 +6,7 @@ import type {
   SchemaAst,
   StateAst,
   StateKeyAst,
+  StateSchemaAst,
   StateValueAst,
   TypeAliasAst,
   TypeArgAst,
@@ -93,20 +94,32 @@ class Parser {
   private parseState(start: Token): StateAst | undefined {
     const name = this.consume("identifier", "expected State name");
     this.consume("=", "expected = after State name");
-    const keySchema = this.consume("identifier", "expected StateKey reference");
+    const keySchema = this.parseStateSchema("StateKey");
     this.consume("->", "expected -> between key and value schemas");
-    const valueSchema = this.consume("identifier", "expected StateValue reference");
+    const valueSchema = this.parseStateSchema("StateValue");
     const attributes = this.parseAttributes();
     if (!name || !keySchema || !valueSchema) return undefined;
     const endSpan = attributes.at(-1)?.span ?? valueSchema.span;
     return {
       kind: "State",
       name: name.value,
-      keySchema: keySchema.value,
-      valueSchema: valueSchema.value,
+      keySchema,
+      valueSchema,
       attributes,
       span: this.join(start, endSpan),
     };
+  }
+
+  private parseStateSchema(kind: "StateKey" | "StateValue"): StateSchemaAst | undefined {
+    if (this.check("{")) {
+      const block = this.parseBlock();
+      if (!block) return undefined;
+      return { kind: "inline", fields: block.fields, span: block.span };
+    }
+
+    const reference = this.consume("identifier", `expected ${kind} reference or inline block`);
+    if (!reference) return undefined;
+    return { kind: "ref", name: reference.value, span: reference.span };
   }
 
   private parseBlock(): { fields: FieldAst[]; span: Token["span"] } | undefined {

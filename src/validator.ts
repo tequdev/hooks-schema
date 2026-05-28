@@ -226,16 +226,46 @@ function validateStruct(
 }
 
 function validateState(state: StateAst, context: Context, diagnostics: Diagnostic[]): void {
-  if (!context.stateKeys.has(state.keySchema)) {
+  if (state.keySchema.kind === "inline") {
+    validateStruct(
+      {
+        kind: "StateKey",
+        name: inlineStateKeyName(state.name),
+        fields: state.keySchema.fields,
+        span: state.keySchema.span,
+      },
+      "StateKey",
+      context,
+      diagnostics,
+    );
+  } else if (!context.stateKeys.has(state.keySchema.name)) {
     diagnostics.push(
-      diagnostic("schema.unknownStateKey", `unknown StateKey ${state.keySchema}`, state.span),
+      diagnostic("schema.unknownStateKey", `unknown StateKey ${state.keySchema.name}`, state.span),
     );
   }
-  if (!context.stateValues.has(state.valueSchema)) {
+
+  if (state.valueSchema.kind === "inline") {
+    validateStruct(
+      {
+        kind: "StateValue",
+        name: inlineStateValueName(state.name),
+        fields: state.valueSchema.fields,
+        span: state.valueSchema.span,
+      },
+      "StateValue",
+      context,
+      diagnostics,
+    );
+  } else if (!context.stateValues.has(state.valueSchema.name)) {
     diagnostics.push(
-      diagnostic("schema.unknownStateValue", `unknown StateValue ${state.valueSchema}`, state.span),
+      diagnostic(
+        "schema.unknownStateValue",
+        `unknown StateValue ${state.valueSchema.name}`,
+        state.span,
+      ),
     );
   }
+
   let priorityCount = 0;
   for (const attribute of state.attributes) {
     if (attribute.name !== "priority") {
@@ -268,6 +298,14 @@ function validateState(state: StateAst, context: Context, diagnostics: Diagnosti
       ),
     );
   }
+}
+
+function inlineStateKeyName(stateName: string): string {
+  return `${RESERVED_PREFIX}${stateName}Key`;
+}
+
+function inlineStateValueName(stateName: string): string {
+  return `${RESERVED_PREFIX}${stateName}Value`;
 }
 
 function staticFieldLength(

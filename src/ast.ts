@@ -36,11 +36,23 @@ export type StateValueAst = {
 export type StateAst = {
   kind: "State";
   name: string;
-  keySchema: string;
-  valueSchema: string;
+  keySchema: StateSchemaAst;
+  valueSchema: StateSchemaAst;
   attributes: AttributeAst[];
   span: SourceSpan;
 };
+
+export type StateSchemaAst =
+  | {
+      kind: "ref";
+      name: string;
+      span: SourceSpan;
+    }
+  | {
+      kind: "inline";
+      fields: FieldAst[];
+      span: SourceSpan;
+    };
 
 export type FieldAst = {
   kind: "Field";

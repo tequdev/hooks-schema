@@ -1,5 +1,5 @@
 import type { FieldAst, SchemaAst, StateAst, TypeExprAst } from "./ast.js";
-import { BUILTIN_TYPES, NUMERIC_TYPES } from "./builtins.js";
+import { BUILTIN_TYPES, NUMERIC_TYPES, RESERVED_PREFIX } from "./builtins.js";
 import { SchemaValidationError } from "./errors.js";
 import type { FieldIr, PatternIr, SchemaIr, StateIr, StructIr, TypeIr, ValueTypeIr } from "./ir.js";
 import { asciiToBytesHex } from "./runtime/bytes.js";
@@ -22,10 +22,22 @@ export function astToIr(ast: SchemaAst): SchemaIr {
   for (const [name, key] of context.stateKeys) {
     stateKeys[name] = structToIr("StateKey", key.name, key.fields, types);
   }
+  for (const state of context.states.values()) {
+    if (state.keySchema.kind === "inline") {
+      const name = inlineStateKeyName(state.name);
+      stateKeys[name] = structToIr("StateKey", name, state.keySchema.fields, types);
+    }
+  }
 
   const stateValues: Record<string, StructIr> = {};
   for (const [name, value] of context.stateValues) {
     stateValues[name] = structToIr("StateValue", value.name, value.fields, types);
+  }
+  for (const state of context.states.values()) {
+    if (state.valueSchema.kind === "inline") {
+      const name = inlineStateValueName(state.name);
+      stateValues[name] = structToIr("StateValue", name, state.valueSchema.fields, types);
+    }
   }
 
   const states = Array.from(context.states.values()).map(stateToIr);
@@ -100,10 +112,20 @@ function stateToIr(state: StateAst): StateIr {
   const priority = state.attributes.find((attribute) => attribute.name === "priority")?.args[0];
   return {
     name: state.name,
-    keySchema: state.keySchema,
-    valueSchema: state.valueSchema,
+    keySchema:
+      state.keySchema.kind === "ref" ? state.keySchema.name : inlineStateKeyName(state.name),
+    valueSchema:
+      state.valueSchema.kind === "ref" ? state.valueSchema.name : inlineStateValueName(state.name),
     priority: priority?.kind === "number" ? priority.value : 0,
   };
+}
+
+function inlineStateKeyName(stateName: string): string {
+  return `${RESERVED_PREFIX}${stateName}Key`;
+}
+
+function inlineStateValueName(stateName: string): string {
+  return `${RESERVED_PREFIX}${stateName}Value`;
 }
 
 function fieldLength(field: FieldIr): number {
