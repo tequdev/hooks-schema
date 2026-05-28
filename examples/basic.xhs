@@ -1,0 +1,30 @@
+type Bitmap256 = Bytes(32)
+type UserId19 = Bytes(19)
+
+StateKey UserInfoKey {
+  Null(11)
+  String("U")
+  Account user
+}
+
+StateValue UserInfoValue {
+  Bitmap256 currencySlots
+}
+
+State UserInfo = UserInfoKey -> UserInfoValue @priority(100)
+
+StateKey UserCurrencySlotKey {
+  Null(10)
+  String("U")
+  u8 currencySlot
+  UserId19 user
+  u8 userSlot
+}
+
+StateValue UserCurrencyValue {
+  Currency currency
+  Issuer issuer
+}
+
+State UserCurrencySlot = UserCurrencySlotKey -> UserCurrencyValue @priority(100)
+

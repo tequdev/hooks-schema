@@ -1,0 +1,29 @@
+{
+  "name": "state-schema",
+  "version": "0.1.0",
+  "description": "Declarative decoder for Xahau Hooks state keys and values.",
+  "type": "module",
+  "bin": {
+    "hook-schema": "./dist/src/cli/main.js"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "biome check . && tsc -p tsconfig.json --noEmit",
+    "format": "biome format --write .",
+    "test": "pnpm run build && node --test \"dist/test/*.test.js\"",
+    "validate": "pnpm run check && pnpm run test"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.15.29",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.11.0"
+}
