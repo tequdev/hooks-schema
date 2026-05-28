@@ -1,15 +1,12 @@
-import assert from "node:assert/strict";
-import test from "node:test";
 import { SchemaParseError } from "../src/index.js";
 import { lex } from "../src/lexer.js";
 import { assertDiagnosticCodes } from "./test-helpers.js";
 
-test("lexes identifiers, punctuation, field references, numbers, and escaped strings", () => {
-  const tokens = lex('State A = K -> V @priority(-10) Bytes($len) String("A\\nB\\"\\\\\\t")');
+describe("lexer", () => {
+  test("lexes identifiers, punctuation, field references, numbers, and escaped strings", () => {
+    const tokens = lex('State A = K -> V @priority(-10) Bytes($len) String("A\\nB\\"\\\\\\t")');
 
-  assert.deepEqual(
-    tokens.map((token) => token.kind),
-    [
+    expect(tokens.map((token) => token.kind)).toEqual([
       "identifier",
       "identifier",
       "=",
@@ -30,55 +27,58 @@ test("lexes identifiers, punctuation, field references, numbers, and escaped str
       "string",
       ")",
       "eof",
-    ],
-  );
-  assert.equal(tokens[9]?.value, "-10");
-  assert.equal(tokens[13]?.value, "len");
-  assert.equal(tokens[17]?.value, 'A\nB"\\\t');
-});
+    ]);
+    expect(tokens[9]?.value).toBe("-10");
+    expect(tokens[13]?.value).toBe("len");
+    expect(tokens[17]?.value).toBe('A\nB"\\\t');
+  });
 
-test("skips line and block comments while preserving following token spans", () => {
-  const tokens = lex(`// ignored
+  test("skips line and block comments while preserving following token spans", () => {
+    const tokens = lex(`// ignored
 StateKey /* ignored */ K {
   Null(32)
 }`);
 
-  assert.equal(tokens[0]?.value, "StateKey");
-  assert.equal(tokens[0]?.span.line, 2);
-  assert.equal(tokens[1]?.value, "K");
-  assert.equal(tokens[1]?.span.line, 2);
-});
+    expect(tokens[0]?.value).toBe("StateKey");
+    expect(tokens[0]?.span.line).toBe(2);
+    expect(tokens[1]?.value).toBe("K");
+    expect(tokens[1]?.span.line).toBe(2);
+  });
 
-test("reports lexical diagnostics for malformed source", () => {
-  assert.throws(
-    () => lex("StateKey $  @bad(`"),
-    (error) => {
-      assert.ok(error instanceof SchemaParseError);
-      assertDiagnosticCodes(error.diagnostics, [
+  test("reports lexical diagnostics for malformed source", () => {
+    expect(() => lex("StateKey $  @bad(`")).toThrow(SchemaParseError);
+
+    try {
+      lex("StateKey $  @bad(`");
+    } catch (error) {
+      expect(error).toBeInstanceOf(SchemaParseError);
+      assertDiagnosticCodes((error as SchemaParseError).diagnostics, [
         "parse.invalidFieldRef",
         "parse.unexpectedCharacter",
       ]);
-      return true;
-    },
-  );
-});
+    }
+  });
 
-test("reports unterminated block comments, strings, and invalid escapes", () => {
-  assert.throws(
-    () => lex("/* no close"),
-    (error) => {
-      assert.ok(error instanceof SchemaParseError);
-      assertDiagnosticCodes(error.diagnostics, ["parse.unterminatedBlockComment"]);
-      return true;
-    },
-  );
+  test("reports unterminated block comments, strings, and invalid escapes", () => {
+    expect(() => lex("/* no close")).toThrow(SchemaParseError);
+    try {
+      lex("/* no close");
+    } catch (error) {
+      expect(error).toBeInstanceOf(SchemaParseError);
+      assertDiagnosticCodes((error as SchemaParseError).diagnostics, [
+        "parse.unterminatedBlockComment",
+      ]);
+    }
 
-  assert.throws(
-    () => lex('"bad\\q'),
-    (error) => {
-      assert.ok(error instanceof SchemaParseError);
-      assertDiagnosticCodes(error.diagnostics, ["parse.invalidEscape", "parse.unterminatedString"]);
-      return true;
-    },
-  );
+    expect(() => lex('"bad\\q')).toThrow(SchemaParseError);
+    try {
+      lex('"bad\\q');
+    } catch (error) {
+      expect(error).toBeInstanceOf(SchemaParseError);
+      assertDiagnosticCodes((error as SchemaParseError).diagnostics, [
+        "parse.invalidEscape",
+        "parse.unterminatedString",
+      ]);
+    }
+  });
 });

@@ -1,5 +1,3 @@
-import assert from "node:assert/strict";
-import test from "node:test";
 import {
   AmbiguousMatchError,
   DecodeInputError,
@@ -48,70 +46,73 @@ StateValue U64Value {
 State SettingsH = SettingsHKey -> U64Value @priority(50)
 `;
 
-test("decodes UserInfo", () => {
-  const schema = compileSchema(schemaText);
-  const result = decodeState(schema, {
-    key: "00000000000000000000005524B374EFE44FC572ED6E4DC112772C26BF754351",
-    value: "0100000000000000000000000000000000000000000000000000000000000000",
+describe("decode schema samples", () => {
+  test("decodes UserInfo", () => {
+    const schema = compileSchema(schemaText);
+    const result = decodeState(schema, {
+      key: "00000000000000000000005524B374EFE44FC572ED6E4DC112772C26BF754351",
+      value: "0100000000000000000000000000000000000000000000000000000000000000",
+    });
+
+    expect(result.state).toBe("UserInfo");
+    expect(result.key).toEqual({
+      user: "24B374EFE44FC572ED6E4DC112772C26BF754351",
+    });
+    expect(result.value).toEqual({
+      currencySlots: "0100000000000000000000000000000000000000000000000000000000000000",
+    });
+    expect(result.match.reasons.some((reason) => reason.includes('String("U")'))).toBe(true);
   });
 
-  assert.equal(result.state, "UserInfo");
-  assert.deepEqual(result.key, {
-    user: "24B374EFE44FC572ED6E4DC112772C26BF754351",
+  test("decodes UserCurrencySlot with 19-byte user id", () => {
+    const schema = compileSchema(schemaText);
+    const result = decodeState(schema, {
+      key: "000000000000000000005501000000000000000000000004D01730E501961300",
+      value: "00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    });
+
+    expect(result.state).toBe("UserCurrencySlot");
+    expect(result.key).toEqual({
+      currencySlot: 1,
+      user: "000000000000000000000004D01730E5019613",
+      userSlot: 0,
+    });
   });
-  assert.deepEqual(result.value, {
-    currencySlots: "0100000000000000000000000000000000000000000000000000000000000000",
+
+  test("decodes u64 as bigint", () => {
+    const schema = compileSchema(schemaText);
+    const result = decodeState(schema, {
+      key: "5348000000000000000000000000000000000000000000000000000000000000",
+      value: "0100000000000000",
+    });
+
+    expect(result.state).toBe("SettingsH");
+    expect(result.value).toEqual({ value: 1n });
   });
-  assert.ok(result.match.reasons.some((reason) => reason.includes('String("U")')));
 });
 
-test("decodes UserCurrencySlot with 19-byte user id", () => {
-  const schema = compileSchema(schemaText);
-  const result = decodeState(schema, {
-    key: "000000000000000000005501000000000000000000000004D01730E501961300",
-    value: "00000000000000000000000000000000000000000000000000000000000000000000000000000000",
+describe("decode error handling", () => {
+  test("uses implicit raw fallback only in loose mode", () => {
+    const schema = compileSchema(schemaText);
+    const input = {
+      key: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      value: "ABCD",
+    };
+
+    expect(() => decodeState(schema, input)).toThrow(NoMatchingStateError);
+    const result = decodeState(schema, input, { mode: "loose" });
+    expect(result.state).toBe("__xhs_RawState");
+    expect(result.key).toEqual({ key: input.key });
+    expect(result.value).toEqual({ value: input.value });
   });
 
-  assert.equal(result.state, "UserCurrencySlot");
-  assert.deepEqual(result.key, {
-    currencySlot: 1,
-    user: "000000000000000000000004D01730E5019613",
-    userSlot: 0,
-  });
-});
-
-test("decodes u64 as bigint", () => {
-  const schema = compileSchema(schemaText);
-  const result = decodeState(schema, {
-    key: "5348000000000000000000000000000000000000000000000000000000000000",
-    value: "0100000000000000",
+  test("rejects non-32-byte keys", () => {
+    const schema = compileSchema(schemaText);
+    expect(() => decodeState(schema, { key: "00", value: "" })).toThrow(DecodeInputError);
   });
 
-  assert.equal(result.state, "SettingsH");
-  assert.deepEqual(result.value, { value: 1n });
-});
-
-test("uses implicit raw fallback only in loose mode", () => {
-  const schema = compileSchema(schemaText);
-  const input = {
-    key: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
-    value: "ABCD",
-  };
-
-  assert.throws(() => decodeState(schema, input), NoMatchingStateError);
-  const result = decodeState(schema, input, { mode: "loose" });
-  assert.equal(result.state, "__xhs_RawState");
-  assert.deepEqual(result.key, { key: input.key });
-  assert.deepEqual(result.value, { value: input.value });
-});
-
-test("rejects non-32-byte keys", () => {
-  const schema = compileSchema(schemaText);
-  assert.throws(() => decodeState(schema, { key: "00", value: "" }), DecodeInputError);
-});
-
-test("reports ambiguous matches", () => {
-  const schema = compileSchema(`
+  test("reports ambiguous matches", () => {
+    const schema = compileSchema(`
 StateKey AKey { Any(32) }
 StateValue AValue { Rest value }
 State A = AKey -> AValue
@@ -119,19 +120,16 @@ StateKey BKey { Any(32) }
 StateValue BValue { Rest value }
 State B = BKey -> BValue
 `);
-  assert.throws(
-    () =>
+    expect(() =>
       decodeState(schema, {
         key: "0000000000000000000000000000000000000000000000000000000000000000",
         value: "",
       }),
-    AmbiguousMatchError,
-  );
-});
+    ).toThrow(AmbiguousMatchError);
+  });
 
-test("validates builtin aliases, ASCII strings, and state key length", () => {
-  assert.throws(
-    () =>
+  test("validates builtin aliases, ASCII strings, and state key length", () => {
+    expect(() =>
       compileSchema(`
 type Account = Bytes(19)
 StateKey BadKey {
@@ -141,6 +139,6 @@ StateKey BadKey {
 StateValue BadValue { Rest value }
 State Bad = BadKey -> BadValue
 `),
-    SchemaValidationError,
-  );
+    ).toThrow(SchemaValidationError);
+  });
 });

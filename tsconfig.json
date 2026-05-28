@@ -9,6 +9,7 @@
     "declarationMap": true,
     "outDir": "dist",
     "rootDir": ".",
+    "types": ["vitest/globals"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true

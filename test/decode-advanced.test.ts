@@ -1,5 +1,3 @@
-import assert from "node:assert/strict";
-import test from "node:test";
 import {
   DecodeError,
   NoMatchingStateError,
@@ -10,9 +8,9 @@ import {
 } from "../src/index.js";
 import { tryDecodeStruct } from "../src/runtime/decode.js";
 
-
-test("chooses the highest-scoring matching State", () => {
-  const schema = compileSchema(`
+describe("decode scoring and output", () => {
+  test("chooses the highest-scoring matching State", () => {
+    const schema = compileSchema(`
 StateKey GenericKey { Any(32) }
 StateKey SpecificKey {
   String("AA")
@@ -23,19 +21,19 @@ State Generic = GenericKey -> Value
 State Specific = SpecificKey -> Value
 `);
 
-  const result = decodeState(schema, {
-    key: "4141000000000000000000000000000000000000000000000000000000000000",
-    value: "DEAD",
+    const result = decodeState(schema, {
+      key: "4141000000000000000000000000000000000000000000000000000000000000",
+      value: "DEAD",
+    });
+
+    expect(result.state).toBe("Specific");
+    expect(result.keySchema).toBe("SpecificKey");
+    expect(result.value).toEqual({ value: "DEAD" });
+    expect(result.match.score).toBeGreaterThan(0);
   });
 
-  assert.equal(result.state, "Specific");
-  assert.equal(result.keySchema, "SpecificKey");
-  assert.deepEqual(result.value, { value: "DEAD" });
-  assert.ok(result.match.score > 0);
-});
-
-test("uses State priority as a deterministic tie breaker", () => {
-  const schema = compileSchema(`
+  test("uses State priority as a deterministic tie breaker", () => {
+    const schema = compileSchema(`
 StateKey AKey { Any(32) }
 StateValue AValue { Rest value }
 State A = AKey -> AValue @priority(1)
@@ -44,17 +42,19 @@ StateValue BValue { Rest value }
 State B = BKey -> BValue @priority(2)
 `);
 
-  const result = decodeState(schema, {
-    key: "0000000000000000000000000000000000000000000000000000000000000000",
-    value: "",
-  });
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "",
+    });
 
-  assert.equal(result.state, "B");
-  assert.ok(result.match.reasons.includes("priority +2"));
+    expect(result.state).toBe("B");
+    expect(result.match.reasons).toContain("priority +2");
+  });
 });
 
-test("decodes variable-length bytes and rest fields in values", () => {
-  const schema = compileSchema(`
+describe("decode value handling", () => {
+  test("decodes variable-length bytes and rest fields in values", () => {
+    const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value {
   u8 length
@@ -64,44 +64,41 @@ StateValue Value {
 State Dynamic = Key -> Value
 `);
 
-  const result = decodeState(schema, {
-    key: "0000000000000000000000000000000000000000000000000000000000000000",
-    value: "03AABBCCDD",
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "03AABBCCDD",
+    });
+
+    expect(result.value).toEqual({
+      length: 3,
+      data: "AABBCC",
+      tail: "DD",
+    });
   });
 
-  assert.deepEqual(result.value, {
-    length: 3,
-    data: "AABBCC",
-    tail: "DD",
-  });
-});
-
-test("decodes batches with decodeStates", () => {
-  const schema = compileSchema(`
+  test("decodes batches with decodeStates", () => {
+    const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value { u8 value }
 State One = Key -> Value
 `);
 
-  const results = decodeStates(schema, [
-    {
-      key: "0000000000000000000000000000000000000000000000000000000000000000",
-      value: "01",
-    },
-    {
-      key: "0000000000000000000000000000000000000000000000000000000000000000",
-      value: "02",
-    },
-  ]);
+    const results = decodeStates(schema, [
+      {
+        key: "0000000000000000000000000000000000000000000000000000000000000000",
+        value: "01",
+      },
+      {
+        key: "0000000000000000000000000000000000000000000000000000000000000000",
+        value: "02",
+      },
+    ]);
 
-  assert.deepEqual(
-    results.map((result) => result.value),
-    [{ value: 1 }, { value: 2 }],
-  );
-});
+    expect(results.map((result) => result.value)).toEqual([{ value: 1 }, { value: 2 }]);
+  });
 
-test("returns State and field metadata in decoded output", () => {
-  const schema = compileSchema(`
+  test("returns State and field metadata in decoded output", () => {
+    const schema = compileSchema(`
 StateKey Key {
   Null(31)
   @name("Slot")
@@ -117,78 +114,94 @@ StateValue Value {
 State UserInfo = Key -> Value
 `);
 
-  const result = decodeState(schema, {
-    key: "0000000000000000000000000000000000000000000000000000000000000007",
-    value: "2A",
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000007",
+      value: "2A",
+    });
+
+    expect(result.metadata).toEqual({
+      name: "User Info",
+      description: "User profile data",
+    });
+    expect(result.fields).toEqual({
+      key: { slot: { name: "Slot" } },
+      value: { age: { name: "Age", description: "User age" } },
+    });
+    expect(result.key).toEqual({ slot: 7 });
+    expect(result.value).toEqual({ age: 42 });
   });
 
-  assert.deepEqual(result.metadata, {
-    name: "User Info",
-    description: "User profile data",
-  });
-  assert.deepEqual(result.fields, {
-    key: { slot: { name: "Slot" } },
-    value: { age: { name: "Age", description: "User age" } },
-  });
-  assert.deepEqual(result.key, { slot: 7 });
-  assert.deepEqual(result.value, { age: 42 });
-});
+  test("returns default metadata names when attributes are omitted", () => {
+    const schema = compileSchema(`
+StateKey Key { Null(31) u8 slot }
+StateValue Value { u8 age }
+State UserInfo = Key -> Value
+`);
 
-test("returns uppercase raw input in decoded output", () => {
-  const schema = compileSchema(`
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000007",
+      value: "2A",
+    });
+
+    expect(result.metadata).toEqual({ name: "UserInfo" });
+    expect(result.fields).toEqual({
+      key: { slot: { name: "slot" } },
+      value: { age: { name: "age" } },
+    });
+  });
+
+  test("returns uppercase raw input in decoded output", () => {
+    const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value { Rest value }
 State S = Key -> Value
 `);
 
-  const result = decodeState(schema, {
-    key: "0000000000000000000000000000000000000000000000000000000000000000",
-    value: "abcd",
-  });
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "abcd",
+    });
 
-  assert.deepEqual(result.raw, {
-    key: "0000000000000000000000000000000000000000000000000000000000000000",
-    value: "ABCD",
+    expect(result.raw).toEqual({
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "ABCD",
+    });
   });
 });
 
-test("disqualifies fixed-length value candidates when trailing bytes remain", () => {
-  const schema = compileSchema(`
+describe("decode errors", () => {
+  test("disqualifies fixed-length value candidates when trailing bytes remain", () => {
+    const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value { u16be value }
 State S = Key -> Value
 `);
 
-  assert.throws(
-    () =>
+    expect(() =>
       decodeState(schema, {
         key: "0000000000000000000000000000000000000000000000000000000000000000",
         value: "000102",
       }),
-    NoMatchingStateError,
-  );
-});
+    ).toThrow(NoMatchingStateError);
+  });
 
-test("throws DecodeError when a field exceeds the available input", () => {
-  const schema = compileSchema(`
+  test("throws DecodeError when a field exceeds the available input", () => {
+    const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value { u16be value }
 State S = Key -> Value
 `);
 
-  assert.throws(
-    () =>
+    expect(() =>
       decodeState(schema, {
         key: "0000000000000000000000000000000000000000000000000000000000000000",
         value: "00",
       }),
-    DecodeError,
-  );
-});
+    ).toThrow(DecodeError);
+  });
 
-test("throws DecodeError when Bytes($field) does not reference an integer length", () => {
-  assert.throws(
-    () =>
+  test("throws DecodeError when Bytes($field) does not reference an integer length", () => {
+    expect(() =>
       tryDecodeStruct(
         {
           kind: "StateValue",
@@ -214,10 +227,12 @@ test("throws DecodeError when Bytes($field) does not reference an integer length
         Uint8Array.from([1, 2]),
         "value",
       ),
-    DecodeError,
-  );
+    ).toThrow(DecodeError);
+  });
 });
 
-test("serializes bigint values with jsonReplacer", () => {
-  assert.equal(JSON.stringify({ value: 1n }, jsonReplacer), '{"value":"1"}');
+describe("json serialization", () => {
+  test("serializes bigint values with jsonReplacer", () => {
+    expect(JSON.stringify({ value: 1n }, jsonReplacer)).toBe('{"value":"1"}');
+  });
 });

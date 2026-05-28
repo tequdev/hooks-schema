@@ -1,9 +1,8 @@
-import assert from "node:assert/strict";
-import test from "node:test";
 import { SchemaParseError, parseSchema } from "../src/index.js";
 
-test("parses field attributes and comments", () => {
-  const ast = parseSchema(`
+describe("parser", () => {
+  test("parses field attributes and comments", () => {
+    const ast = parseSchema(`
 // line comment
 StateKey ExampleKey {
   Null(31)
@@ -16,11 +15,11 @@ StateValue ExampleValue { Rest value }
 State Example = ExampleKey -> ExampleValue @priority(-1)
 `);
 
-  assert.equal(ast.definitions.length, 3);
-});
+    expect(ast.definitions).toHaveLength(3);
+  });
 
-test("parses inline State key and value schemas", () => {
-  const ast = parseSchema(`
+  test("parses inline State key and value schemas", () => {
+    const ast = parseSchema(`
 type UserId19 = Bytes(19)
 State UserCurrencySlot = {
   Null(10)
@@ -34,17 +33,17 @@ State UserCurrencySlot = {
 } @priority(100)
 `);
 
-  assert.equal(ast.definitions.length, 2);
-  const state = ast.definitions[1];
-  assert.equal(state?.kind, "State");
-  if (state?.kind !== "State") return;
-  assert.equal(state.keySchema.kind, "inline");
-  assert.equal(state.valueSchema.kind, "inline");
-  assert.equal(state.attributes[0]?.name, "priority");
-});
+    expect(ast.definitions).toHaveLength(2);
+    const state = ast.definitions[1];
+    expect(state?.kind).toBe("State");
+    if (state?.kind !== "State") return;
+    expect(state.keySchema.kind).toBe("inline");
+    expect(state.valueSchema.kind).toBe("inline");
+    expect(state.attributes[0]?.name).toBe("priority");
+  });
 
-test("parses prefix attributes on fields and States", () => {
-  const ast = parseSchema(`
+  test("parses prefix attributes on fields and States", () => {
+    const ast = parseSchema(`
 StateKey ExampleKey {
   Null(31)
   @name("Slot")
@@ -57,20 +56,37 @@ StateValue ExampleValue { Rest value }
 State Example = ExampleKey -> ExampleValue
 `);
 
-  assert.equal(ast.definitions.length, 3);
-  const key = ast.definitions[0];
-  assert.equal(key?.kind, "StateKey");
-  if (key?.kind !== "StateKey") return;
-  assert.equal(key.fields[1]?.attributes[0]?.name, "name");
-  assert.equal(key.fields[1]?.attributes[1]?.name, "description");
+    expect(ast.definitions).toHaveLength(3);
+    const key = ast.definitions[0];
+    expect(key?.kind).toBe("StateKey");
+    if (key?.kind !== "StateKey") return;
+    expect(key.fields[1]?.attributes[0]?.name).toBe("name");
+    expect(key.fields[1]?.attributes[1]?.name).toBe("description");
 
-  const state = ast.definitions[2];
-  assert.equal(state?.kind, "State");
-  if (state?.kind !== "State") return;
-  assert.equal(state.attributes[0]?.name, "priority");
-  assert.equal(state.attributes[1]?.name, "name");
-});
+    const state = ast.definitions[2];
+    expect(state?.kind).toBe("State");
+    if (state?.kind !== "State") return;
+    expect(state.attributes[0]?.name).toBe("priority");
+    expect(state.attributes[1]?.name).toBe("name");
+  });
 
-test("collects parse diagnostics", () => {
-  assert.throws(() => parseSchema("StateKey {"), SchemaParseError);
+  test("keeps newline prefix attributes separate from previous fields", () => {
+    const ast = parseSchema(`
+StateValue ExampleValue {
+  u8 first
+  @name("Second")
+  u8 second
+}
+`);
+
+    const value = ast.definitions[0];
+    expect(value?.kind).toBe("StateValue");
+    if (value?.kind !== "StateValue") return;
+    expect(value.fields[0]?.attributes).toEqual([]);
+    expect(value.fields[1]?.attributes[0]?.name).toBe("name");
+  });
+
+  test("collects parse diagnostics", () => {
+    expect(() => parseSchema("StateKey {")).toThrow(SchemaParseError);
+  });
 });
