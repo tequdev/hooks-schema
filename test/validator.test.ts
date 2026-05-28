@@ -62,6 +62,20 @@ StateKey Same { Null(32) }
     ]);
   });
 
+  test.each(["Account", "Currency", "Issuer"])(
+    "rejects aliases that shadow builtin type %s",
+    (typeName) => {
+      const diagnostics = diagnosticsFor(`
+type ${typeName} = Bytes(20)
+StateKey Key { Null(32) }
+StateValue Value { Rest value }
+State S = Key -> Value
+`);
+
+      assertIncludesDiagnosticCodes(diagnostics, ["schema.builtinAlias"]);
+    },
+  );
+
   test("validates aliases and length arguments", () => {
     const diagnostics = diagnosticsFor(`
 type BadTarget = u8

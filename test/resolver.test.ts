@@ -1,4 +1,5 @@
 import {
+  BUILTIN_TYPES,
   SchemaValidationError,
   astToIr,
   compileSchema,
@@ -96,6 +97,75 @@ State Ref = Key -> Value
       priority: 0,
       metadata: { name: "Ref" },
     });
+  });
+
+  test("resolves builtin byte types in schema IR", () => {
+    const ir = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Value {
+  Account account
+  Currency currency
+  Issuer issuer
+}
+State Builtins = Key -> Value
+`);
+
+    expect(ir.builtins).toEqual(BUILTIN_TYPES);
+    expect(ir.stateValues.Value?.fixedLength).toBe(60);
+    expect(ir.stateValues.Value?.fields).toEqual([
+      {
+        kind: "field",
+        name: "account",
+        valueType: { kind: "bytes", length: 20 },
+        sourceTypeName: "Account",
+        metadata: { name: "account" },
+      },
+      {
+        kind: "field",
+        name: "currency",
+        valueType: { kind: "bytes", length: 20 },
+        sourceTypeName: "Currency",
+        metadata: { name: "currency" },
+      },
+      {
+        kind: "field",
+        name: "issuer",
+        valueType: { kind: "bytes", length: 20 },
+        sourceTypeName: "Issuer",
+        metadata: { name: "issuer" },
+      },
+    ]);
+  });
+
+  test("resolves all numeric builtin types in schema IR", () => {
+    const ir = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Value {
+  u8 a
+  u16le b
+  u16be c
+  u32le d
+  u32be e
+  u64le f
+  u64be g
+}
+State Numerics = Key -> Value
+`);
+
+    expect(ir.stateValues.Value?.fixedLength).toBe(29);
+    expect(
+      ir.stateValues.Value?.fields.map((field) =>
+        field.kind === "field" ? field.valueType : null,
+      ),
+    ).toEqual([
+      { kind: "u8", length: 1 },
+      { kind: "u16", endian: "le", length: 2 },
+      { kind: "u16", endian: "be", length: 2 },
+      { kind: "u32", endian: "le", length: 4 },
+      { kind: "u32", endian: "be", length: 4 },
+      { kind: "u64", endian: "le", length: 8 },
+      { kind: "u64", endian: "be", length: 8 },
+    ]);
   });
 
   test("compiles State and field metadata to IR", () => {

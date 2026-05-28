@@ -89,6 +89,65 @@ describe("decode schema samples", () => {
     expect(result.state).toBe("SettingsH");
     expect(result.value).toEqual({ value: 1n });
   });
+
+  test("decodes builtin byte types", () => {
+    const schema = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Value {
+  Account account
+  Currency currency
+  Issuer issuer
+}
+State Builtins = Key -> Value
+`);
+    const account = "1111111111111111111111111111111111111111";
+    const currency = "2222222222222222222222222222222222222222";
+    const issuer = "3333333333333333333333333333333333333333";
+
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: `${account}${currency}${issuer}`,
+    });
+
+    expect(result.state).toBe("Builtins");
+    expect(result.value).toEqual({
+      account: account.toUpperCase(),
+      currency: currency.toUpperCase(),
+      issuer: issuer.toUpperCase(),
+    });
+  });
+
+  test("decodes all numeric builtin types through schemas", () => {
+    const schema = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Value {
+  u8 a
+  u16le b
+  u16be c
+  u32le d
+  u32be e
+  u64le f
+  u64be g
+}
+State Numerics = Key -> Value
+`);
+
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "01030204050A0908070B0C0D0E0C0D0E0F1011121A1A1B1C1D1E1F2021",
+    });
+
+    expect(result.state).toBe("Numerics");
+    expect(result.value).toEqual({
+      a: 1,
+      b: 0x0203,
+      c: 0x0405,
+      d: 0x0708090a,
+      e: 0x0b0c0d0e,
+      f: 0x1a1211100f0e0d0cn,
+      g: 0x1a1b1c1d1e1f2021n,
+    });
+  });
 });
 
 describe("decode error handling", () => {
