@@ -43,6 +43,34 @@ State UserCurrencySlot = {
   assert.equal(state.attributes[0]?.name, "priority");
 });
 
+test("parses prefix attributes on fields and States", () => {
+  const ast = parseSchema(`
+StateKey ExampleKey {
+  Null(31)
+  @name("Slot")
+  @description("Key slot")
+  u8 slot
+}
+StateValue ExampleValue { Rest value }
+@priority(100)
+@name("Example")
+State Example = ExampleKey -> ExampleValue
+`);
+
+  assert.equal(ast.definitions.length, 3);
+  const key = ast.definitions[0];
+  assert.equal(key?.kind, "StateKey");
+  if (key?.kind !== "StateKey") return;
+  assert.equal(key.fields[1]?.attributes[0]?.name, "name");
+  assert.equal(key.fields[1]?.attributes[1]?.name, "description");
+
+  const state = ast.definitions[2];
+  assert.equal(state?.kind, "State");
+  if (state?.kind !== "State") return;
+  assert.equal(state.attributes[0]?.name, "priority");
+  assert.equal(state.attributes[1]?.name, "name");
+});
+
 test("collects parse diagnostics", () => {
   assert.throws(() => parseSchema("StateKey {"), SchemaParseError);
 });

@@ -35,6 +35,7 @@ State Inline = {
       keySchema: "__xhs_InlineKey",
       valueSchema: "__xhs_InlineValue",
       priority: -5,
+      metadata: { name: "Inline" },
     },
   ]);
 
@@ -54,24 +55,28 @@ State Inline = {
       name: "length",
       valueType: { kind: "u8", length: 1 },
       sourceTypeName: "u8",
+      metadata: { name: "length" },
     },
     {
       kind: "field",
       name: "data",
       valueType: { kind: "bytesRef", field: "length" },
       sourceTypeName: "Bytes",
+      metadata: { name: "data" },
     },
     {
       kind: "field",
       name: "user",
       valueType: { kind: "bytes", length: 19 },
       sourceTypeName: "UserId",
+      metadata: { name: "user" },
     },
     {
       kind: "field",
       name: "tail",
       valueType: { kind: "rest" },
       sourceTypeName: "Rest",
+      metadata: { name: "tail" },
     },
   ]);
 });
@@ -90,6 +95,45 @@ State Ref = Key -> Value
     keySchema: "Key",
     valueSchema: "Value",
     priority: 0,
+    metadata: { name: "Ref" },
+  });
+});
+
+test("compiles State and field metadata to IR", () => {
+  const ir = compileSchema(`
+StateKey Key {
+  Null(31)
+  @name("Slot") @description("Key slot")
+  u8 slot
+}
+StateValue Value {
+  @name("Age")
+  @description("User age")
+  u8 age
+}
+@priority(100)
+@name("User Info")
+@description("User profile data")
+State UserInfo = Key -> Value
+`);
+
+  assert.deepEqual(ir.states[0]?.metadata, {
+    name: "User Info",
+    description: "User profile data",
+  });
+  assert.deepEqual(ir.stateKeys.Key?.fields[1], {
+    kind: "field",
+    name: "slot",
+    valueType: { kind: "u8", length: 1 },
+    sourceTypeName: "u8",
+    metadata: { name: "Slot", description: "Key slot" },
+  });
+  assert.deepEqual(ir.stateValues.Value?.fields[0], {
+    kind: "field",
+    name: "age",
+    valueType: { kind: "u8", length: 1 },
+    sourceTypeName: "u8",
+    metadata: { name: "Age", description: "User age" },
   });
 });
 

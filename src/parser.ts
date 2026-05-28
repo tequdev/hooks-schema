@@ -45,10 +45,12 @@ class Parser {
   }
 
   private parseDefinition(): DefinitionAst | undefined {
-    if (this.matchIdentifier("type")) return this.parseTypeAlias(this.previous());
-    if (this.matchIdentifier("StateKey")) return this.parseStateKey(this.previous());
-    if (this.matchIdentifier("StateValue")) return this.parseStateValue(this.previous());
-    if (this.matchIdentifier("State")) return this.parseState(this.previous());
+    const attributes = this.parseAttributes();
+    if (this.matchIdentifier("type")) return this.parseTypeAlias(this.previous(), attributes);
+    if (this.matchIdentifier("StateKey")) return this.parseStateKey(this.previous(), attributes);
+    if (this.matchIdentifier("StateValue"))
+      return this.parseStateValue(this.previous(), attributes);
+    if (this.matchIdentifier("State")) return this.parseState(this.previous(), attributes);
 
     const token = this.peek();
     this.error(
@@ -59,7 +61,10 @@ class Parser {
     return undefined;
   }
 
-  private parseTypeAlias(start: Token): TypeAliasAst | undefined {
+  private parseTypeAlias(
+    start: Token,
+    _prefixAttributes: AttributeAst[] = [],
+  ): TypeAliasAst | undefined {
     const name = this.consume("identifier", "expected type alias name");
     this.consume("=", "expected = after type alias name");
     const target = this.parseTypeExpr();
@@ -67,7 +72,10 @@ class Parser {
     return { kind: "TypeAlias", name: name.value, target, span: this.join(start, target.span) };
   }
 
-  private parseStateKey(start: Token): StateKeyAst | undefined {
+  private parseStateKey(
+    start: Token,
+    _prefixAttributes: AttributeAst[] = [],
+  ): StateKeyAst | undefined {
     const name = this.consume("identifier", "expected StateKey name");
     const block = this.parseBlock();
     if (!name || !block) return undefined;
@@ -79,7 +87,10 @@ class Parser {
     };
   }
 
-  private parseStateValue(start: Token): StateValueAst | undefined {
+  private parseStateValue(
+    start: Token,
+    _prefixAttributes: AttributeAst[] = [],
+  ): StateValueAst | undefined {
     const name = this.consume("identifier", "expected StateValue name");
     const block = this.parseBlock();
     if (!name || !block) return undefined;
@@ -91,14 +102,14 @@ class Parser {
     };
   }
 
-  private parseState(start: Token): StateAst | undefined {
+  private parseState(start: Token, prefixAttributes: AttributeAst[] = []): StateAst | undefined {
     const name = this.consume("identifier", "expected State name");
     this.consume("=", "expected = after State name");
     const keySchema = this.parseStateSchema("StateKey");
     this.consume("->", "expected -> between key and value schemas");
     const valueSchema = this.parseStateSchema("StateValue");
-    const attributes = this.parseAttributes();
     if (!name || !keySchema || !valueSchema) return undefined;
+    const attributes = [...prefixAttributes, ...this.parseAttributes(this.previous().span.line)];
     const endSpan = attributes.at(-1)?.span ?? valueSchema.span;
     return {
       kind: "State",
@@ -126,7 +137,8 @@ class Parser {
     const open = this.consume("{", "expected {");
     const fields: FieldAst[] = [];
     while (!this.check("}") && !this.check("eof")) {
-      const field = this.parseField();
+      const attributes = this.parseAttributes();
+      const field = this.parseField(attributes);
       if (field) {
         fields.push(field);
       } else {
@@ -138,7 +150,7 @@ class Parser {
     return { fields, span: this.join(open, close.span) };
   }
 
-  private parseField(): FieldAst | undefined {
+  private parseField(prefixAttributes: AttributeAst[] = []): FieldAst | undefined {
     const type = this.parseTypeExpr();
     if (!type) return undefined;
 
@@ -152,7 +164,7 @@ class Parser {
     ) {
       name = this.advance().value;
     }
-    const attributes = this.parseAttributes();
+    const attributes = [...prefixAttributes, ...this.parseAttributes(this.previous().span.line)];
     const endSpan = attributes.at(-1)?.span ?? type.span;
     return { kind: "Field", type, name, attributes, span: this.join(type.span, endSpan) };
   }
@@ -193,9 +205,10 @@ class Parser {
     return undefined;
   }
 
-  private parseAttributes(): AttributeAst[] {
+  private parseAttributes(sameLine?: number): AttributeAst[] {
     const attributes: AttributeAst[] = [];
-    while (this.match("@")) {
+    while (this.check("@") && (sameLine === undefined || this.peek().span.line === sameLine)) {
+      this.advance();
       const at = this.previous();
       const name = this.consume("identifier", "expected attribute name");
       const args: TypeArgAst[] = [];

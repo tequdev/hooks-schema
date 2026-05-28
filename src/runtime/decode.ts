@@ -4,7 +4,15 @@ import {
   DecodeInputError,
   NoMatchingStateError,
 } from "../errors.js";
-import type { FieldIr, NamedFieldIr, SchemaIr, StateIr, StructIr, ValueTypeIr } from "../ir.js";
+import type {
+  FieldIr,
+  MetadataIr,
+  NamedFieldIr,
+  SchemaIr,
+  StateIr,
+  StructIr,
+  ValueTypeIr,
+} from "../ir.js";
 import { bytesToHex, hexToBytes } from "./bytes.js";
 import { matchPattern } from "./match.js";
 import { decodeNumeric } from "./numeric.js";
@@ -20,10 +28,15 @@ export type DecodeOptions = {
 
 export type DecodedState = {
   state: string;
+  metadata: MetadataIr;
   keySchema: string;
   valueSchema: string;
   key: Record<string, unknown>;
   value: Record<string, unknown>;
+  fields: {
+    key: Record<string, MetadataIr>;
+    value: Record<string, MetadataIr>;
+  };
   raw: {
     key: string;
     value: string;
@@ -38,6 +51,10 @@ type Candidate = {
   state: StateIr;
   key: Record<string, unknown>;
   value: Record<string, unknown>;
+  fields: {
+    key: Record<string, MetadataIr>;
+    value: Record<string, MetadataIr>;
+  };
   score: number;
   reasons: string[];
 };
@@ -88,6 +105,10 @@ export function decodeState(
       state,
       key: keyResult.fields,
       value: valueResult.fields,
+      fields: {
+        key: collectFieldMetadata(keySchema),
+        value: collectFieldMetadata(valueSchema),
+      },
       score,
       reasons,
     });
@@ -229,10 +250,15 @@ function decodeImplicitRawFallback(key: Uint8Array, value: Uint8Array): Candidat
       keySchema: "__xhs_RawKey",
       valueSchema: "__xhs_RawValue",
       priority: -1_000_000,
+      metadata: { name: "__xhs_RawState" },
       implicit: true,
     },
     key: { key: bytesToHex(key) },
     value: { value: bytesToHex(value) },
+    fields: {
+      key: { key: { name: "key" } },
+      value: { value: { name: "value" } },
+    },
     score: -1_000_000,
     reasons: ["implicit Raw fallback", "priority -1000000"],
   };
@@ -241,10 +267,12 @@ function decodeImplicitRawFallback(key: Uint8Array, value: Uint8Array): Candidat
 function toDecodedState(candidate: Candidate, input: StateInput): DecodedState {
   return {
     state: candidate.state.name,
+    metadata: candidate.state.metadata,
     keySchema: candidate.state.keySchema,
     valueSchema: candidate.state.valueSchema,
     key: candidate.key,
     value: candidate.value,
+    fields: candidate.fields,
     raw: {
       key: input.key.toUpperCase(),
       value: input.value.toUpperCase(),
@@ -258,4 +286,12 @@ function toDecodedState(candidate: Candidate, input: StateInput): DecodedState {
 
 function formatSigned(value: number): string {
   return value >= 0 ? `+${value}` : `${value}`;
+}
+
+function collectFieldMetadata(struct: StructIr): Record<string, MetadataIr> {
+  const fields: Record<string, MetadataIr> = {};
+  for (const field of struct.fields) {
+    if (field.kind === "field") fields[field.name] = field.metadata;
+  }
+  return fields;
 }

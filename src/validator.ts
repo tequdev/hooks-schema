@@ -119,15 +119,7 @@ function validateStruct(
 
   for (let index = 0; index < struct.fields.length; index += 1) {
     const field = struct.fields[index];
-    for (const attribute of field.attributes) {
-      diagnostics.push(
-        diagnostic(
-          "schema.unsupportedFieldAttribute",
-          `unsupported field attribute @${attribute.name}`,
-          attribute.span,
-        ),
-      );
-    }
+    validateMetadataAttributes(field.attributes, "field", diagnostics);
 
     if (field.name) {
       if (names.has(field.name)) {
@@ -267,27 +259,39 @@ function validateState(state: StateAst, context: Context, diagnostics: Diagnosti
   }
 
   let priorityCount = 0;
+  let nameCount = 0;
+  let descriptionCount = 0;
   for (const attribute of state.attributes) {
-    if (attribute.name !== "priority") {
-      diagnostics.push(
-        diagnostic(
-          "schema.unsupportedStateAttribute",
-          `unsupported State attribute @${attribute.name}`,
-          attribute.span,
-        ),
-      );
+    if (attribute.name === "priority") {
+      priorityCount += 1;
+      if (attribute.args.length !== 1 || attribute.args[0]?.kind !== "number") {
+        diagnostics.push(
+          diagnostic(
+            "schema.invalidPriority",
+            "@priority requires one numeric argument",
+            attribute.span,
+          ),
+        );
+      }
       continue;
     }
-    priorityCount += 1;
-    if (attribute.args.length !== 1 || attribute.args[0]?.kind !== "number") {
-      diagnostics.push(
-        diagnostic(
-          "schema.invalidPriority",
-          "@priority requires one numeric argument",
-          attribute.span,
-        ),
-      );
+    if (attribute.name === "name") {
+      nameCount += 1;
+      validateStringAttribute(attribute, "state", diagnostics);
+      continue;
     }
+    if (attribute.name === "description") {
+      descriptionCount += 1;
+      validateStringAttribute(attribute, "state", diagnostics);
+      continue;
+    }
+    diagnostics.push(
+      diagnostic(
+        "schema.unsupportedStateAttribute",
+        `unsupported State attribute @${attribute.name}`,
+        attribute.span,
+      ),
+    );
   }
   if (priorityCount > 1) {
     diagnostics.push(
@@ -295,6 +299,98 @@ function validateState(state: StateAst, context: Context, diagnostics: Diagnosti
         "schema.duplicatePriority",
         `State ${state.name} has multiple @priority attributes`,
         state.span,
+      ),
+    );
+  }
+  if (nameCount > 1) {
+    diagnostics.push(
+      diagnostic(
+        "schema.duplicateStateName",
+        `State ${state.name} has multiple @name attributes`,
+        state.span,
+      ),
+    );
+  }
+  if (descriptionCount > 1) {
+    diagnostics.push(
+      diagnostic(
+        "schema.duplicateStateDescription",
+        `State ${state.name} has multiple @description attributes`,
+        state.span,
+      ),
+    );
+  }
+}
+
+function validateMetadataAttributes(
+  attributes: AttributeAst[],
+  target: "field" | "state",
+  diagnostics: Diagnostic[],
+): void {
+  let nameCount = 0;
+  let descriptionCount = 0;
+  for (const attribute of attributes) {
+    if (attribute.name === "name") {
+      nameCount += 1;
+      validateStringAttribute(attribute, target, diagnostics);
+      continue;
+    }
+    if (attribute.name === "description") {
+      descriptionCount += 1;
+      validateStringAttribute(attribute, target, diagnostics);
+      continue;
+    }
+    if (target === "field") {
+      diagnostics.push(
+        diagnostic(
+          "schema.unsupportedFieldAttribute",
+          `unsupported field attribute @${attribute.name}`,
+          attribute.span,
+        ),
+      );
+      continue;
+    }
+    diagnostics.push(
+      diagnostic(
+        "schema.unsupportedStateAttribute",
+        `unsupported State attribute @${attribute.name}`,
+        attribute.span,
+      ),
+    );
+  }
+  if (nameCount > 1) {
+    diagnostics.push(
+      diagnostic(
+        target === "field" ? "schema.duplicateFieldName" : "schema.duplicateStateName",
+        `${target} has multiple @name attributes`,
+        attributes.find((attribute) => attribute.name === "name")?.span,
+      ),
+    );
+  }
+  if (descriptionCount > 1) {
+    diagnostics.push(
+      diagnostic(
+        target === "field"
+          ? "schema.duplicateFieldDescription"
+          : "schema.duplicateStateDescription",
+        `${target} has multiple @description attributes`,
+        attributes.find((attribute) => attribute.name === "description")?.span,
+      ),
+    );
+  }
+}
+
+function validateStringAttribute(
+  attribute: AttributeAst,
+  target: "field" | "state",
+  diagnostics: Diagnostic[],
+): void {
+  if (attribute.args.length !== 1 || attribute.args[0]?.kind !== "string") {
+    diagnostics.push(
+      diagnostic(
+        target === "field" ? "schema.invalidFieldMetadata" : "schema.invalidStateMetadata",
+        `@${attribute.name} requires one string argument`,
+        attribute.span,
       ),
     );
   }

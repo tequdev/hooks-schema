@@ -27,6 +27,27 @@ State Good = GoodKey -> GoodValue @priority(7)
   assert.deepEqual(diagnostics, []);
 });
 
+test("accepts State and field metadata attributes", () => {
+  const diagnostics = diagnosticsFor(`
+StateKey Key {
+  Null(31)
+  @name("Slot")
+  @description("Key slot")
+  u8 slot
+}
+StateValue Value {
+  @name("Age") @description("User age")
+  u8 age
+}
+@priority(7)
+@name("User Info")
+@description("User profile data")
+State Good = Key -> Value
+`);
+
+  assert.deepEqual(diagnostics, []);
+});
+
 test("reports duplicate, reserved, and conflicting definitions", () => {
   const diagnostics = diagnosticsFor(`
 type Account = Bytes(20)
@@ -109,6 +130,8 @@ test("validates state references and attributes", () => {
 StateKey GoodKey { Null(32) }
 StateValue GoodValue { Rest value }
 State Bad = MissingKey -> MissingValue @other @priority("high") @priority(1)
+@name(1)
+State BadMetadata = GoodKey -> GoodValue
 State InlineBad = {
   Null(31)
   Rest rest
@@ -123,6 +146,7 @@ State InlineBad = {
     "schema.unsupportedStateAttribute",
     "schema.invalidPriority",
     "schema.duplicatePriority",
+    "schema.invalidStateMetadata",
     "schema.stateKeyRest",
     "schema.stateKeyLength",
     "schema.stateKeyVariable",

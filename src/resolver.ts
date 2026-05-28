@@ -1,7 +1,16 @@
-import type { FieldAst, SchemaAst, StateAst, TypeExprAst } from "./ast.js";
+import type { AttributeAst, FieldAst, SchemaAst, StateAst, TypeExprAst } from "./ast.js";
 import { BUILTIN_TYPES, NUMERIC_TYPES, RESERVED_PREFIX } from "./builtins.js";
 import { SchemaValidationError } from "./errors.js";
-import type { FieldIr, PatternIr, SchemaIr, StateIr, StructIr, TypeIr, ValueTypeIr } from "./ir.js";
+import type {
+  FieldIr,
+  MetadataIr,
+  PatternIr,
+  SchemaIr,
+  StateIr,
+  StructIr,
+  TypeIr,
+  ValueTypeIr,
+} from "./ir.js";
 import { asciiToBytesHex } from "./runtime/bytes.js";
 import { collectDefinitions, validateSchema } from "./validator.js";
 
@@ -78,6 +87,7 @@ function fieldToIr(field: FieldAst, types: Record<string, TypeIr>): FieldIr {
     name: field.name,
     valueType: valueTypeToIr(field.type, types),
     sourceTypeName: field.type.name,
+    metadata: metadataToIr(field.name, field.attributes),
   };
 }
 
@@ -117,6 +127,16 @@ function stateToIr(state: StateAst): StateIr {
     valueSchema:
       state.valueSchema.kind === "ref" ? state.valueSchema.name : inlineStateValueName(state.name),
     priority: priority?.kind === "number" ? priority.value : 0,
+    metadata: metadataToIr(state.name, state.attributes),
+  };
+}
+
+function metadataToIr(defaultName: string, attributes: AttributeAst[]): MetadataIr {
+  const displayName = attributes.find((attribute) => attribute.name === "name")?.args[0];
+  const description = attributes.find((attribute) => attribute.name === "description")?.args[0];
+  return {
+    name: displayName?.kind === "string" ? displayName.value : defaultName,
+    ...(description?.kind === "string" ? { description: description.value } : {}),
   };
 }
 

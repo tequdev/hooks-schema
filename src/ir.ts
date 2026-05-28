@@ -9,6 +9,11 @@ export type SchemaIr = {
 
 export type TypeIr = { kind: "bytes"; length: number };
 
+export type MetadataIr = {
+  name: string;
+  description?: string;
+};
+
 export type StructIr = {
   kind: "StateKey" | "StateValue";
   name: string;
@@ -29,6 +34,7 @@ export type NamedFieldIr = {
   name: string;
   valueType: ValueTypeIr;
   sourceTypeName?: string;
+  metadata: MetadataIr;
 };
 
 export type PatternIr =
@@ -51,5 +57,6 @@ export type StateIr = {
   keySchema: string;
   valueSchema: string;
   priority: number;
+  metadata: MetadataIr;
   implicit?: boolean;
 };

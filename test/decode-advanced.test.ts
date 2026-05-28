@@ -10,6 +10,7 @@ import {
 } from "../src/index.js";
 import { tryDecodeStruct } from "../src/runtime/decode.js";
 
+
 test("chooses the highest-scoring matching State", () => {
   const schema = compileSchema(`
 StateKey GenericKey { Any(32) }
@@ -99,6 +100,40 @@ State One = Key -> Value
   );
 });
 
+test("returns State and field metadata in decoded output", () => {
+  const schema = compileSchema(`
+StateKey Key {
+  Null(31)
+  @name("Slot")
+  u8 slot
+}
+StateValue Value {
+  @name("Age")
+  @description("User age")
+  u8 age
+}
+@name("User Info")
+@description("User profile data")
+State UserInfo = Key -> Value
+`);
+
+  const result = decodeState(schema, {
+    key: "0000000000000000000000000000000000000000000000000000000000000007",
+    value: "2A",
+  });
+
+  assert.deepEqual(result.metadata, {
+    name: "User Info",
+    description: "User profile data",
+  });
+  assert.deepEqual(result.fields, {
+    key: { slot: { name: "Slot" } },
+    value: { age: { name: "Age", description: "User age" } },
+  });
+  assert.deepEqual(result.key, { slot: 7 });
+  assert.deepEqual(result.value, { age: 42 });
+});
+
 test("returns uppercase raw input in decoded output", () => {
   const schema = compileSchema(`
 StateKey Key { Null(32) }
@@ -165,12 +200,14 @@ test("throws DecodeError when Bytes($field) does not reference an integer length
               name: "length",
               valueType: { kind: "bytes", length: 1 },
               sourceTypeName: "Bytes",
+              metadata: { name: "length" },
             },
             {
               kind: "field",
               name: "data",
               valueType: { kind: "bytesRef", field: "length" },
               sourceTypeName: "Bytes",
+              metadata: { name: "data" },
             },
           ],
         },
