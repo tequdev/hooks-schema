@@ -1,0 +1,162 @@
+type XFL = Bytes(8)
+type Hash256 = Bytes(32)
+type HookHash28 = Bytes(28)
+
+@name("Current member count")
+State CurrentMemberCount = {
+  Null(30)
+  String("MC")
+} -> {
+  @name("Count")
+  u8 count
+}
+
+@name("Current reward rate")
+State CurrentRewardRate = {
+  Null(30)
+  String("RR")
+} -> {
+  @name("Value")
+  XFL value
+}
+
+@name("Current reward delay")
+State CurrentRewardDelay = {
+  Null(30)
+  String("RD")
+} -> {
+  @name("Value")
+  XFL value
+}
+
+@name("Seat Place")
+State SeatPlace = {
+  Null(31)
+  @name("SeatID")
+  u8 seatId
+} -> {
+  @name("Account")
+  Account account
+}
+
+@name("Account Place")
+State AccountPlace = {
+  Null(12)
+  @name("Account")
+  Account account
+} -> {
+  @name("SeatID")
+  u8 seatId
+}
+
+@name("Vote Hook")
+State VoteHook = {
+  String("VH")
+  @name("Slot")
+  u8 slot
+  @name("Layer")
+  u8 layer
+  Null(8)
+  @name("Account")
+  Account account
+} -> {
+  @name("HookHash")
+  Hash256 hookHash
+}
+
+@name("Vote Reward Rate")
+State VoteRewardRate = {
+  String("VRR")
+  @name("Layer")
+  u8 layer
+  Null(8)
+  @name("Account")
+  Account account
+} -> {
+  @name("Value")
+  XFL value
+}
+
+@name("Vote Reward Delay")
+State VoteRewardDelay = {
+  String("VRD")
+  @name("Layer")
+  u8 layer
+  Null(8)
+  @name("Account")
+  Account account
+} -> {
+  @name("Value")
+  XFL value
+}
+
+@name("Vote Seat")
+State VoteSeat = {
+  String("VS")
+  @name("SeatID")
+  u8 seatId
+  @name("Layer")
+  u8 layer
+  Null(8)
+  @name("Account")
+  Account account
+} -> {
+  @name("Account")
+  Account account
+}
+
+@name("Count Vote Hook")
+State CountVoteHook = {
+  String("CH")
+  @name("Slot")
+  u8 slot
+  @name("Layer")
+  u8 layer
+  @name("HookHash28")
+  @description("Front 28 bytes of hook hash for counting")
+  HookHash28 hookHash
+} -> {
+  @name("Count")
+  u8 count
+}
+
+@name("Count Vote Reward Rate")
+State CountVoteRewardRate = {
+  String("CRR")
+  @name("Layer")
+  u8 layer
+  Any(20)
+  @name("Value")
+  XFL value
+} -> {
+  @name("Count")
+  u8 count
+}
+
+@name("Count Vote Reward Delay")
+State CountVoteRewardDelay = {
+  String("CRD")
+  @name("Layer")
+  u8 layer
+  Any(20)
+  @name("Value")
+  XFL value
+} -> {
+  @name("Count")
+  u8 count
+}
+
+@name("Count Vote Seat")
+State CountVoteSeat = {
+  String("CS")
+  @name("SeatID")
+  u8 seatId
+  @name("Layer")
+  u8 layer
+  Null(8)
+  @name("Account")
+  Account account
+} -> {
+  @name("Count")
+  u8 count
+}
