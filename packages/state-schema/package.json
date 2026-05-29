@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Declarative decoder for Xahau Hooks state keys and values.",
   "type": "module",
-  "files": ["dist", "src"],
+  "files": ["build", "src"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
@@ -11,8 +11,8 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js"
     }
   }
 }

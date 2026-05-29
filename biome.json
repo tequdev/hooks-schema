@@ -7,7 +7,7 @@
     "lineWidth": 100
   },
   "files": {
-    "ignore": ["**/dist/**", "node_modules/**"]
+    "ignore": ["**/build/**", "**/dist/**", "**/dist-types/**", "node_modules/**"]
   },
   "organizeImports": {
     "enabled": true

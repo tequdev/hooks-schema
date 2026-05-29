@@ -4,9 +4,9 @@
   "description": "Command-line decoder for Xahau Hooks state schemas.",
   "type": "module",
   "bin": {
-    "hook-schema": "./dist/main.js"
+    "hook-schema": "./build/main.js"
   },
-  "files": ["dist"],
+  "files": ["build"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit"
