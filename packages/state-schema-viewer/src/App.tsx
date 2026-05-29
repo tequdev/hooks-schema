@@ -407,9 +407,6 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
           <p className="mb-0.5 font-black">{getEntryLabel(entry)}</p>
           <span className="text-sm font-black text-[#60716b]">{getEntryState(entry)}</span>
         </div>
-        <code className="rounded-full bg-[#eef5f2] px-2 py-1 font-mono text-xs text-[#36574f]">
-          {entry.raw.OwnerNode}
-        </code>
       </div>
 
       {entry.error ? (
