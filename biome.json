@@ -7,7 +7,7 @@
     "lineWidth": 100
   },
   "files": {
-    "ignore": ["dist/**", "node_modules/**"]
+    "ignore": ["**/dist/**", "node_modules/**"]
   },
   "organizeImports": {
     "enabled": true

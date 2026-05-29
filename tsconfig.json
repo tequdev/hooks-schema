@@ -1,18 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "declaration": true,
-    "sourceMap": true,
-    "declarationMap": true,
-    "outDir": "dist",
-    "rootDir": ".",
-    "types": ["vitest/globals"],
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "files": [],
+  "references": [{ "path": "./packages/state-schema" }, { "path": "./packages/hook-schema-cli" }]
 }

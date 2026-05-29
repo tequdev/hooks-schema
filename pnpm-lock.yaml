@@ -14,12 +14,23 @@ importers:
       '@types/node':
         specifier: ^22.15.29
         version: 22.19.19
+      state-schema:
+        specifier: workspace:*
+        version: link:packages/state-schema
       typescript:
         specifier: ^5.8.3
         version: 5.9.3
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.19.19)
+
+  packages/hook-schema-cli:
+    dependencies:
+      state-schema:
+        specifier: workspace:*
+        version: link:../state-schema
+
+  packages/state-schema: {}
 
 packages:
 

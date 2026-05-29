@@ -1,28 +1,20 @@
 {
-  "name": "state-schema",
+  "name": "hooks-abi-dsl",
   "version": "0.1.0",
+  "private": true,
   "description": "Declarative decoder for Xahau Hooks state keys and values.",
   "type": "module",
-  "bin": {
-    "hook-schema": "./dist/src/cli/main.js"
-  },
-  "files": ["dist", "src"],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "check": "biome check . && tsc -p tsconfig.json --noEmit",
+    "build": "pnpm -r run build",
+    "check": "biome check . && tsc -p tsconfig.check.json --noEmit",
     "format": "biome format --write .",
     "test": "vitest run",
-    "validate": "pnpm run check && pnpm run test"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "import": "./dist/src/index.js"
-    }
+    "validate": "pnpm run check && pnpm run test && pnpm run build"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/node": "^22.15.29",
+    "state-schema": "workspace:*",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },

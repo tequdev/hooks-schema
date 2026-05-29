@@ -1,6 +1,7 @@
 node_modules/
 .pnpm-store/
 dist/
+**/dist/
 .DS_Store
 *.tsbuildinfo
 .agents

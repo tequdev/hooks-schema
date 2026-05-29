@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compileSchema, decodeState, jsonReplacer } from "../src/index.js";
+import { compileSchema, decodeState, jsonReplacer } from "state-schema";
 
 const namespaceEntries = [
   {

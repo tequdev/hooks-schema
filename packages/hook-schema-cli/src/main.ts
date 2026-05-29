@@ -6,7 +6,7 @@ import {
   compileSchema,
   decodeState,
   jsonReplacer,
-} from "../index.js";
+} from "state-schema";
 
 type CliArgs = {
   command?: string;
