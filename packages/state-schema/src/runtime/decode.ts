@@ -1,3 +1,4 @@
+import { NUMERIC_TYPES, isBuiltinType } from "../builtins.js";
 import {
   AmbiguousMatchError,
   DecodeError,
@@ -26,6 +27,11 @@ export type DecodeOptions = {
   mode?: "strict" | "loose";
 };
 
+export type DecodedFieldMetadata = MetadataIr & {
+  typeName: string;
+  type: ValueTypeIr;
+};
+
 export type DecodedState = {
   state: string;
   metadata: MetadataIr;
@@ -33,9 +39,9 @@ export type DecodedState = {
   valueSchema: string;
   key: Record<string, unknown>;
   value: Record<string, unknown>;
-  fields: {
-    key: Record<string, MetadataIr>;
-    value: Record<string, MetadataIr>;
+  fieldMetadata: {
+    key: Record<string, DecodedFieldMetadata>;
+    value: Record<string, DecodedFieldMetadata>;
   };
   raw: {
     key: string;
@@ -51,9 +57,9 @@ type Candidate = {
   state: StateIr;
   key: Record<string, unknown>;
   value: Record<string, unknown>;
-  fields: {
-    key: Record<string, MetadataIr>;
-    value: Record<string, MetadataIr>;
+  fieldMetadata: {
+    key: Record<string, DecodedFieldMetadata>;
+    value: Record<string, DecodedFieldMetadata>;
   };
   score: number;
   reasons: string[];
@@ -105,7 +111,7 @@ export function decodeState(
       state,
       key: keyResult.fields,
       value: valueResult.fields,
-      fields: {
+      fieldMetadata: {
         key: collectFieldMetadata(keySchema),
         value: collectFieldMetadata(valueSchema),
       },
@@ -255,9 +261,21 @@ function decodeImplicitRawFallback(key: Uint8Array, value: Uint8Array): Candidat
     },
     key: { key: bytesToHex(key) },
     value: { value: bytesToHex(value) },
-    fields: {
-      key: { key: { name: "key" } },
-      value: { value: { name: "value" } },
+    fieldMetadata: {
+      key: {
+        key: {
+          name: "key",
+          typeName: "Bytes",
+          type: { kind: "bytes", length: 32 },
+        },
+      },
+      value: {
+        value: {
+          name: "value",
+          typeName: "Rest",
+          type: { kind: "rest" },
+        },
+      },
     },
     score: -1_000_000,
     reasons: ["implicit Raw fallback", "priority -1000000"],
@@ -272,7 +290,7 @@ function toDecodedState(candidate: Candidate, input: StateInput): DecodedState {
     valueSchema: candidate.state.valueSchema,
     key: candidate.key,
     value: candidate.value,
-    fields: candidate.fields,
+    fieldMetadata: candidate.fieldMetadata,
     raw: {
       key: input.key.toUpperCase(),
       value: input.value.toUpperCase(),
@@ -288,10 +306,37 @@ function formatSigned(value: number): string {
   return value >= 0 ? `+${value}` : `${value}`;
 }
 
-function collectFieldMetadata(struct: StructIr): Record<string, MetadataIr> {
-  const fields: Record<string, MetadataIr> = {};
+function collectFieldMetadata(struct: StructIr): Record<string, DecodedFieldMetadata> {
+  const fields: Record<string, DecodedFieldMetadata> = {};
   for (const field of struct.fields) {
-    if (field.kind === "field") fields[field.name] = field.metadata;
+    if (field.kind === "field") {
+      fields[field.name] = {
+        ...field.metadata,
+        typeName: fieldTypeName(field),
+        type: field.valueType,
+      };
+    }
   }
   return fields;
+}
+
+function fieldTypeName(field: NamedFieldIr): string {
+  const sourceTypeName = field.sourceTypeName;
+  if (
+    sourceTypeName &&
+    (NUMERIC_TYPES.has(sourceTypeName) ||
+      sourceTypeName === "Bytes" ||
+      sourceTypeName === "Rest" ||
+      isBuiltinType(sourceTypeName))
+  ) {
+    return sourceTypeName;
+  }
+
+  const type = field.valueType;
+  if (type.kind === "u16" || type.kind === "u32" || type.kind === "u64") {
+    return `${type.kind}${type.endian}`;
+  }
+  if (type.kind === "bytes" || type.kind === "bytesRef") return "Bytes";
+  if (type.kind === "rest") return "Rest";
+  return type.kind;
 }

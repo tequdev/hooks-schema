@@ -46,6 +46,9 @@ importers:
       xahau:
         specifier: ^4.0.4
         version: 4.0.4
+      xahau-address-codec:
+        specifier: 5.0.0
+        version: 5.0.0
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.3.0

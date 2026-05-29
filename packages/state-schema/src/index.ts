@@ -5,7 +5,12 @@ import { validateSchema } from "./validator.js";
 
 export type * from "./ast.js";
 export type * from "./ir.js";
-export type { DecodedState, DecodeOptions, StateInput } from "./runtime/decode.js";
+export type {
+  DecodedFieldMetadata,
+  DecodedState,
+  DecodeOptions,
+  StateInput,
+} from "./runtime/decode.js";
 export { BUILTIN_TYPES, RESERVED_PREFIX } from "./builtins.js";
 export {
   AmbiguousMatchError,

@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
 import {
+  type DecodedFieldMetadata,
   type DecodedState,
   type SchemaIr,
   compileSchema,
   decodeState,
   jsonReplacer,
 } from "state-schema";
+import { encodeAccountID } from "xahau-address-codec";
 import governanceSchema from "../../../examples/governance.xhs?raw";
 
 const ENDPOINTS = {
@@ -74,7 +76,23 @@ function validateInputs(schemaText: string, account: string, namespaceId: string
   return null;
 }
 
-function toDisplayValue(value: unknown): string {
+function hexToBytes(hex: string): Uint8Array {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let index = 0; index < bytes.length; index += 1) {
+    bytes[index] = Number.parseInt(hex.slice(index * 2, index * 2 + 2), 16);
+  }
+  return bytes;
+}
+
+function toDisplayValue(value: unknown, metadata?: DecodedFieldMetadata): string {
+  if (metadata?.typeName === "Account" && typeof value === "string" && value.length === 40) {
+    try {
+      return encodeAccountID(hexToBytes(value));
+    } catch {
+      return value;
+    }
+  }
+
   if (value === null || value === undefined) return "";
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     return String(value);
@@ -400,8 +418,16 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
         </div>
       ) : (
         <div className="grid gap-3">
-          <ValueGroup title="Key" values={entry.decoded?.key ?? {}} />
-          <ValueGroup title="Value" values={entry.decoded?.value ?? {}} />
+          <ValueGroup
+            title="Key"
+            values={entry.decoded?.key ?? {}}
+            fieldMetadata={entry.decoded?.fieldMetadata.key ?? {}}
+          />
+          <ValueGroup
+            title="Value"
+            values={entry.decoded?.value ?? {}}
+            fieldMetadata={entry.decoded?.fieldMetadata.value ?? {}}
+          />
         </div>
       )}
 
@@ -417,7 +443,15 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
   );
 }
 
-function ValueGroup({ title, values }: { title: string; values: Record<string, unknown> }) {
+function ValueGroup({
+  title,
+  values,
+  fieldMetadata,
+}: {
+  title: string;
+  values: Record<string, unknown>;
+  fieldMetadata: Record<string, DecodedFieldMetadata>;
+}) {
   const entries = Object.entries(values);
 
   return (
@@ -432,7 +466,7 @@ function ValueGroup({ title, values }: { title: string; values: Record<string, u
           <div className="grid grid-cols-[96px_minmax(0,1fr)] items-start gap-3 py-2" key={key}>
             <span className="text-sm font-black text-[#50635d]">{key}</span>
             <code className="break-all whitespace-pre-wrap font-mono text-xs text-[#16231f]">
-              {toDisplayValue(value)}
+              {toDisplayValue(value, fieldMetadata[key])}
             </code>
           </div>
         ))

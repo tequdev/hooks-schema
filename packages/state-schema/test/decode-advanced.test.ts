@@ -123,9 +123,16 @@ State UserInfo = Key -> Value
       name: "User Info",
       description: "User profile data",
     });
-    expect(result.fields).toEqual({
-      key: { slot: { name: "Slot" } },
-      value: { age: { name: "Age", description: "User age" } },
+    expect(result.fieldMetadata).toEqual({
+      key: { slot: { name: "Slot", typeName: "u8", type: { kind: "u8", length: 1 } } },
+      value: {
+        age: {
+          name: "Age",
+          description: "User age",
+          typeName: "u8",
+          type: { kind: "u8", length: 1 },
+        },
+      },
     });
     expect(result.key).toEqual({ slot: 7 });
     expect(result.value).toEqual({ age: 42 });
@@ -144,9 +151,39 @@ State UserInfo = Key -> Value
     });
 
     expect(result.metadata).toEqual({ name: "UserInfo" });
-    expect(result.fields).toEqual({
-      key: { slot: { name: "slot" } },
-      value: { age: { name: "age" } },
+    expect(result.fieldMetadata).toEqual({
+      key: { slot: { name: "slot", typeName: "u8", type: { kind: "u8", length: 1 } } },
+      value: { age: { name: "age", typeName: "u8", type: { kind: "u8", length: 1 } } },
+    });
+  });
+
+  test("returns resolved field type metadata for builtins and xhs aliases", () => {
+    const schema = compileSchema(`
+type Bitmap256 = Bytes(32)
+StateKey Key { Null(32) }
+StateValue Value {
+  Account account
+  Bitmap256 flags
+}
+State S = Key -> Value
+`);
+    const account = "1111111111111111111111111111111111111111";
+    const flags = "0100000000000000000000000000000000000000000000000000000000000000";
+
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: `${account}${flags}`,
+    });
+
+    expect(result.fieldMetadata.value.account).toEqual({
+      name: "account",
+      typeName: "Account",
+      type: { kind: "bytes", length: 20 },
+    });
+    expect(result.fieldMetadata.value.flags).toEqual({
+      name: "flags",
+      typeName: "Bytes",
+      type: { kind: "bytes", length: 32 },
     });
   });
 
