@@ -46,6 +46,18 @@ StateValue U64Value {
 State SettingsH = SettingsHKey -> U64Value @priority(50)
 `;
 
+const zeroKey = "0000000000000000000000000000000000000000000000000000000000000000";
+
+function decodeSingleValue(fieldDeclaration: string, value: string): unknown {
+  const schema = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Value { ${fieldDeclaration} }
+State Single = Key -> Value
+`);
+
+  return decodeState(schema, { key: zeroKey, value }).value.value;
+}
+
 describe("decode schema samples", () => {
   test("decodes UserInfo", () => {
     const schema = compileSchema(schemaText);
@@ -90,65 +102,40 @@ describe("decode schema samples", () => {
     expect(result.value).toEqual({ value: 1n });
   });
 
-  test("decodes builtin byte types", () => {
-    const schema = compileSchema(`
-StateKey Key { Null(32) }
-StateValue Value {
-  Account account
-  Currency currency
-  Issuer issuer
-  XFL xfl
-}
-State Builtins = Key -> Value
-`);
-    const account = "1111111111111111111111111111111111111111";
-    const currency = "2222222222222222222222222222222222222222";
-    const issuer = "3333333333333333333333333333333333333333";
-    const xfl = "0080C6A47E8D8354";
-
-    const result = decodeState(schema, {
-      key: "0000000000000000000000000000000000000000000000000000000000000000",
-      value: `${account}${currency}${issuer}${xfl}`,
-    });
-
-    expect(result.state).toBe("Builtins");
-    expect(result.value).toEqual({
-      account: account.toUpperCase(),
-      currency: currency.toUpperCase(),
-      issuer: issuer.toUpperCase(),
-      xfl: "1",
+  describe("builtin byte type decoding", () => {
+    test.each([
+      [
+        "Account",
+        "1111111111111111111111111111111111111111",
+        "1111111111111111111111111111111111111111",
+      ],
+      [
+        "Currency",
+        "2222222222222222222222222222222222222222",
+        "2222222222222222222222222222222222222222",
+      ],
+      [
+        "Issuer",
+        "3333333333333333333333333333333333333333",
+        "3333333333333333333333333333333333333333",
+      ],
+      ["XFL", "0080C6A47E8D8354", "1"],
+    ])("decodes %s", (typeName, encoded, expected) => {
+      expect(decodeSingleValue(`${typeName} value`, encoded)).toBe(expected);
     });
   });
 
-  test("decodes all numeric builtin types through schemas", () => {
-    const schema = compileSchema(`
-StateKey Key { Null(32) }
-StateValue Value {
-  u8 a
-  u16 b
-  u16 c @BE
-  u32 d
-  u32 e @BE
-  u64 f
-  u64 g @BE
-}
-State Numerics = Key -> Value
-`);
-
-    const result = decodeState(schema, {
-      key: "0000000000000000000000000000000000000000000000000000000000000000",
-      value: "01030204050A0908070B0C0D0E0C0D0E0F1011121A1A1B1C1D1E1F2021",
-    });
-
-    expect(result.state).toBe("Numerics");
-    expect(result.value).toEqual({
-      a: 1,
-      b: 0x0203,
-      c: 0x0405,
-      d: 0x0708090a,
-      e: 0x0b0c0d0e,
-      f: 0x1a1211100f0e0d0cn,
-      g: 0x1a1b1c1d1e1f2021n,
+  describe("numeric type decoding", () => {
+    test.each([
+      ["u8", "u8 value", "01", 1],
+      ["u16", "u16 value", "0302", 0x0203],
+      ["u16 @BE", "u16 value @BE", "0405", 0x0405],
+      ["u32", "u32 value", "0A090807", 0x0708090a],
+      ["u32 @BE", "u32 value @BE", "0B0C0D0E", 0x0b0c0d0e],
+      ["u64", "u64 value", "0C0D0E0F1011121A", 0x1a1211100f0e0d0cn],
+      ["u64 @BE", "u64 value @BE", "1A1B1C1D1E1F2021", 0x1a1b1c1d1e1f2021n],
+    ])("decodes %s", (_typeName, fieldDeclaration, encoded, expected) => {
+      expect(decodeSingleValue(fieldDeclaration, encoded)).toBe(expected);
     });
   });
 });
