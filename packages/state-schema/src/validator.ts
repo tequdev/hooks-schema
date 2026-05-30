@@ -13,6 +13,7 @@ import type {
 } from "./ast.js";
 import {
   BUILTIN_TYPES,
+  ENDIAN_ATTRIBUTE_TYPES,
   NUMERIC_TYPES,
   PATTERN_TYPES,
   RESERVED_PREFIX,
@@ -119,7 +120,7 @@ function validateStruct(
 
   for (let index = 0; index < struct.fields.length; index += 1) {
     const field = struct.fields[index];
-    validateMetadataAttributes(field.attributes, "field", diagnostics);
+    validateFieldAttributes(field, diagnostics);
 
     if (field.name) {
       if (names.has(field.name)) {
@@ -174,7 +175,7 @@ function validateStruct(
               ref.span,
             ),
           );
-        } else if (!["u8", "u16le", "u16be", "u32le", "u32be"].includes(referenced.type.name)) {
+        } else if (!["u8", "u16", "u16be", "u32", "u32be"].includes(referenced.type.name)) {
           diagnostics.push(
             diagnostic(
               "schema.bytesRefInvalidType",
@@ -322,6 +323,38 @@ function validateState(state: StateAst, context: Context, diagnostics: Diagnosti
   }
 }
 
+function validateFieldAttributes(field: FieldAst, diagnostics: Diagnostic[]): void {
+  let endianCount = 0;
+  for (const attribute of field.attributes) {
+    if (attribute.name !== "BE") continue;
+    endianCount += 1;
+    if (attribute.args.length !== 0) {
+      diagnostics.push(
+        diagnostic("schema.invalidEndianAttribute", "@BE does not take arguments", attribute.span),
+      );
+    }
+    if (!ENDIAN_ATTRIBUTE_TYPES.has(field.type.name)) {
+      diagnostics.push(
+        diagnostic(
+          "schema.invalidEndianAttribute",
+          "@BE is only supported on u16/u32/u64 fields",
+          attribute.span,
+        ),
+      );
+    }
+  }
+  if (endianCount > 1) {
+    diagnostics.push(
+      diagnostic(
+        "schema.duplicateEndianAttribute",
+        "field has multiple @BE attributes",
+        field.span,
+      ),
+    );
+  }
+  validateMetadataAttributes(field.attributes, "field", diagnostics);
+}
+
 function validateMetadataAttributes(
   attributes: AttributeAst[],
   target: "field" | "state",
@@ -340,6 +373,7 @@ function validateMetadataAttributes(
       validateStringAttribute(attribute, target, diagnostics);
       continue;
     }
+    if (target === "field" && attribute.name === "BE") continue;
     if (target === "field") {
       diagnostics.push(
         diagnostic(

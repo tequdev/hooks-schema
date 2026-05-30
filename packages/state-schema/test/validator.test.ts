@@ -18,6 +18,7 @@ StateKey GoodKey {
 StateValue GoodValue {
   u8 length
   Bytes($length) data
+  u32 count @BE
   Rest tail
 }
 State Good = GoodKey -> GoodValue @priority(7)
@@ -62,7 +63,7 @@ StateKey Same { Null(32) }
     ]);
   });
 
-  test.each(["Account", "Currency", "Issuer"])(
+  test.each(["Account", "Currency", "Issuer", "XFL"])(
     "rejects aliases that shadow builtin type %s",
     (typeName) => {
       const diagnostics = diagnosticsFor(`
@@ -114,7 +115,8 @@ StateValue BadValue {
   Bytes($afterRest) ok
   Bytes($first) badRef
   Account(1) account
-  u16le(1) number
+  u16(1) number
+  u8 small @BE
   Unknown field
 }
 State Bad = BadKey -> BadValue
@@ -134,6 +136,7 @@ State Bad = BadKey -> BadValue
       "schema.bytesRefInvalidType",
       "schema.builtinArgs",
       "schema.numericArgs",
+      "schema.invalidEndianAttribute",
       "schema.unknownType",
     ]);
   });

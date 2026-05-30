@@ -7,7 +7,11 @@ export type SchemaIr = {
   states: StateIr[];
 };
 
-export type TypeIr = { kind: "bytes"; length: number };
+export type TypeIr =
+  | { kind: "bytes"; length: number }
+  | { kind: "u16"; endian: "le" | "be"; length: 2 }
+  | { kind: "u32"; endian: "le" | "be"; length: 4 }
+  | { kind: "u64"; endian: "le" | "be"; length: 8 };
 
 export type MetadataIr = {
   name: string;

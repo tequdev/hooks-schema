@@ -85,7 +85,7 @@ function fieldToIr(field: FieldAst, types: Record<string, TypeIr>): FieldIr {
   return {
     kind: "field",
     name: field.name,
-    valueType: valueTypeToIr(field.type, types),
+    valueType: valueTypeToIr(field, types),
     sourceTypeName: field.type.name,
     metadata: metadataToIr(field.name, field.attributes),
   };
@@ -101,13 +101,16 @@ function patternToIr(type: TypeExprAst): PatternIr {
   return { kind: "hex", bytesHex: stringArg(type).toUpperCase() };
 }
 
-function valueTypeToIr(type: TypeExprAst, types: Record<string, TypeIr>): ValueTypeIr {
+function valueTypeToIr(field: FieldAst, types: Record<string, TypeIr>): ValueTypeIr {
+  const type = field.type;
+  const endian = field.attributes.some((attribute) => attribute.name === "BE") ? "be" : "le";
+
   if (type.name === "u8") return { kind: "u8", length: 1 };
-  if (type.name === "u16le") return { kind: "u16", endian: "le", length: 2 };
+  if (type.name === "u16") return { kind: "u16", endian, length: 2 };
   if (type.name === "u16be") return { kind: "u16", endian: "be", length: 2 };
-  if (type.name === "u32le") return { kind: "u32", endian: "le", length: 4 };
+  if (type.name === "u32") return { kind: "u32", endian, length: 4 };
   if (type.name === "u32be") return { kind: "u32", endian: "be", length: 4 };
-  if (type.name === "u64le") return { kind: "u64", endian: "le", length: 8 };
+  if (type.name === "u64") return { kind: "u64", endian, length: 8 };
   if (type.name === "u64be") return { kind: "u64", endian: "be", length: 8 };
   if (type.name === "Bytes" && type.args[0]?.kind === "fieldRef")
     return { kind: "bytesRef", field: type.args[0].name };
@@ -115,7 +118,7 @@ function valueTypeToIr(type: TypeExprAst, types: Record<string, TypeIr>): ValueT
   if (type.name === "Rest") return { kind: "rest" };
 
   const aliasOrBuiltin = types[type.name] ?? BUILTIN_TYPES[type.name];
-  return { kind: "bytes", length: aliasOrBuiltin.length };
+  return aliasOrBuiltin;
 }
 
 function stateToIr(state: StateAst): StateIr {

@@ -1,4 +1,3 @@
-type XFL = Bytes(8)
 type Hash256 = Bytes(32)
 type HookHash28 = Bytes(28)
 

@@ -40,7 +40,7 @@ StateKey SettingsHKey {
 }
 
 StateValue U64Value {
-  u64le value
+  u64 value
 }
 
 State SettingsH = SettingsHKey -> U64Value @priority(50)
@@ -97,16 +97,18 @@ StateValue Value {
   Account account
   Currency currency
   Issuer issuer
+  XFL xfl
 }
 State Builtins = Key -> Value
 `);
     const account = "1111111111111111111111111111111111111111";
     const currency = "2222222222222222222222222222222222222222";
     const issuer = "3333333333333333333333333333333333333333";
+    const xfl = "0100000000000000";
 
     const result = decodeState(schema, {
       key: "0000000000000000000000000000000000000000000000000000000000000000",
-      value: `${account}${currency}${issuer}`,
+      value: `${account}${currency}${issuer}${xfl}`,
     });
 
     expect(result.state).toBe("Builtins");
@@ -114,6 +116,7 @@ State Builtins = Key -> Value
       account: account.toUpperCase(),
       currency: currency.toUpperCase(),
       issuer: issuer.toUpperCase(),
+      xfl: 1n,
     });
   });
 
@@ -122,12 +125,12 @@ State Builtins = Key -> Value
 StateKey Key { Null(32) }
 StateValue Value {
   u8 a
-  u16le b
-  u16be c
-  u32le d
-  u32be e
-  u64le f
-  u64be g
+  u16 b
+  u16 c @BE
+  u32 d
+  u32 e @BE
+  u64 f
+  u64 g @BE
 }
 State Numerics = Key -> Value
 `);

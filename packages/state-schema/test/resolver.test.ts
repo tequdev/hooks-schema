@@ -84,7 +84,7 @@ State Inline = {
   test("defaults State priority to zero and resolves referenced structs", () => {
     const ir = compileSchema(`
 StateKey Key { Null(32) }
-StateValue Value { u16be value }
+StateValue Value { u16 value @BE }
 State Ref = Key -> Value
 `);
 
@@ -106,12 +106,13 @@ StateValue Value {
   Account account
   Currency currency
   Issuer issuer
+  XFL xfl
 }
 State Builtins = Key -> Value
 `);
 
     expect(ir.builtins).toEqual(BUILTIN_TYPES);
-    expect(ir.stateValues.Value?.fixedLength).toBe(60);
+    expect(ir.stateValues.Value?.fixedLength).toBe(68);
     expect(ir.stateValues.Value?.fields).toEqual([
       {
         kind: "field",
@@ -134,6 +135,13 @@ State Builtins = Key -> Value
         sourceTypeName: "Issuer",
         metadata: { name: "issuer" },
       },
+      {
+        kind: "field",
+        name: "xfl",
+        valueType: { kind: "u64", endian: "le", length: 8 },
+        sourceTypeName: "XFL",
+        metadata: { name: "xfl" },
+      },
     ]);
   });
 
@@ -142,12 +150,12 @@ State Builtins = Key -> Value
 StateKey Key { Null(32) }
 StateValue Value {
   u8 a
-  u16le b
-  u16be c
-  u32le d
-  u32be e
-  u64le f
-  u64be g
+  u16 b
+  u16 c @BE
+  u32 d
+  u32 e @BE
+  u64 f
+  u64 g @BE
 }
 State Numerics = Key -> Value
 `);
