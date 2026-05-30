@@ -1,7 +1,7 @@
 import { DecodeInputError } from "../src/index.js";
 import { bytesToHex, hexToBytes, isAscii, isHex } from "../src/runtime/bytes.js";
 import { matchPattern, patternLength } from "../src/runtime/match.js";
-import { decodeNumeric } from "../src/runtime/numeric.js";
+import { decodeNumeric, decodeXflDecimal } from "../src/runtime/numeric.js";
 
 describe("runtime bytes", () => {
   test("converts hex strings to bytes and bytes to uppercase hex", () => {
@@ -41,6 +41,15 @@ describe("runtime numeric decoding", () => {
     expect(decodeNumeric({ kind: "u64", endian: "be", length: 8 }, bytes, 0)).toBe(
       0x0102030405060708n,
     );
+  });
+
+  test("formats XFL enclosing numbers as decimal strings", () => {
+    expect(decodeXflDecimal(0n)).toBe("0");
+    expect(decodeXflDecimal(6089866696204910592n)).toBe("1");
+    expect(decodeXflDecimal(1478180677777522688n)).toBe("-1");
+    expect(decodeXflDecimal(6092008288858500385n)).toBe("3.141592653589793");
+    expect(decodeXflDecimal(1480322270431112481n)).toBe("-3.141592653589793");
+    expect(decodeXflDecimal(1n << 63n)).toBe("Invalid XFL");
   });
 });
 

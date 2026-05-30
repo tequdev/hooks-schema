@@ -104,7 +104,7 @@ State Builtins = Key -> Value
     const account = "1111111111111111111111111111111111111111";
     const currency = "2222222222222222222222222222222222222222";
     const issuer = "3333333333333333333333333333333333333333";
-    const xfl = "0100000000000000";
+    const xfl = "0080C6A47E8D8354";
 
     const result = decodeState(schema, {
       key: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -116,7 +116,7 @@ State Builtins = Key -> Value
       account: account.toUpperCase(),
       currency: currency.toUpperCase(),
       issuer: issuer.toUpperCase(),
-      xfl: 1n,
+      xfl: "1",
     });
   });
 

@@ -16,7 +16,7 @@ import type {
 } from "../ir.js";
 import { bytesToHex, hexToBytes } from "./bytes.js";
 import { matchPattern } from "./match.js";
-import { decodeNumeric } from "./numeric.js";
+import { decodeNumeric, decodeXflDecimal } from "./numeric.js";
 
 export type StateInput = {
   key: string;
@@ -224,7 +224,11 @@ function decodeField(
     };
   }
 
-  const value = decodeNumeric(type, input, offset);
+  const numericValue = decodeNumeric(type, input, offset);
+  const value =
+    field.sourceTypeName === "XFL" && typeof numericValue === "bigint"
+      ? decodeXflDecimal(numericValue)
+      : numericValue;
   return {
     value,
     nextOffset: offset + length,
