@@ -52,6 +52,7 @@ type EntryGroup = {
   state: string;
   label: string;
   entries: DecodedEntry[];
+  failed: boolean;
 };
 
 type LoadState =
@@ -125,11 +126,18 @@ function getEntryState(entry: DecodedEntry): string {
   return entry.decoded?.state ?? "Decode failed";
 }
 
+function isDecodeFailed(entry: DecodedEntry): boolean {
+  return !entry.decoded;
+}
+
 function getEntryLabel(entry: DecodedEntry): string {
   return entry.decoded?.metadata.name ?? getEntryState(entry);
 }
 
 function compareEntries(left: DecodedEntry, right: DecodedEntry): number {
+  const failedComparison = Number(isDecodeFailed(left)) - Number(isDecodeFailed(right));
+  if (failedComparison !== 0) return failedComparison;
+
   const stateComparison = getEntryState(left).localeCompare(getEntryState(right));
   if (stateComparison !== 0) return stateComparison;
   return left.ledgerIndex.localeCompare(right.ledgerIndex);
@@ -149,6 +157,7 @@ function groupEntries(entries: DecodedEntry[]): EntryGroup[] {
       state,
       label: getEntryLabel(entry),
       entries: [entry],
+      failed: isDecodeFailed(entry),
     });
   }
 
@@ -362,6 +371,7 @@ function App() {
               </div>
               <span className="text-sm font-black text-[#60716b]">
                 {loadState.entries.length} HookState entries
+                {stats && stats.failed > 0 ? ` (${stats.failed} failed)` : ""}
               </span>
             </div>
 
@@ -371,12 +381,20 @@ function App() {
                   <div className="flex items-center justify-between gap-3 border-b border-[#18221f1a] pb-2">
                     <div>
                       <h3 className="font-black text-[#12211c]">{group.label}</h3>
-                      <p className="mt-0.5 font-mono text-xs font-bold text-[#60716b]">
-                        {group.state}
-                      </p>
+                      {group.failed ? null : (
+                        <p className="mt-0.5 font-mono text-xs font-bold text-[#60716b]">
+                          {group.state}
+                        </p>
+                      )}
                     </div>
-                    <span className="rounded-full bg-[#dff1ec] px-3 py-1 text-xs font-black text-[#245048]">
-                      {group.entries.length}
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-black ${
+                        group.failed
+                          ? "bg-[#fff3ef] text-[#8f2f25]"
+                          : "bg-[#dff1ec] text-[#245048]"
+                      }`}
+                    >
+                      {group.failed ? `${group.entries.length} failed` : group.entries.length}
                     </span>
                   </div>
 
