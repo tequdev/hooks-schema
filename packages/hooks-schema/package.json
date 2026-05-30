@@ -1,5 +1,5 @@
 {
-  "name": "state-schema",
+  "name": "hooks-schema",
   "version": "0.1.0",
   "description": "Declarative decoder for Xahau Hooks state keys and values.",
   "type": "module",

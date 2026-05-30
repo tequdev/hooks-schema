@@ -14,9 +14,9 @@ importers:
       '@types/node':
         specifier: ^22.15.29
         version: 22.19.19
-      state-schema:
+      hooks-schema:
         specifier: workspace:*
-        version: link:packages/state-schema
+        version: link:packages/hooks-schema
       typescript:
         specifier: ^5.8.3
         version: 5.9.3
@@ -24,25 +24,25 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)
 
-  packages/hook-schema-cli:
+  packages/hooks-schema: {}
+
+  packages/hooks-schema-cli:
     dependencies:
-      state-schema:
+      hooks-schema:
         specifier: workspace:*
-        version: link:../state-schema
+        version: link:../hooks-schema
 
-  packages/state-schema: {}
-
-  packages/state-schema-viewer:
+  packages/hooks-schema-viewer:
     dependencies:
+      hooks-schema:
+        specifier: workspace:*
+        version: link:../hooks-schema
       react:
         specifier: ^19.1.0
         version: 19.2.6
       react-dom:
         specifier: ^19.1.0
         version: 19.2.6(react@19.2.6)
-      state-schema:
-        specifier: workspace:*
-        version: link:../state-schema
       xahau:
         specifier: ^4.0.4
         version: 4.0.4

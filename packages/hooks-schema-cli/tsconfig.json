@@ -7,5 +7,5 @@
     "tsBuildInfoFile": "build/tsconfig.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],
-  "references": [{ "path": "../state-schema" }]
+  "references": [{ "path": "../hooks-schema" }]
 }

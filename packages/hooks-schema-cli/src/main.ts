@@ -6,7 +6,7 @@ import {
   compileSchema,
   decodeState,
   jsonReplacer,
-} from "state-schema";
+} from "hooks-schema";
 
 type CliArgs = {
   command?: string;
@@ -72,7 +72,7 @@ function fail(message: string): never {
 
 function usage(): void {
   console.error(
-    "usage: hook-schema decode --schema schema.xhs --key HEX --value HEX [--mode strict|loose] [--pretty] [--ir]",
+    "usage: hooks-schema decode --schema schema.xhs --key HEX --value HEX [--mode strict|loose] [--pretty] [--ir]",
   );
 }
 

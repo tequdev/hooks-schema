@@ -11,7 +11,7 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "state-schema": ["packages/state-schema/src/index.ts"]
+      "hooks-schema": ["packages/hooks-schema/src/index.ts"]
     },
     "types": ["vitest/globals"],
     "esModuleInterop": true,

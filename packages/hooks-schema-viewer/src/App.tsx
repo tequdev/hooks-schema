@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";
 import {
   type DecodedFieldMetadata,
   type DecodedState,
@@ -6,7 +5,8 @@ import {
   compileSchema,
   decodeState,
   jsonReplacer,
-} from "state-schema";
+} from "hooks-schema";
+import { useMemo, useState } from "react";
 import { encodeAccountID } from "xahau-address-codec";
 import governanceSchema from "../../../examples/governance.xhs?raw";
 

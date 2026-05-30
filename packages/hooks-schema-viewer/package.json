@@ -1,5 +1,5 @@
 {
-  "name": "state-schema-viewer",
+  "name": "hooks-schema-viewer",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "state-schema": "workspace:*",
+    "hooks-schema": "workspace:*",
     "xahau": "^4.0.4",
     "xahau-address-codec": "5.0.0"
   },

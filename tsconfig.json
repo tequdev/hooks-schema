@@ -1,8 +1,8 @@
 {
   "files": [],
   "references": [
-    { "path": "./packages/state-schema" },
-    { "path": "./packages/hook-schema-cli" },
-    { "path": "./packages/state-schema-viewer" }
+    { "path": "./packages/hooks-schema" },
+    { "path": "./packages/hooks-schema-cli" },
+    { "path": "./packages/hooks-schema-viewer" }
   ]
 }

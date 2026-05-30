@@ -1,10 +1,10 @@
 {
-  "name": "hook-schema-cli",
+  "name": "hooks-schema-cli",
   "version": "0.1.0",
   "description": "Command-line decoder for Xahau Hooks state schemas.",
   "type": "module",
   "bin": {
-    "hook-schema": "./build/main.js"
+    "hooks-schema": "./build/main.js"
   },
   "files": ["build"],
   "scripts": {
@@ -12,6 +12,6 @@
     "check": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "state-schema": "workspace:*"
+    "hooks-schema": "workspace:*"
   }
 }
