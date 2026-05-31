@@ -6,7 +6,7 @@ import {
   decodeState,
   jsonReplacer,
 } from "hooks-schema";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { encodeAccountID } from "xahau-address-codec";
 import governanceSchema from "../../../examples/governance.xhs?raw";
 
@@ -61,8 +61,37 @@ type LoadState =
   | { kind: "success"; ledgerIndex: number; validated: boolean; entries: DecodedEntry[] }
   | { kind: "error"; message: string };
 
+type SchemaStatus =
+  | { kind: "idle" }
+  | { kind: "loading"; url: string }
+  | { kind: "error"; message: string };
+
+const DEFAULT_ACCOUNT = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
+const DEFAULT_NAMESPACE_ID =
+  "0000000000000000000000000000000000000000000000000000000000000000";
+
 function normalizeHex(value: string): string {
   return value.trim().replace(/^0x/i, "").toUpperCase();
+}
+
+function normalizeNetwork(value: string | null): Network {
+  const normalized = value?.trim().toLowerCase();
+  if (normalized === "test" || normalized === "testnet") return "testnet";
+  return "mainnet";
+}
+
+function networkToQueryValue(network: Network): "main" | "test" {
+  return network === "testnet" ? "test" : "main";
+}
+
+function readUrlState() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    network: normalizeNetwork(params.get("network")),
+    account: params.get("account")?.trim() || DEFAULT_ACCOUNT,
+    namespaceId: params.get("namespaceid")?.trim() || DEFAULT_NAMESPACE_ID,
+    schemaUrl: params.get("schema")?.trim() || null,
+  };
 }
 
 function validateInputs(schemaText: string, account: string, namespaceId: string): string | null {
@@ -166,12 +195,54 @@ function groupEntries(entries: DecodedEntry[]): EntryGroup[] {
 
 function App() {
   const [schemaText, setSchemaText] = useState(governanceSchema);
-  const [network, setNetwork] = useState<Network>("mainnet");
-  const [account, setAccount] = useState("rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh");
-  const [namespaceId, setNamespaceId] = useState(
-    "0000000000000000000000000000000000000000000000000000000000000000",
-  );
+  const [schemaStatus, setSchemaStatus] = useState<SchemaStatus>({ kind: "idle" });
+  const [schemaSourceUrl, setSchemaSourceUrl] = useState<string | null>(() => readUrlState().schemaUrl);
+  const schemaLoadToken = useRef(0);
+  const [network, setNetwork] = useState<Network>(() => readUrlState().network);
+  const [account, setAccount] = useState(() => readUrlState().account);
+  const [namespaceId, setNamespaceId] = useState(() => readUrlState().namespaceId);
   const [loadState, setLoadState] = useState<LoadState>({ kind: "idle" });
+
+  useEffect(() => {
+    if (!schemaSourceUrl) return;
+
+    const controller = new AbortController();
+    const loadToken = ++schemaLoadToken.current;
+    setSchemaStatus({ kind: "loading", url: schemaSourceUrl });
+
+    void (async () => {
+      try {
+        const response = await fetch(schemaSourceUrl, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch schema (${response.status} ${response.statusText})`);
+        }
+        const text = await response.text();
+        if (controller.signal.aborted || loadToken !== schemaLoadToken.current) return;
+        setSchemaText(text);
+        setSchemaStatus({ kind: "idle" });
+      } catch (error) {
+        if (controller.signal.aborted || loadToken !== schemaLoadToken.current) return;
+        setSchemaStatus({
+          kind: "error",
+          message: error instanceof Error ? error.message : String(error),
+        });
+      }
+    })();
+
+    return () => controller.abort();
+  }, [schemaSourceUrl]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (network !== "mainnet") params.set("network", networkToQueryValue(network));
+    if (account.trim() !== DEFAULT_ACCOUNT) params.set("account", account.trim());
+    if (namespaceId.trim() !== DEFAULT_NAMESPACE_ID) params.set("namespaceid", namespaceId.trim());
+    if (schemaSourceUrl) params.set("schema", schemaSourceUrl);
+
+    const query = params.toString();
+    const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", nextUrl);
+  }, [account, network, namespaceId, schemaSourceUrl]);
 
   const stats = useMemo(() => {
     if (loadState.kind !== "success") return null;
@@ -189,6 +260,16 @@ function App() {
   }, [loadState]);
 
   async function handleDecode() {
+    if (schemaStatus.kind === "loading") {
+      setLoadState({ kind: "error", message: "Schema URL is still loading." });
+      return;
+    }
+
+    if (schemaStatus.kind === "error") {
+      setLoadState({ kind: "error", message: schemaStatus.message });
+      return;
+    }
+
     const validationError = validateInputs(schemaText, account, namespaceId);
     if (validationError) {
       setLoadState({ kind: "error", message: validationError });
@@ -240,6 +321,15 @@ function App() {
     }
   }
 
+  function handleSchemaChange(value: string) {
+    schemaLoadToken.current += 1;
+    setSchemaText(value);
+    setSchemaSourceUrl(null);
+    if (schemaStatus.kind !== "idle") {
+      setSchemaStatus({ kind: "idle" });
+    }
+  }
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-[1440px] bg-[#f6f4ee] p-4 text-[#18221f] md:p-6">
       <section className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_380px]">
@@ -270,8 +360,16 @@ function App() {
             className="min-h-[520px] w-full resize-y rounded-lg border border-[#18221f29] bg-[#16231f] p-4 font-mono text-[0.92rem] leading-relaxed text-[#f4fbf8] outline-none focus:border-[#159b83] focus:ring-3 focus:ring-[#159b8324] md:min-h-[560px]"
             spellCheck={false}
             value={schemaText}
-            onChange={(event) => setSchemaText(event.target.value)}
+            onChange={(event) => handleSchemaChange(event.target.value)}
           />
+          {schemaStatus.kind === "loading" ? (
+            <p className="mt-2 text-xs font-bold text-[#60716b]">
+              Loading schema from {schemaStatus.url}
+            </p>
+          ) : null}
+          {schemaStatus.kind === "error" ? (
+            <p className="mt-2 text-xs font-bold text-[#8f2f25]">{schemaStatus.message}</p>
+          ) : null}
         </div>
 
         <aside className="grid gap-4">
