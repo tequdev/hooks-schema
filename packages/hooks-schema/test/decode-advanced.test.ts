@@ -207,6 +207,24 @@ State S = Key -> Value
 });
 
 describe("decode errors", () => {
+  test("skips a candidate that exceeds input length when another candidate matches", () => {
+    const schema = compileSchema(`
+StateKey Key { Null(32) }
+StateValue Long { u8 first u8 second }
+StateValue Short { Rest value }
+State LongState = Key -> Long
+State ShortState = Key -> Short
+`);
+
+    const result = decodeState(schema, {
+      key: "0000000000000000000000000000000000000000000000000000000000000000",
+      value: "01",
+    });
+
+    expect(result.state).toBe("ShortState");
+    expect(result.value).toEqual({ value: "01" });
+  });
+
   test("disqualifies fixed-length value candidates when trailing bytes remain", () => {
     const schema = compileSchema(`
 StateKey Key { Null(32) }
@@ -222,7 +240,7 @@ State S = Key -> Value
     ).toThrow(NoMatchingStateError);
   });
 
-  test("throws DecodeError when a field exceeds the available input", () => {
+  test("treats a candidate that exceeds the available input as a mismatch", () => {
     const schema = compileSchema(`
 StateKey Key { Null(32) }
 StateValue Value { u16be value }
@@ -234,7 +252,7 @@ State S = Key -> Value
         key: "0000000000000000000000000000000000000000000000000000000000000000",
         value: "00",
       }),
-    ).toThrow(DecodeError);
+    ).toThrow(NoMatchingStateError);
   });
 
   test("throws DecodeError when Bytes($field) does not reference an integer length", () => {

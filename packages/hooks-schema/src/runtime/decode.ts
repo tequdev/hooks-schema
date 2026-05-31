@@ -87,37 +87,44 @@ export function decodeState(
     const valueSchema = schema.stateValues[state.valueSchema];
     if (!keySchema || !valueSchema) continue;
 
-    const keyResult = tryDecodeStruct(keySchema, key, "key");
-    if (!keyResult.ok) continue;
+    try {
+      const keyResult = tryDecodeStruct(keySchema, key, "key");
+      if (!keyResult.ok) continue;
 
-    const valueResult = tryDecodeStruct(valueSchema, value, "value");
-    if (!valueResult.ok) continue;
+      const valueResult = tryDecodeStruct(valueSchema, value, "value");
+      if (!valueResult.ok) continue;
 
-    let score = keyResult.score + valueResult.score + state.priority;
-    const reasons = [
-      ...keyResult.reasons,
-      ...valueResult.reasons,
-      `priority ${formatSigned(state.priority)}`,
-    ];
+      let score = keyResult.score + valueResult.score + state.priority;
+      const reasons = [
+        ...keyResult.reasons,
+        ...valueResult.reasons,
+        `priority ${formatSigned(state.priority)}`,
+      ];
 
-    score += 10;
-    reasons.unshift("key length matched 32 bytes (+10)");
-    if (valueSchema.fixedLength !== null) {
       score += 10;
-      reasons.push(`value length matched ${value.length} bytes (+10)`);
-    }
+      reasons.unshift("key length matched 32 bytes (+10)");
+      if (valueSchema.fixedLength !== null) {
+        score += 10;
+        reasons.push(`value length matched ${value.length} bytes (+10)`);
+      }
 
-    candidates.push({
-      state,
-      key: keyResult.fields,
-      value: valueResult.fields,
-      fieldMetadata: {
-        key: collectFieldMetadata(keySchema),
-        value: collectFieldMetadata(valueSchema),
-      },
-      score,
-      reasons,
-    });
+      candidates.push({
+        state,
+        key: keyResult.fields,
+        value: valueResult.fields,
+        fieldMetadata: {
+          key: collectFieldMetadata(keySchema),
+          value: collectFieldMetadata(valueSchema),
+        },
+        score,
+        reasons,
+      });
+    } catch (error) {
+      if (isInputLengthError(error)) {
+        continue;
+      }
+      throw error;
+    }
   }
 
   if (candidates.length === 0) {
@@ -308,6 +315,10 @@ function toDecodedState(candidate: Candidate, input: StateInput): DecodedState {
 
 function formatSigned(value: number): string {
   return value >= 0 ? `+${value}` : `${value}`;
+}
+
+function isInputLengthError(error: unknown): error is DecodeError {
+  return error instanceof DecodeError && error.message.includes("exceeds input length");
 }
 
 function collectFieldMetadata(struct: StructIr): Record<string, DecodedFieldMetadata> {
