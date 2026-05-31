@@ -522,15 +522,6 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
         entry.error ? "border-[#b33d4c4d]" : "border-[#18221f1f]"
       }`}
     >
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <p className="mb-0.5 font-black">
-            <MetadataLabel metadata={entry.decoded?.metadata}>{getEntryLabel(entry)}</MetadataLabel>
-          </p>
-          <span className="text-sm font-black text-[#60716b]">{getEntryState(entry)}</span>
-        </div>
-      </div>
-
       {entry.error ? (
         <div className="rounded-md bg-[#fff3ef] p-3 text-sm font-bold text-[#8f2f25]">
           {entry.error}
@@ -541,6 +532,7 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
             title="Key"
             values={entry.decoded?.key ?? {}}
             fieldMetadata={entry.decoded?.fieldMetadata.key ?? {}}
+            first
           />
           <ValueGroup
             title="Value"
@@ -566,15 +558,17 @@ function ValueGroup({
   title,
   values,
   fieldMetadata,
+  first = false,
 }: {
   title: string;
   values: Record<string, unknown>;
   fieldMetadata: Record<string, DecodedFieldMetadata>;
+  first?: boolean;
 }) {
   const entries = Object.entries(values);
 
   return (
-    <div className="border-t border-[#18221f1a] pt-3">
+    <div className={first ? "" : "border-t border-[#18221f1a] pt-3"}>
       <h3 className="mb-2 text-xs font-black text-[#60716b] uppercase">{title}</h3>
       {entries.length === 0 ? (
         <div className="rounded-md bg-[#f4f7f5] p-3 text-sm font-bold text-[#60716b]">
