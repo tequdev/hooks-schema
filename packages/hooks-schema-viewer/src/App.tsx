@@ -1,6 +1,7 @@
 import {
   type DecodedFieldMetadata,
   type DecodedState,
+  type MetadataIr,
   type SchemaIr,
   compileSchema,
   decodeState,
@@ -51,6 +52,7 @@ type DecodedEntry = {
 type EntryGroup = {
   state: string;
   label: string;
+  metadata?: MetadataIr;
   entries: DecodedEntry[];
   failed: boolean;
 };
@@ -67,8 +69,7 @@ type SchemaStatus =
   | { kind: "error"; message: string };
 
 const DEFAULT_ACCOUNT = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
-const DEFAULT_NAMESPACE_ID =
-  "0000000000000000000000000000000000000000000000000000000000000000";
+const DEFAULT_NAMESPACE_ID = "0000000000000000000000000000000000000000000000000000000000000000";
 
 function normalizeHex(value: string): string {
   return value.trim().replace(/^0x/i, "").toUpperCase();
@@ -185,6 +186,7 @@ function groupEntries(entries: DecodedEntry[]): EntryGroup[] {
     groups.set(state, {
       state,
       label: getEntryLabel(entry),
+      metadata: entry.decoded?.metadata,
       entries: [entry],
       failed: isDecodeFailed(entry),
     });
@@ -196,7 +198,9 @@ function groupEntries(entries: DecodedEntry[]): EntryGroup[] {
 function App() {
   const [schemaText, setSchemaText] = useState(governanceSchema);
   const [schemaStatus, setSchemaStatus] = useState<SchemaStatus>({ kind: "idle" });
-  const [schemaSourceUrl, setSchemaSourceUrl] = useState<string | null>(() => readUrlState().schemaUrl);
+  const [schemaSourceUrl, setSchemaSourceUrl] = useState<string | null>(
+    () => readUrlState().schemaUrl,
+  );
   const schemaLoadToken = useRef(0);
   const [network, setNetwork] = useState<Network>(() => readUrlState().network);
   const [account, setAccount] = useState(() => readUrlState().account);
@@ -478,7 +482,9 @@ function App() {
                 <section className="grid gap-3" key={group.state}>
                   <div className="flex items-center justify-between gap-3 border-b border-[#18221f1a] pb-2">
                     <div>
-                      <h3 className="font-black text-[#12211c]">{group.label}</h3>
+                      <h3 className="font-black text-[#12211c]">
+                        <MetadataLabel metadata={group.metadata}>{group.label}</MetadataLabel>
+                      </h3>
                       {group.failed ? null : (
                         <p className="mt-0.5 font-mono text-xs font-bold text-[#60716b]">
                           {group.state}
@@ -487,9 +493,7 @@ function App() {
                     </div>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-black ${
-                        group.failed
-                          ? "bg-[#fff3ef] text-[#8f2f25]"
-                          : "bg-[#dff1ec] text-[#245048]"
+                        group.failed ? "bg-[#fff3ef] text-[#8f2f25]" : "bg-[#dff1ec] text-[#245048]"
                       }`}
                     >
                       {group.failed ? `${group.entries.length} failed` : group.entries.length}
@@ -520,7 +524,9 @@ function ResultCard({ entry }: { entry: DecodedEntry }) {
     >
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
-          <p className="mb-0.5 font-black">{getEntryLabel(entry)}</p>
+          <p className="mb-0.5 font-black">
+            <MetadataLabel metadata={entry.decoded?.metadata}>{getEntryLabel(entry)}</MetadataLabel>
+          </p>
           <span className="text-sm font-black text-[#60716b]">{getEntryState(entry)}</span>
         </div>
       </div>
@@ -577,7 +583,14 @@ function ValueGroup({
       ) : (
         entries.map(([key, value]) => (
           <div className="grid grid-cols-[96px_minmax(0,1fr)] items-start gap-3 py-2" key={key}>
-            <span className="text-sm font-black text-[#50635d]">{key}</span>
+            <span className="text-sm font-black text-[#50635d]">
+              <MetadataLabel
+                metadata={fieldMetadata[key]}
+                type={formatFieldType(fieldMetadata[key])}
+              >
+                {fieldMetadata[key]?.name ?? key}
+              </MetadataLabel>
+            </span>
             <code className="break-all whitespace-pre-wrap font-mono text-xs text-[#16231f]">
               {toDisplayValue(value, fieldMetadata[key])}
             </code>
@@ -585,6 +598,44 @@ function ValueGroup({
         ))
       )}
     </div>
+  );
+}
+
+function formatFieldType(metadata?: DecodedFieldMetadata): string | undefined {
+  if (!metadata) return undefined;
+
+  if (metadata.type.kind === "bytes") {
+    return `${metadata.typeName} (${metadata.type.length} bytes)`;
+  }
+  if (metadata.type.kind === "bytesRef") {
+    return `${metadata.typeName} ($${metadata.type.field})`;
+  }
+
+  return metadata.typeName;
+}
+
+function MetadataLabel({
+  children,
+  metadata,
+  type,
+}: {
+  children: string;
+  metadata?: MetadataIr;
+  type?: string;
+}) {
+  if (!metadata) return children;
+
+  return (
+    <button className="group/metadata relative inline-flex cursor-help text-left" type="button">
+      {children}
+      <span className="invisible absolute top-full left-0 z-20 mt-2 w-max max-w-72 rounded-md bg-[#16231f] px-3 py-2 text-left text-xs leading-relaxed font-bold text-[#ecf7f4] opacity-0 shadow-xl transition group-hover/metadata:visible group-hover/metadata:opacity-100 group-focus/metadata:visible group-focus/metadata:opacity-100">
+        <span className="block text-[#8dd7c9]">{metadata.name}</span>
+        {type ? <span className="mt-1 block font-mono text-[#d5e9e4]">Type: {type}</span> : null}
+        {metadata.description ? (
+          <span className="mt-1 block text-[#ecf7f4]">{metadata.description}</span>
+        ) : null}
+      </span>
+    </button>
   );
 }
 
